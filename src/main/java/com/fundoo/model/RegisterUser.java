@@ -13,6 +13,7 @@ import javax.persistence.Id;
 @Entity
 @NoArgsConstructor
 @Getter
+@ToString
 public class RegisterUser {
 
     @Id
