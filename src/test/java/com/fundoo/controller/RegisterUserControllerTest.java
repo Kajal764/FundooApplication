@@ -48,4 +48,14 @@ public class RegisterUserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getContentAsString(), "Registration Successfull");
     }
+
+    @Test
+    void givenRequestWithAnotherMediaType_WhenGetResponse_ItShouldNotAccept() throws Exception {
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
+        String toJson = gson.toJson(registerUserDto);
+        when(registrationService.register(any())).thenReturn("Registration Successfull");
+        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/register").content(toJson)
+                .contentType(MediaType.APPLICATION_PROBLEM_XML_VALUE)).andReturn();
+        Assert.assertEquals(mvcResult.getResponse().getContentAsString(), "Unsupported Media Type");
+    }
 }
