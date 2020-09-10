@@ -1,6 +1,7 @@
 package com.fundoo.model;
 
 import com.fundoo.dto.RegisterUserDto;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class RegisterUser {
 
     @Id
@@ -23,10 +25,10 @@ public class RegisterUser {
     private String password;
 
     public RegisterUser(RegisterUserDto registerUserDto) {
-        this.firstName=registerUserDto.firstName;
-        this.lastName=registerUserDto.lastName;
-        this.email=registerUserDto.email;
-        this.password=registerUserDto.password;
+        this.firstName = registerUserDto.firstName;
+        this.lastName = registerUserDto.lastName;
+        this.email = registerUserDto.email;
+        this.password = registerUserDto.password;
     }
 
 }
