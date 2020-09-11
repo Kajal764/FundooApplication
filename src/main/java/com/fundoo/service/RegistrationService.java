@@ -6,6 +6,7 @@ import com.fundoo.exception.RegistrationException;
 import com.fundoo.model.RegisterUser;
 import com.fundoo.repository.RegisterUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -20,9 +21,14 @@ public class RegistrationService implements IRegitrationService {
     @Autowired
     JavaMailUtil javaMailUtil;
 
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     public ResponseDto register(RegisterUserDto registerUserDto) throws MessagingException {
+        registerUserDto.password=bCryptPasswordEncoder.encode(registerUserDto.password);
         RegisterUser registerUser = new RegisterUser(registerUserDto);
+
         Optional<RegisterUser> byEmail = registerUserRepository.findByEmail(registerUser.getEmail());
         if (byEmail.isPresent())
             throw new RegistrationException("User already register", 400);

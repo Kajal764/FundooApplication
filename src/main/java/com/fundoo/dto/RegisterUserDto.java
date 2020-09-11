@@ -2,6 +2,7 @@ package com.fundoo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.validation.constraints.Pattern;
 
