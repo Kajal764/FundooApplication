@@ -1,6 +1,7 @@
 package com.fundoo.controller;
 
 import com.fundoo.dto.RegisterUserDto;
+import com.fundoo.dto.ResponseDto;
 import com.fundoo.service.RegistrationService;
 import com.google.gson.Gson;
 import org.junit.Assert;
@@ -36,7 +37,7 @@ public class RegisterUserControllerTest {
     void setUp() {
         registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         toJson = gson.toJson(registerUserDto);
-        when(registrationService.register(any())).thenReturn("Registration Successfull");
+        when(registrationService.register(any())).thenReturn(new ResponseDto("Registration Successfull", 200));
     }
 
     @Test
@@ -50,13 +51,14 @@ public class RegisterUserControllerTest {
     void givenRequest_WhenGetResponse_ItShouldReturnSuccessMessage() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/register").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
-        Assert.assertEquals(mvcResult.getResponse().getContentAsString(), "Registration Successfull");
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Registration Successful"));
     }
 
     @Test
     void givenRequestWithAnotherMediaType_WhenGetResponse_ItShouldNotAccept() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/register").content(toJson)
                 .contentType(MediaType.APPLICATION_PROBLEM_XML_VALUE)).andReturn();
-        Assert.assertEquals(mvcResult.getResponse().getContentAsString(), "Unsupported Media Type");
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Unsupported Media Type"));
     }
+
 }

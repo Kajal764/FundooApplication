@@ -1,6 +1,7 @@
 package com.fundoo.service;
 
 import com.fundoo.dto.RegisterUserDto;
+import com.fundoo.dto.ResponseDto;
 import com.fundoo.exception.RegistrationException;
 import com.fundoo.model.RegisterUser;
 import com.fundoo.repository.RegisterUserRepository;
@@ -22,14 +23,15 @@ public class RegisterUserTest {
     @InjectMocks
     RegistrationService registrationService;
 
-//    @Test
-//    void givenUserDetails_WhenRegister_ItShouldSaveRegistrationDetails() {
-//        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
-//        RegisterUser registerUser = new RegisterUser(registerUserDto);
-//        when(registerUserRepository.save(any())).thenReturn(registerUser);
-//        RegisterUser register = registrationService.register(registerUserDto);
-//        Assert.assertEquals(register ,"Registration Successfull");
-//    }
+    @Test
+    void givenUserDetails_WhenRegister_ItShouldSaveRegistrationDetails() {
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
+        RegisterUser registerUser = new RegisterUser(registerUserDto);
+        when(registerUserRepository.save(any())).thenReturn(registerUser);
+        ResponseDto register = registrationService.register(registerUserDto);
+        ResponseDto expectedResult = new ResponseDto("Registration Successful", 200);
+        Assert.assertEquals(register.toString(), expectedResult.toString());
+    }
 
     @Test
     void givenAlreadyRegisterDetails_WhenRegister_ItShouldNotSave() {
@@ -39,7 +41,7 @@ public class RegisterUserTest {
         try {
             registrationService.register(registerUserDto);
         } catch (RegistrationException e) {
-            Assert.assertEquals(e.getMessage(),"User already register");
+            Assert.assertEquals(e.message, "User already register");
         }
     }
 }
