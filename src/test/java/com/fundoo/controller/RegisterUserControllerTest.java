@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
+import javax.mail.MessagingException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,8 +34,8 @@ public class RegisterUserControllerTest {
     String toJson;
 
     @BeforeEach
-    void setUp() {
-        registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
+    void setUp() throws MessagingException {
+        registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "Asha@se");
         toJson = gson.toJson(registerUserDto);
         when(registrationService.register(any())).thenReturn(new ResponseDto("Registration Successfull", 200));
     }

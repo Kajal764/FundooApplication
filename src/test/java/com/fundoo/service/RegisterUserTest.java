@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.SimpleMailMessage;
+
+import javax.mail.MessagingException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -20,14 +23,18 @@ public class RegisterUserTest {
     @Mock
     RegisterUserRepository registerUserRepository;
 
+    @Mock
+    JavaMailUtil javaMailUtil;
+
     @InjectMocks
     RegistrationService registrationService;
 
     @Test
-    void givenUserDetails_WhenRegister_ItShouldSaveRegistrationDetails() {
+    void givenUserDetails_WhenRegister_ItShouldSaveRegistrationDetails() throws MessagingException {
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         RegisterUser registerUser = new RegisterUser(registerUserDto);
         when(registerUserRepository.save(any())).thenReturn(registerUser);
+        when(javaMailUtil.sendMail(any())).thenReturn(new SimpleMailMessage());
         ResponseDto register = registrationService.register(registerUserDto);
         ResponseDto expectedResult = new ResponseDto("Registration Successful", 200);
         Assert.assertEquals(register.toString(), expectedResult.toString());
@@ -42,6 +49,8 @@ public class RegisterUserTest {
             registrationService.register(registerUserDto);
         } catch (RegistrationException e) {
             Assert.assertEquals(e.message, "User already register");
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
     }
 }
