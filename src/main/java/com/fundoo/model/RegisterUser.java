@@ -24,6 +24,7 @@ public class RegisterUser {
     private String lastName;
     private String email;
     private String password;
+    private boolean isVarified;
 
     public RegisterUser(RegisterUserDto registerUserDto) {
         this.firstName = registerUserDto.firstName;
@@ -31,5 +32,4 @@ public class RegisterUser {
         this.email = registerUserDto.email;
         this.password = registerUserDto.password;
     }
-
 }
