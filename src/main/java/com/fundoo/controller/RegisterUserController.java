@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/fundoo")
@@ -18,7 +19,12 @@ public class RegisterUserController {
     RegistrationService registrationService;
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto registerUser(@Valid @RequestBody RegisterUserDto registerUserDto) throws MessagingException {
+    public ResponseDto registerUser(@Valid @RequestBody RegisterUserDto registerUserDto) throws MessagingException, UnsupportedEncodingException {
         return registrationService.register(registerUserDto);
+    }
+
+    @GetMapping("/verifyUser")
+    public Object validateUser(@RequestParam String token) {
+       return registrationService.verifyUser(token);
     }
 }

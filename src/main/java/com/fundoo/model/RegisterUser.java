@@ -3,16 +3,14 @@ package com.fundoo.model;
 import com.fundoo.dto.RegisterUserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString
 public class RegisterUser {
 
@@ -21,9 +19,13 @@ public class RegisterUser {
     private int id;
 
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     private String password;
+
     private boolean isVarified;
 
     public RegisterUser(RegisterUserDto registerUserDto) {
