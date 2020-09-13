@@ -5,7 +5,7 @@ import com.fundoo.dto.RegisterUserDto;
 import com.fundoo.exception.LoginUserException;
 import com.fundoo.model.UserInfo;
 import com.fundoo.repository.UserRepository;
-import com.fundoo.utility.Utility;
+import com.fundoo.utility.JwtUtil;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,7 +30,7 @@ public class LoginServiceTest {
     BCryptPasswordEncoder encoder;
 
     @Mock
-    Utility utility;
+    JwtUtil jwtUtil;
 
 
     @Test
@@ -53,7 +53,7 @@ public class LoginServiceTest {
         UserInfo userInfo = new UserInfo(registerUserDto);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
         when(encoder.matches(any(), any())).thenReturn(true);
-        when(utility.createJwtToken(any())).thenReturn(token);
+        when(jwtUtil.createJwtToken(any())).thenReturn(token);
 
         try {
             loginService.login(loginDto);
@@ -72,7 +72,7 @@ public class LoginServiceTest {
         userInfo.setVarified(true);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
         when(encoder.matches(any(),any())).thenReturn(true);
-        when(utility.createJwtToken(any())).thenReturn(token);
+        when(jwtUtil.createJwtToken(any())).thenReturn(token);
 
         String login = loginService.login(loginDto);
 

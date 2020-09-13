@@ -5,7 +5,8 @@ import com.fundoo.dto.ResponseDto;
 import com.fundoo.exception.RegistrationException;
 import com.fundoo.model.UserInfo;
 import com.fundoo.repository.UserRepository;
-import com.fundoo.utility.Utility;
+import com.fundoo.utility.JavaMailUtil;
+import com.fundoo.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class RegistrationService implements IRegitrationService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    Utility utility;
+    JwtUtil jwtUtil;
 
     @Override
     public ResponseDto register(RegisterUserDto registerUserDto) throws MessagingException {
@@ -37,14 +38,14 @@ public class RegistrationService implements IRegitrationService {
         if (byEmail.isPresent())
             throw new RegistrationException("User already register", 400);
         UserInfo save = userRepository.save(userInfo);
-        String jwtToken = utility.createJwtToken(save.getEmail());
+        String jwtToken = jwtUtil.createJwtToken(save.getEmail());
         javaMailUtil.sendMail(save.getEmail(), jwtToken);
         return new ResponseDto("Registration Successful", 200);
     }
 
     @Override
     public Object verifyUser(String token) {
-        Object validateEmail = utility.verify(token);
+        Object validateEmail = jwtUtil.verify(token);
         if (validateEmail != null) {
             Optional<UserInfo> data = userRepository.findByEmail(validateEmail.toString());
             if (data.isPresent()) {

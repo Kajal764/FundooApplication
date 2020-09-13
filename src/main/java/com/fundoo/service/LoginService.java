@@ -4,7 +4,7 @@ import com.fundoo.dto.LoginDto;
 import com.fundoo.exception.LoginUserException;
 import com.fundoo.model.UserInfo;
 import com.fundoo.repository.UserRepository;
-import com.fundoo.utility.Utility;
+import com.fundoo.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class LoginService implements ILoginService {
     BCryptPasswordEncoder encoder;
 
     @Autowired
-    Utility utility;
+    JwtUtil jwtUtil;
 
     @Override
     public String login(LoginDto loginDto) {
@@ -32,7 +32,7 @@ public class LoginService implements ILoginService {
         String CLIENT_ID = isEmailPresent.get().getEmail();
         if (encoder.matches(loginDto.password, isEmailPresent.get().getPassword())) {
             if (isEmailPresent.get().isVarified() == true) {
-                String token = utility.createJwtToken(CLIENT_ID);
+                String token = jwtUtil.createJwtToken(CLIENT_ID);
                 RedisService.setToken(CLIENT_ID, token);
                 return token;
             }

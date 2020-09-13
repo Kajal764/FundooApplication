@@ -1,4 +1,4 @@
-package com.fundoo.service;
+package com.fundoo.utility;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

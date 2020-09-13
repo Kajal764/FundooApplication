@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Service
-public class Utility {
+public class JwtUtil {
 
     private String SECRET_KEY = "Its_Secret_Key";
 

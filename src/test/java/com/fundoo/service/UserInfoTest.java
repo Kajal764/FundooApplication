@@ -5,7 +5,8 @@ import com.fundoo.dto.ResponseDto;
 import com.fundoo.exception.RegistrationException;
 import com.fundoo.model.UserInfo;
 import com.fundoo.repository.UserRepository;
-import com.fundoo.utility.Utility;
+import com.fundoo.utility.JavaMailUtil;
+import com.fundoo.utility.JwtUtil;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,7 +33,7 @@ public class UserInfoTest {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Mock
-    Utility utility;
+    JwtUtil jwtUtil;
 
     @InjectMocks
     RegistrationService registrationService;
@@ -45,7 +46,7 @@ public class UserInfoTest {
         when(userRepository.save(any())).thenReturn(userInfo);
         when(javaMailUtil.sendMail("kajalw1998@gmail.com", "sdjfdsf")).thenReturn(new SimpleMailMessage());
         when(bCryptPasswordEncoder.encode(any())).thenReturn("nmdf");
-        when(utility.createJwtToken(any())).thenReturn("sdjkfsdn");
+        when(jwtUtil.createJwtToken(any())).thenReturn("sdjkfsdn");
         ResponseDto register = registrationService.register(registerUserDto);
         ResponseDto expectedResult = new ResponseDto("Registration Successful", 200);
         Assert.assertEquals(register.toString(), expectedResult.toString());
@@ -71,7 +72,7 @@ public class UserInfoTest {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
         UserInfo userInfo = new UserInfo(registerUserDto);
-        when(utility.verify(token)).thenReturn(new Object());
+        when(jwtUtil.verify(token)).thenReturn(new Object());
         when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(userInfo));
         when(userRepository.save(userInfo)).thenReturn(userInfo);
         registrationService.verifyUser(token);
