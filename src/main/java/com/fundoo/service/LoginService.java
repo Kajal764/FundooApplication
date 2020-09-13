@@ -8,13 +8,14 @@ import com.fundoo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
 public class LoginService implements ILoginService {
 
     @Autowired
-    UserRepository userRepository ;
+    UserRepository userRepository;
 
     @Autowired
     BCryptPasswordEncoder encoder;
@@ -32,6 +33,7 @@ public class LoginService implements ILoginService {
         if (encoder.matches(loginDto.password, isEmailPresent.get().getPassword())) {
             if (isEmailPresent.get().isVarified() == true) {
                 String token = utility.createJwtToken(CLIENT_ID);
+                RedisService.setToken(CLIENT_ID, token);
                 return token;
             }
             throw new LoginUserException("Please Activate your account");
