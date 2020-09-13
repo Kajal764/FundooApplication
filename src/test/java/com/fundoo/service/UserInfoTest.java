@@ -40,7 +40,7 @@ public class UserInfoTest {
 
     @Test
     void givenUserDetails_WhenRegister_ItShouldSaveRegistrationDetails() throws MessagingException {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
         UserInfo userInfo = new UserInfo(registerUserDto);
         when(userRepository.save(any())).thenReturn(userInfo);
         when(javaMailUtil.sendMail("kajalw1998@gmail.com", "sdjfdsf")).thenReturn(new SimpleMailMessage());
@@ -53,7 +53,7 @@ public class UserInfoTest {
 
     @Test
     void givenAlreadyRegisterDetails_WhenRegister_ItShouldNotSave() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
         UserInfo userInfo = new UserInfo(registerUserDto);
         when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(userInfo));
         when(bCryptPasswordEncoder.encode(any())).thenReturn("nmdf");
@@ -69,7 +69,7 @@ public class UserInfoTest {
     @Test
     void givenRequestForVerify_WhenGetTokenShouldActivateVarifiedAccount() {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
         UserInfo userInfo = new UserInfo(registerUserDto);
         when(utility.verify(token)).thenReturn(new Object());
         when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(userInfo));

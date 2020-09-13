@@ -48,7 +48,7 @@ public class LoginServiceTest {
     @Test
     void givenUserLoginCredentials_WhenAccountNotActivate_ItShouldThrowException() {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978787878");
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
         UserInfo userInfo = new UserInfo(registerUserDto);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
@@ -66,7 +66,7 @@ public class LoginServiceTest {
     @Test
     void givenUserLoginCredentials_WhenLogin_ItShouldReturnToken() {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978787878");
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
         UserInfo userInfo = new UserInfo(registerUserDto);
         userInfo.setVarified(true);
@@ -82,7 +82,7 @@ public class LoginServiceTest {
     @Test
     void givenUserLoginPasswordWrong_WhenLogin_ItShouldThrowException() {
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978787878");
         UserInfo userInfo = new UserInfo(registerUserDto);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
         when(encoder.matches(any(),any())).thenReturn(false);

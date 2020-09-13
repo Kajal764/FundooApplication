@@ -26,6 +26,8 @@ public class UserInfo {
 
     private String password;
 
+    private String mobileNumber;
+
     private boolean isVarified;
 
     public UserInfo(RegisterUserDto registerUserDto) {
@@ -33,5 +35,6 @@ public class UserInfo {
         this.lastName = registerUserDto.lastName;
         this.email = registerUserDto.email;
         this.password = registerUserDto.password;
+        this.mobileNumber=registerUserDto.mobileNumber;
     }
 }

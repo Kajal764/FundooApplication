@@ -37,7 +37,7 @@ public class UserInfoControllerTest {
 
     @BeforeEach
     void setUp() throws MessagingException {
-        registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "Asha@se");
+        registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "Asha@se","8978675645");
         toJson = gson.toJson(registerUserDto);
         when(registrationService.register(any())).thenReturn(new ResponseDto("Registration Successfull", 200));
     }

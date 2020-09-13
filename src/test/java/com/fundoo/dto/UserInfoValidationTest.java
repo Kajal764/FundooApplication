@@ -22,23 +22,30 @@ public class UserInfoValidationTest {
 
     @Test
     public void GivenInvalidName_whenValidation_ItShouldNotAccept() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("", "waghmare", "kajalw1998@gmail.com", "Asha#ghf");
+        RegisterUserDto registerUserDto = new RegisterUserDto("", "waghmare", "kajalw1998@gmail.com", "Asha#ghf","8978675645");
         Set<ConstraintViolation<RegisterUserDto>> validate = validator.validate(registerUserDto);
         assertThat(validate.iterator().next().getMessage(), is("First Name is invalid"));
     }
 
     @Test
     public void GivenInvalidEmail_whenValidation_ItShouldNotAccept() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw199gmail.com", "Asha#ghf");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw199gmail.com", "Asha#ghf","8978675645");
         Set<ConstraintViolation<RegisterUserDto>> validate = validator.validate(registerUserDto);
         assertThat(validate.iterator().next().getMessage(), is("Email must be valid"));
     }
 
     @Test
     public void GivenInvalidPassword_whenValidation_ItShouldNotAccept() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw199@gmail.com", "as23");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw199@gmail.com", "as23","8978675645");
         Set<ConstraintViolation<RegisterUserDto>> validate = validator.validate(registerUserDto);
         assertThat(validate.iterator().next().getMessage(), is("Password Should contain One Uppercase and Symbol and greater than 6 character"));
+    }
+
+    @Test
+    public void GivenInvalidMobileNo_whenValidation_ItShouldNotAccept() {
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw199@gmail.com", "as23","78675645");
+        Set<ConstraintViolation<RegisterUserDto>> validate = validator.validate(registerUserDto);
+        assertThat(validate.iterator().next().getMessage(), is("Invalid mobile no"));
     }
 
 }
