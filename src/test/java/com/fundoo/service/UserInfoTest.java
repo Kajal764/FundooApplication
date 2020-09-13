@@ -3,8 +3,8 @@ package com.fundoo.service;
 import com.fundoo.dto.RegisterUserDto;
 import com.fundoo.dto.ResponseDto;
 import com.fundoo.exception.RegistrationException;
-import com.fundoo.model.RegisterUser;
-import com.fundoo.repository.RegisterUserRepository;
+import com.fundoo.model.UserInfo;
+import com.fundoo.repository.UserRepository;
 import com.fundoo.utility.Utility;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class RegisterUserTest {
+public class UserInfoTest {
 
     @Mock
-    RegisterUserRepository registerUserRepository;
+    UserRepository userRepository;
 
     @Mock
     JavaMailUtil javaMailUtil;
@@ -41,8 +41,8 @@ public class RegisterUserTest {
     @Test
     void givenUserDetails_WhenRegister_ItShouldSaveRegistrationDetails() throws MessagingException {
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
-        RegisterUser registerUser = new RegisterUser(registerUserDto);
-        when(registerUserRepository.save(any())).thenReturn(registerUser);
+        UserInfo userInfo = new UserInfo(registerUserDto);
+        when(userRepository.save(any())).thenReturn(userInfo);
         when(javaMailUtil.sendMail("kajalw1998@gmail.com", "sdjfdsf")).thenReturn(new SimpleMailMessage());
         when(bCryptPasswordEncoder.encode(any())).thenReturn("nmdf");
         when(utility.createJwtToken(any())).thenReturn("sdjkfsdn");
@@ -54,8 +54,8 @@ public class RegisterUserTest {
     @Test
     void givenAlreadyRegisterDetails_WhenRegister_ItShouldNotSave() {
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
-        RegisterUser registerUser = new RegisterUser(registerUserDto);
-        when(registerUserRepository.findByEmail(any())).thenReturn(java.util.Optional.of(registerUser));
+        UserInfo userInfo = new UserInfo(registerUserDto);
+        when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(userInfo));
         when(bCryptPasswordEncoder.encode(any())).thenReturn("nmdf");
         try {
             registrationService.register(registerUserDto);
@@ -70,11 +70,11 @@ public class RegisterUserTest {
     void givenRequestForVerify_WhenGetTokenShouldActivateVarifiedAccount() {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
-        RegisterUser registerUser = new RegisterUser(registerUserDto);
+        UserInfo userInfo = new UserInfo(registerUserDto);
         when(utility.verify(token)).thenReturn(new Object());
-        when(registerUserRepository.findByEmail(any())).thenReturn(java.util.Optional.of(registerUser));
-        when(registerUserRepository.save(registerUser)).thenReturn(registerUser);
+        when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(userInfo));
+        when(userRepository.save(userInfo)).thenReturn(userInfo);
         registrationService.verifyUser(token);
-        Assert.assertTrue(registerUser.isVarified());
+        Assert.assertTrue(userInfo.isVarified());
     }
 }

@@ -16,6 +16,11 @@ public class FundooExceptionHandler {
         return new ResponseEntity<>(new ResponseDto(registrationException.message, registrationException.statusCode), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = LoginUserException.class)
+    public ResponseEntity<Object> loginExceptionHandler(LoginUserException loginException){
+        return new ResponseEntity<>(new ResponseDto(loginException.getMessage(),400),HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Object> methodArgumentNotValidException(MethodArgumentNotValidException e) {
         return new ResponseEntity<>(new ResponseDto(e.getBindingResult().getFieldError().getDefaultMessage(), 400), HttpStatus.BAD_REQUEST);

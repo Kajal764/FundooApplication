@@ -3,8 +3,8 @@ package com.fundoo.service;
 import com.fundoo.dto.RegisterUserDto;
 import com.fundoo.dto.ResponseDto;
 import com.fundoo.exception.RegistrationException;
-import com.fundoo.model.RegisterUser;
-import com.fundoo.repository.RegisterUserRepository;
+import com.fundoo.model.UserInfo;
+import com.fundoo.repository.UserRepository;
 import com.fundoo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class RegistrationService implements IRegitrationService {
 
     @Autowired
-    RegisterUserRepository registerUserRepository;
+    UserRepository userRepository;
 
     @Autowired
     JavaMailUtil javaMailUtil;
@@ -31,12 +31,12 @@ public class RegistrationService implements IRegitrationService {
     @Override
     public ResponseDto register(RegisterUserDto registerUserDto) throws MessagingException {
         registerUserDto.password = bCryptPasswordEncoder.encode(registerUserDto.password);
-        RegisterUser registerUser = new RegisterUser(registerUserDto);
+        UserInfo userInfo = new UserInfo(registerUserDto);
 
-        Optional<RegisterUser> byEmail = registerUserRepository.findByEmail(registerUser.getEmail());
+        Optional<UserInfo> byEmail = userRepository.findByEmail(userInfo.getEmail());
         if (byEmail.isPresent())
             throw new RegistrationException("User already register", 400);
-        RegisterUser save = registerUserRepository.save(registerUser);
+        UserInfo save = userRepository.save(userInfo);
         String jwtToken = utility.createJwtToken(save.getEmail());
         javaMailUtil.sendMail(save.getEmail(), jwtToken);
         return new ResponseDto("Registration Successful", 200);
@@ -46,10 +46,10 @@ public class RegistrationService implements IRegitrationService {
     public Object verifyUser(String token) {
         Object validateEmail = utility.verify(token);
         if (validateEmail != null) {
-            Optional<RegisterUser> data = registerUserRepository.findByEmail(validateEmail.toString());
+            Optional<UserInfo> data = userRepository.findByEmail(validateEmail.toString());
             if (data.isPresent()) {
                 data.get().setVarified(true);
-                registerUserRepository.save(data.get());
+                userRepository.save(data.get());
                 return "Verify User Successfully";
             }
         }

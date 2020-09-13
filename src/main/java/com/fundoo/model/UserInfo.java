@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-public class RegisterUser {
+public class UserInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +28,7 @@ public class RegisterUser {
 
     private boolean isVarified;
 
-    public RegisterUser(RegisterUserDto registerUserDto) {
+    public UserInfo(RegisterUserDto registerUserDto) {
         this.firstName = registerUserDto.firstName;
         this.lastName = registerUserDto.lastName;
         this.email = registerUserDto.email;
