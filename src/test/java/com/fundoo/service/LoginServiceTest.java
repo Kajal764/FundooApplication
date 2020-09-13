@@ -2,6 +2,7 @@ package com.fundoo.service;
 
 import com.fundoo.dto.LoginDto;
 import com.fundoo.dto.RegisterUserDto;
+import com.fundoo.dto.ResponseDto;
 import com.fundoo.exception.LoginUserException;
 import com.fundoo.model.UserInfo;
 import com.fundoo.repository.UserRepository;
@@ -74,9 +75,9 @@ public class LoginServiceTest {
         when(encoder.matches(any(),any())).thenReturn(true);
         when(jwtUtil.createJwtToken(any())).thenReturn(token);
 
-        String login = loginService.login(loginDto);
+        ResponseDto login = loginService.login(loginDto);
 
-        Assert.assertEquals(login,token);
+        Assert.assertEquals(login.token,token);
     }
 
     @Test

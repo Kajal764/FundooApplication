@@ -2,7 +2,8 @@ package com.fundoo.service;
 
 
 import com.fundoo.dto.LoginDto;
+import com.fundoo.dto.ResponseDto;
 
 public interface ILoginService {
-    String login(LoginDto loginDto);
+    ResponseDto login(LoginDto loginDto);
 }

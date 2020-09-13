@@ -1,9 +1,10 @@
 package com.fundoo.service;
 
 import com.fundoo.dto.ForgotPwDto;
+import com.fundoo.dto.ResponseDto;
 
 import javax.mail.MessagingException;
 
 public interface IForgotPWService {
-    String checkDetails(ForgotPwDto forgotPwDto) throws MessagingException;
+    ResponseDto checkDetails(ForgotPwDto forgotPwDto) throws MessagingException;
 }

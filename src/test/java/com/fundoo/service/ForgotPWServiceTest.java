@@ -2,6 +2,7 @@ package com.fundoo.service;
 
 import com.fundoo.dto.ForgotPwDto;
 import com.fundoo.dto.RegisterUserDto;
+import com.fundoo.dto.ResponseDto;
 import com.fundoo.exception.LoginUserException;
 import com.fundoo.model.UserInfo;
 import com.fundoo.repository.UserRepository;
@@ -20,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 public class ForgotPWServiceTest {
 
     @InjectMocks
-    ForgotPWServiceService forgotPWService;
+    ForgotPWService forgotPWService;
 
     @Mock
     UserRepository userRepository;
@@ -32,8 +33,8 @@ public class ForgotPWServiceTest {
         ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com", "kajal", "waghmare");
         Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
 
-        String checkDetails = forgotPWService.checkDetails(forgotPwDto);
-        Assert.assertEquals(checkDetails,"Otp Has been sent to your account");
+        ResponseDto checkDetails = forgotPWService.checkDetails(forgotPwDto);
+        Assert.assertEquals(checkDetails.message,"Otp Has been sent to your account");
     }
 
     @Test
@@ -45,14 +46,10 @@ public class ForgotPWServiceTest {
 
         try{
             forgotPWService.checkDetails(forgotPwDto);
-        }catch (LoginUserException | MessagingException e){
+        }catch (LoginUserException e){
             Assert.assertEquals(e.getMessage(),"Account not found");
         }
     }
 
-//    @Test
-//    void name() {
-//
-//    }
 }
 

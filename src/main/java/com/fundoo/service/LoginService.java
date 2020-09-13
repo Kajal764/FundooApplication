@@ -1,6 +1,7 @@
 package com.fundoo.service;
 
 import com.fundoo.dto.LoginDto;
+import com.fundoo.dto.ResponseDto;
 import com.fundoo.exception.LoginUserException;
 import com.fundoo.model.UserInfo;
 import com.fundoo.repository.UserRepository;
@@ -24,7 +25,7 @@ public class LoginService implements ILoginService {
     JwtUtil jwtUtil;
 
     @Override
-    public String login(LoginDto loginDto) {
+    public ResponseDto login(LoginDto loginDto) {
 
         Optional<UserInfo> isEmailPresent = userRepository.findByEmail(loginDto.email);
         if (isEmailPresent.isEmpty())
@@ -34,7 +35,7 @@ public class LoginService implements ILoginService {
             if (isEmailPresent.get().isVarified() == true) {
                 String token = jwtUtil.createJwtToken(CLIENT_ID);
                 RedisService.setToken(CLIENT_ID, token);
-                return token;
+                return new ResponseDto(token);
             }
             throw new LoginUserException("Please Activate your account");
         }
