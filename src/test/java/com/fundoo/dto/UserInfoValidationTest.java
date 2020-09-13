@@ -43,7 +43,7 @@ public class UserInfoValidationTest {
 
     @Test
     public void GivenInvalidMobileNo_whenValidation_ItShouldNotAccept() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw199@gmail.com", "as23","78675645");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw199@gmail.com", "123@Hii","78675645");
         Set<ConstraintViolation<RegisterUserDto>> validate = validator.validate(registerUserDto);
         assertThat(validate.iterator().next().getMessage(), is("Invalid mobile no"));
     }

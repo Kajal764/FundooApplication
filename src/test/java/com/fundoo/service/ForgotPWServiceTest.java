@@ -6,6 +6,8 @@ import com.fundoo.dto.ResponseDto;
 import com.fundoo.exception.LoginUserException;
 import com.fundoo.model.UserInfo;
 import com.fundoo.repository.UserRepository;
+import com.fundoo.utility.JavaMailUtil;
+import com.fundoo.utility.JwtUtil;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +15,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.SimpleMailMessage;
+
 import javax.mail.MessagingException;
 import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ForgotPWServiceTest {
@@ -26,13 +31,20 @@ public class ForgotPWServiceTest {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    JavaMailUtil javaMailUtil;
+
+    @Mock
+    JwtUtil jwtUtil;
+
     @Test
     void givenDetails_WhenForgotPassword_ItShouldReturnSuccessMessage() throws MessagingException {
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
         UserInfo userInfo = new UserInfo(registerUserDto);
         ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com", "kajal", "waghmare");
         Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
-
+        when(javaMailUtil.resetPwMail("kajalw1998@gmail.com","token")).thenReturn(new SimpleMailMessage());
+        when(jwtUtil.createJwtToken(any())).thenReturn(any());
         ResponseDto checkDetails = forgotPWService.checkDetails(forgotPwDto);
         Assert.assertEquals(checkDetails.message,"Otp Has been sent to your account");
     }
@@ -43,7 +55,8 @@ public class ForgotPWServiceTest {
         UserInfo userInfo = new UserInfo(registerUserDto);
         ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com", "Guddi", "waghmare");
         Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
-
+        when(javaMailUtil.resetPwMail("kajalw1998@gmail.com","token")).thenReturn(new SimpleMailMessage());
+        when(jwtUtil.createJwtToken(any())).thenReturn(any());
         try{
             forgotPWService.checkDetails(forgotPwDto);
         }catch (LoginUserException e){
