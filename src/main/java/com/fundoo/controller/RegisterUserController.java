@@ -25,6 +25,6 @@ public class RegisterUserController {
 
     @GetMapping("/verifyUser")
     public Object validateUser(@RequestParam String token) {
-       return registrationService.verifyUser(token);
+        return registrationService.verifyUser(token);
     }
 }

@@ -8,7 +8,6 @@ import com.fundoo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-//import com.fundoo.exception.LoginException;
 import java.util.Optional;
 
 @Service
@@ -27,10 +26,8 @@ public class LoginService implements ILoginService {
     public String login(LoginDto loginDto) {
 
         Optional<UserInfo> isEmailPresent = userRepository.findByEmail(loginDto.email);
-
         if (isEmailPresent.isEmpty())
             throw new LoginUserException("No such account found");
-            //throw new LoginException("No such account found");
         String CLIENT_ID = isEmailPresent.get().getEmail();
         if (encoder.matches(loginDto.password, isEmailPresent.get().getPassword())) {
             if (isEmailPresent.get().isVarified() == true) {
