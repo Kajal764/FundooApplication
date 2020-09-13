@@ -14,7 +14,7 @@ public class JavaMailUtil {
     JavaMailSender javaMailSender;
 
 
-    public SimpleMailMessage sendMail(String email, String jwtToken) throws MessagingException {
+    public SimpleMailMessage sendMail(String email, String jwtToken) {
         SimpleMailMessage message = new SimpleMailMessage();
         String link="http://localhost:8080/fundoo/verifyUser?token=";
         message.setTo(email);
