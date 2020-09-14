@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @PutMapping("update/{token}")
-    public Object updatePassword(@PathVariable("token") String token, @RequestBody UpdatePasswordDto updatePasswordDto) {
+    public ResponseDto updatePassword(@PathVariable("token") String token, @RequestBody UpdatePasswordDto updatePasswordDto) {
         return updatePasswordService.update(token, updatePasswordDto);
     }
 

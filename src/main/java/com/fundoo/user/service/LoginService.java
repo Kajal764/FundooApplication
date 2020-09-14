@@ -35,7 +35,7 @@ public class LoginService implements ILoginService {
             if (isEmailPresent.get().isVarified() == true) {
                 String token = jwtUtil.createJwtToken(CLIENT_ID);
                 RedisService.setToken(CLIENT_ID, token);
-                return new ResponseDto(token);
+                return new ResponseDto("Login Succesfull",200);
             }
             throw new LoginUserException("Please Activate your account");
         }

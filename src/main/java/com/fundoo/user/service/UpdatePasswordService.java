@@ -25,7 +25,7 @@ public class UpdatePasswordService implements IUpdatePasswordService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public Object update(String token, UpdatePasswordDto updatePasswordDto) {
+    public ResponseDto update(String token, UpdatePasswordDto updatePasswordDto) {
         Object verify = jwtUtil.verify(token);
         Optional<UserInfo> userInfo = userRepository.findByEmail(verify.toString());
         if (userInfo.isPresent()) {

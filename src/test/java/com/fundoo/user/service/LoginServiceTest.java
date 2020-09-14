@@ -76,8 +76,7 @@ public class LoginServiceTest {
         when(jwtUtil.createJwtToken(any())).thenReturn(token);
 
         ResponseDto login = loginService.login(loginDto);
-
-        Assert.assertEquals(login.token,token);
+        Assert.assertEquals(login.message,"Login Succesfull");
     }
 
     @Test
