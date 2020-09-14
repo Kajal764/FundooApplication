@@ -3,7 +3,7 @@ package com.fundoo.user.service;
 import com.fundoo.user.dto.RegisterUserDto;
 import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.exception.RegistrationException;
-import com.fundoo.user.model.UserInfo;
+import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
 import com.fundoo.user.utility.JavaMailUtil;
 import com.fundoo.user.utility.JwtUtil;
@@ -32,12 +32,12 @@ public class RegistrationService implements IRegitrationService {
     @Override
     public ResponseDto register(RegisterUserDto registerUserDto) throws MessagingException {
         registerUserDto.password = bCryptPasswordEncoder.encode(registerUserDto.password);
-        UserInfo userInfo = new UserInfo(registerUserDto);
+        User user = new User(registerUserDto);
 
-        Optional<UserInfo> byEmail = userRepository.findByEmail(userInfo.getEmail());
+        Optional<User> byEmail = userRepository.findByEmail(user.getEmail());
         if (byEmail.isPresent())
             throw new RegistrationException("User already register", 400);
-        UserInfo save = userRepository.save(userInfo);
+        User save = userRepository.save(user);
         String jwtToken = jwtUtil.createJwtToken(save.getEmail());
         javaMailUtil.sendMail(save.getEmail(), jwtToken);
         return new ResponseDto("Registration Successful", 200);
@@ -47,7 +47,7 @@ public class RegistrationService implements IRegitrationService {
     public Object verifyUser(String token) {
         Object validateEmail = jwtUtil.verify(token);
         if (validateEmail != null) {
-            Optional<UserInfo> data = userRepository.findByEmail(validateEmail.toString());
+            Optional<User> data = userRepository.findByEmail(validateEmail.toString());
             if (data.isPresent()) {
                 data.get().setVarified(true);
                 userRepository.save(data.get());

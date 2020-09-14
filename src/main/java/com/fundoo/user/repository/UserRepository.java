@@ -1,6 +1,6 @@
 package com.fundoo.user.repository;
 
-import com.fundoo.user.model.UserInfo;
+import com.fundoo.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,9 +11,9 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserInfo, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-    Optional<UserInfo> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     @Modifying
     @Transactional

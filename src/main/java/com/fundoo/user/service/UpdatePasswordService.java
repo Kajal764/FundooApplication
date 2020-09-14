@@ -3,7 +3,7 @@ package com.fundoo.user.service;
 import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.dto.UpdatePasswordDto;
 import com.fundoo.user.exception.LoginUserException;
-import com.fundoo.user.model.UserInfo;
+import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
 import com.fundoo.user.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class UpdatePasswordService implements IUpdatePasswordService {
     @Override
     public ResponseDto update(String token, UpdatePasswordDto updatePasswordDto) {
         Object verify = jwtUtil.verify(token);
-        Optional<UserInfo> userInfo = userRepository.findByEmail(verify.toString());
+        Optional<User> userInfo = userRepository.findByEmail(verify.toString());
         if (userInfo.isPresent()) {
             if (updatePasswordDto.password.equals(updatePasswordDto.confirmPassword)) {
                 String encodedPassword = bCryptPasswordEncoder.encode(updatePasswordDto.password);

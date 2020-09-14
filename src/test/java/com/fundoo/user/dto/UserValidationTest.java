@@ -11,7 +11,7 @@ import java.util.Set;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class UserInfoValidationTest {
+public class UserValidationTest {
 
     private Validator validator;
 

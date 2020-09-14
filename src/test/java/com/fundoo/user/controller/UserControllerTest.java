@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserInfoControllerTest {
+public class UserControllerTest {
 
     @Autowired
     MockMvc mockMvc;

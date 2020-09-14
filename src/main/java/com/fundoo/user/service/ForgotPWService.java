@@ -3,7 +3,7 @@ package com.fundoo.user.service;
 import com.fundoo.user.dto.ForgotPwDto;
 import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.exception.LoginUserException;
-import com.fundoo.user.model.UserInfo;
+import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
 import com.fundoo.user.utility.JavaMailUtil;
 import com.fundoo.user.utility.JwtUtil;
@@ -27,7 +27,7 @@ public class ForgotPWService implements IForgotPWService {
     @Override
     public ResponseDto checkDetails(ForgotPwDto forgotPwDto) {
         System.out.println(userRepository.findByEmail(forgotPwDto.email));
-        Optional<UserInfo> isDetailPresent = userRepository.findByEmail(forgotPwDto.email);
+        Optional<User> isDetailPresent = userRepository.findByEmail(forgotPwDto.email);
         System.out.println(isDetailPresent);
         if (!isDetailPresent.isEmpty()) {
             String jwtToken = jwtUtil.createJwtToken(forgotPwDto.email);

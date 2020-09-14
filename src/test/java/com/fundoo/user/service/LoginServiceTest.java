@@ -4,7 +4,7 @@ import com.fundoo.user.dto.LoginDto;
 import com.fundoo.user.dto.RegisterUserDto;
 import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.exception.LoginUserException;
-import com.fundoo.user.model.UserInfo;
+import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
 import com.fundoo.user.utility.JwtUtil;
 import org.junit.Assert;
@@ -51,8 +51,8 @@ public class LoginServiceTest {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978787878");
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
-        UserInfo userInfo = new UserInfo(registerUserDto);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
+        User user = new User(registerUserDto);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(encoder.matches(any(), any())).thenReturn(true);
         when(jwtUtil.createJwtToken(any())).thenReturn(token);
 
@@ -69,9 +69,9 @@ public class LoginServiceTest {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978787878");
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
-        UserInfo userInfo = new UserInfo(registerUserDto);
-        userInfo.setVarified(true);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
+        User user = new User(registerUserDto);
+        user.setVarified(true);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(encoder.matches(any(),any())).thenReturn(true);
         when(jwtUtil.createJwtToken(any())).thenReturn(token);
 
@@ -83,8 +83,8 @@ public class LoginServiceTest {
     void givenUserLoginPasswordWrong_WhenLogin_ItShouldThrowException() {
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978787878");
-        UserInfo userInfo = new UserInfo(registerUserDto);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
+        User user = new User(registerUserDto);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(encoder.matches(any(),any())).thenReturn(false);
 
         try{

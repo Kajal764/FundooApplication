@@ -3,7 +3,7 @@ package com.fundoo.user.service;
 import com.fundoo.user.dto.RegisterUserDto;
 import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.exception.RegistrationException;
-import com.fundoo.user.model.UserInfo;
+import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
 import com.fundoo.user.utility.JavaMailUtil;
 import com.fundoo.user.utility.JwtUtil;
@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class UserInfoTest {
+public class UserTest {
 
     @Mock
     UserRepository userRepository;
@@ -42,8 +42,8 @@ public class UserInfoTest {
     @Test
     void givenUserDetails_WhenRegister_ItShouldSaveRegistrationDetails() throws MessagingException {
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
-        UserInfo userInfo = new UserInfo(registerUserDto);
-        when(userRepository.save(any())).thenReturn(userInfo);
+        User user = new User(registerUserDto);
+        when(userRepository.save(any())).thenReturn(user);
         when(javaMailUtil.sendMail("kajalw1998@gmail.com", "sdjfdsf")).thenReturn(new SimpleMailMessage());
         when(bCryptPasswordEncoder.encode(any())).thenReturn("nmdf");
         when(jwtUtil.createJwtToken(any())).thenReturn("sdjkfsdn");
@@ -55,8 +55,8 @@ public class UserInfoTest {
     @Test
     void givenAlreadyRegisterDetails_WhenRegister_ItShouldNotSave() {
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
-        UserInfo userInfo = new UserInfo(registerUserDto);
-        when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(userInfo));
+        User user = new User(registerUserDto);
+        when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(user));
         when(bCryptPasswordEncoder.encode(any())).thenReturn("nmdf");
         try {
             registrationService.register(registerUserDto);
@@ -71,11 +71,11 @@ public class UserInfoTest {
     void givenRequestForVerify_WhenGetTokenShouldActivateVarifiedAccount() {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
-        UserInfo userInfo = new UserInfo(registerUserDto);
+        User user = new User(registerUserDto);
         when(jwtUtil.verify(token)).thenReturn(new Object());
-        when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(userInfo));
-        when(userRepository.save(userInfo)).thenReturn(userInfo);
+        when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
         registrationService.verifyUser(token);
-        Assert.assertTrue(userInfo.isVarified());
+        Assert.assertTrue(user.isVarified());
     }
 }

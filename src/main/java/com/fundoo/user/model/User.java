@@ -11,13 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class UserInfo {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,7 +42,9 @@ public class UserInfo {
     @Column(nullable = false)
     private boolean isVarified;
 
-    public UserInfo(RegisterUserDto registerUserDto) {
+    private LocalDateTime createdDate;
+
+    public User(RegisterUserDto registerUserDto) {
         this.firstName = registerUserDto.firstName;
         this.lastName = registerUserDto.lastName;
         this.email = registerUserDto.email;
