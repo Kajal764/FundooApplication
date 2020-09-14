@@ -5,7 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Column;
 
 @Entity
 @NoArgsConstructor
@@ -18,16 +23,22 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @Column(nullable = false)
     private String firstName;
 
+    @Column(nullable = false)
     private String lastName;
 
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String mobileNumber;
 
+    @Column(nullable = false)
     private boolean isVarified;
 
     public UserInfo(RegisterUserDto registerUserDto) {
@@ -37,4 +48,5 @@ public class UserInfo {
         this.password = registerUserDto.password;
         this.mobileNumber=registerUserDto.mobileNumber;
     }
+
 }
