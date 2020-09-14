@@ -37,5 +37,12 @@ public class ForgotPWService implements IForgotPWService {
         }
         throw new LoginUserException("Account not found");
     }
+
+    @Override
+    public String redirectToUpatePassword(String token) {
+        String link = "http://localhost:8080/fundoo/update/"+token;
+        return link;
+
+    }
 }
 

@@ -5,8 +5,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-
 @Service
 public class JavaMailUtil {
 
@@ -26,7 +24,7 @@ public class JavaMailUtil {
 
     public SimpleMailMessage resetPwMail(String email, String jwtToken) {
         SimpleMailMessage message = new SimpleMailMessage();
-        String link = "http://localhost:8080/fundoo/resetPassword?token=";
+        String link = "http://localhost:8080/fundoo/reset/";
         message.setTo(email);
         message.setSubject("Password Reset Request");
         message.setText("To reset your password, click the link : " + (link + jwtToken));

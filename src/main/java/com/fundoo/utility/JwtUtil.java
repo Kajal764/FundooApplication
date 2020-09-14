@@ -13,7 +13,7 @@ public class JwtUtil {
 
     public String createJwtToken(String email) {
         return Jwts.builder().claim("email", email).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(10).toInstant()))
+                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(30).toInstant()))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
     }
 
@@ -25,7 +25,8 @@ public class JwtUtil {
             return claimsJws.getBody().get("email");
         } catch (ExpiredJwtException e) {
             return "Token Expired";
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return " Some other exception in JWT parsing ";
         }
     }

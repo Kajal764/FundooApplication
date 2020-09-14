@@ -2,12 +2,10 @@ package com.fundoo.controller;
 
 import com.fundoo.dto.ForgotPwDto;
 import com.fundoo.dto.ResponseDto;
+import com.fundoo.dto.UpdatePasswordDto;
 import com.fundoo.service.ForgotPWService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
@@ -23,5 +21,10 @@ public class ForgotPwController {
         return forgotPWService.checkDetails(forgotPwDto);
     }
 
+    @GetMapping(value = "/reset/{token}")
+    public String updatePassword(@PathVariable("token") String token) {
+        return forgotPWService.redirectToUpatePassword(token);
+
+    }
 }
 

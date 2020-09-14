@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -53,6 +54,25 @@ public class ForgotPasswordControllerTest {
         MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/forgotpassword").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Otp Has been sent to your account"));
-
     }
+
+    @Test
+    void givenRequestForResetPassword_WhenGetResponse_ItShouldReturnStatusOk() throws Exception {
+        String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
+        when(forgotPWService.redirectToUpatePassword(any())).thenReturn("http://localhost:8080/fundoo/update/" + token);
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/reset/" + token)).andReturn();
+        Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
+    }
+
+
+    @Test
+    void givenRequestForResetPassword_WhenGetResponse_ItShouldRedirectToUpadtePasswordApi() throws Exception {
+        String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
+        when(forgotPWService.redirectToUpatePassword(any())).thenReturn("http://localhost:8080/fundoo/update/" + token);
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/reset/" + token)).andReturn();
+        String updateApi = "http://localhost:8080/fundoo/update/eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
+        Assert.assertEquals(mvcResult.getResponse().getContentAsString(), updateApi);
+    }
+
+
 }
