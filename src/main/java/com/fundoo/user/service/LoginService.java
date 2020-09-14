@@ -1,7 +1,6 @@
 package com.fundoo.user.service;
 
 import com.fundoo.user.dto.LoginDto;
-import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.exception.LoginUserException;
 import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Service
@@ -25,7 +25,7 @@ public class LoginService implements ILoginService {
     JwtUtil jwtUtil;
 
     @Override
-    public ResponseDto login(LoginDto loginDto) {
+    public String login(LoginDto loginDto) {
 
         Optional<User> isEmailPresent = userRepository.findByEmail(loginDto.email);
         if (isEmailPresent.isEmpty())
@@ -35,7 +35,7 @@ public class LoginService implements ILoginService {
             if (isEmailPresent.get().isVarified() == true) {
                 String token = jwtUtil.createJwtToken(CLIENT_ID);
                 RedisService.setToken(CLIENT_ID, token);
-                return new ResponseDto("Login Succesfull", 200);
+                return token;
             }
             throw new LoginUserException("Please Activate your account");
         }

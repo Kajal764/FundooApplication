@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 
@@ -40,8 +41,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto login(@RequestBody LoginDto loginDto) {
-        return loginService.login(loginDto);
+    public String login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+        String token = loginService.login(loginDto);
+        response.setHeader("AuthorizeToken",token);
+        return token;
     }
 
     @PostMapping(value = "/forgotpassword")

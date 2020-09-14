@@ -1,8 +1,6 @@
 package com.fundoo.user.controller;
 
-
 import com.fundoo.user.dto.LoginDto;
-import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.service.LoginService;
 import com.google.gson.Gson;
 import org.junit.Assert;
@@ -41,7 +39,7 @@ public class LoginControllerTest {
         token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
         toJson = gson.toJson(loginDto);
-        when(loginService.login(any())).thenReturn(new ResponseDto("Login Succesfull", 200));
+        when(loginService.login(any())).thenReturn(token);
     }
 
     @Test
@@ -58,7 +56,7 @@ public class LoginControllerTest {
         MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/login").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
-        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Login Succesfull"));
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(token));
     }
 
 }
