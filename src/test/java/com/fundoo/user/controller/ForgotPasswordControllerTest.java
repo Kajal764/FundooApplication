@@ -35,7 +35,7 @@ public class ForgotPasswordControllerTest {
 
     @Test
     void givenRequestForForgotPw_WhenGetResponse_ItShouldReturnStatusOk() throws Exception {
-        ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com", "Guddi", "waghmare");
+        ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com");
         String toJson = gson.toJson(forgotPwDto);
         when(forgotPWService.checkDetails(any())).thenReturn(new ResponseDto("Otp Has been sent to your account", 200));
         MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/forgotpassword").content(toJson)
@@ -47,7 +47,7 @@ public class ForgotPasswordControllerTest {
 
     @Test
     void givenRequestForForgotPw_WhenGetResponse_ItShouldReturnCorrectSuccesMessage() throws Exception {
-        ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com", "Guddi", "waghmare");
+        ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com");
         String toJson = gson.toJson(forgotPwDto);
 
         when(forgotPWService.checkDetails(any())).thenReturn(new ResponseDto("Otp Has been sent to your account", 200));

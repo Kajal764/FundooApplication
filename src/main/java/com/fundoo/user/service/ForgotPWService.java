@@ -26,21 +26,20 @@ public class ForgotPWService implements IForgotPWService {
 
     @Override
     public ResponseDto checkDetails(ForgotPwDto forgotPwDto) {
-
+        System.out.println(userRepository.findByEmail(forgotPwDto.email));
         Optional<UserInfo> isDetailPresent = userRepository.findByEmail(forgotPwDto.email);
-        if(!isDetailPresent.isEmpty()){
-            if(isDetailPresent.get().getFirstName().equalsIgnoreCase(forgotPwDto.firstName) && isDetailPresent.get().getLastName().equalsIgnoreCase(forgotPwDto.lastName) ){
-                String jwtToken = jwtUtil.createJwtToken(isDetailPresent.get().getEmail());
-                javaMailUtil.resetPwMail(forgotPwDto.email,jwtToken);
-                return new ResponseDto("Otp Has been sent to your account", 200);
-            }
+        System.out.println(isDetailPresent);
+        if (!isDetailPresent.isEmpty()) {
+            String jwtToken = jwtUtil.createJwtToken(forgotPwDto.email);
+            javaMailUtil.resetPwMail(forgotPwDto.email,jwtToken);
+            return new ResponseDto("Otp Has been sent to your account", 200);
         }
         throw new LoginUserException("Account not found");
     }
 
     @Override
     public String redirectToUpatePassword(String token) {
-        String link = "http://localhost:8080/fundoo/update/"+token;
+        String link = "http://localhost:8080/fundoo/update/" + token;
         return link;
 
     }

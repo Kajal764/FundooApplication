@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/forgotpassword")
-    public ResponseDto forgotPassword(@RequestBody ForgotPwDto forgotPwDto) throws MessagingException {
+    public ResponseDto forgotPassword(@RequestBody ForgotPwDto forgotPwDto) {
         return forgotPWService.checkDetails(forgotPwDto);
     }
 

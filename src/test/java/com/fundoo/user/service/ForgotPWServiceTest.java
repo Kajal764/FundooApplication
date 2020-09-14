@@ -41,11 +41,11 @@ public class ForgotPWServiceTest {
     void givenDetails_WhenForgotPassword_ItShouldReturnSuccessMessage() throws MessagingException {
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
         UserInfo userInfo = new UserInfo(registerUserDto);
-        ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com", "kajal", "waghmare");
+        String email="kajalw1998@gmail.com";
         Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
         when(javaMailUtil.resetPwMail("kajalw1998@gmail.com","token")).thenReturn(new SimpleMailMessage());
         when(jwtUtil.createJwtToken(any())).thenReturn(any());
-        ResponseDto checkDetails = forgotPWService.checkDetails(forgotPwDto);
+        ResponseDto checkDetails = forgotPWService.checkDetails(new ForgotPwDto("kajalw1998@gmail.com"));
         Assert.assertEquals(checkDetails.message,"Otp Has been sent to your account");
     }
 
@@ -53,12 +53,12 @@ public class ForgotPWServiceTest {
     void givenWrongDetails_WhenForgotPassword_ItShouldThrowException() {
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
         UserInfo userInfo = new UserInfo(registerUserDto);
-        ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com", "Guddi", "waghmare");
+        String email="kajalw1998@gmail.com";
         Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userInfo));
         when(javaMailUtil.resetPwMail("kajalw1998@gmail.com","token")).thenReturn(new SimpleMailMessage());
         when(jwtUtil.createJwtToken(any())).thenReturn(any());
         try{
-            forgotPWService.checkDetails(forgotPwDto);
+            forgotPWService.checkDetails(new ForgotPwDto("kajalw1998@gmail.com"));
         }catch (LoginUserException e){
             Assert.assertEquals(e.getMessage(),"Account not found");
         }

@@ -9,9 +9,4 @@ public class ForgotPwDto {
 
     public String email;
 
-    public String firstName;
-
-    public String lastName;
-
-
 }
