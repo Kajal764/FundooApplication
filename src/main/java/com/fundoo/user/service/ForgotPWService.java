@@ -28,7 +28,6 @@ public class ForgotPWService implements IForgotPWService {
     public ResponseDto checkDetails(ForgotPwDto forgotPwDto) {
         System.out.println(userRepository.findByEmail(forgotPwDto.email));
         Optional<User> isDetailPresent = userRepository.findByEmail(forgotPwDto.email);
-        System.out.println(isDetailPresent);
         if (!isDetailPresent.isEmpty()) {
             String jwtToken = jwtUtil.createJwtToken(forgotPwDto.email);
             javaMailUtil.resetPwMail(forgotPwDto.email,jwtToken);
@@ -39,7 +38,7 @@ public class ForgotPWService implements IForgotPWService {
 
     @Override
     public String redirectToUpatePassword(String token) {
-        String link = "http://localhost:8080/fundoo/update_password/" + token;
+        String link = "http://localhost:8080/fundoo/user/update_password/" + token;
         return link;
 
     }

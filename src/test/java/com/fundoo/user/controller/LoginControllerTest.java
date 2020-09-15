@@ -56,6 +56,6 @@ public class LoginControllerTest {
         MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/user/login").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
-        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(token));
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Login Successful"));
     }
 }

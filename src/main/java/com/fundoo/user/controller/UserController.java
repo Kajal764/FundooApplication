@@ -41,10 +41,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+    public ResponseDto login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
         String token = loginService.login(loginDto);
         response.setHeader("AuthorizeToken",token);
-        return token;
+        return new ResponseDto("Login Successful",200);
     }
 
     @PostMapping(value = "/forgot_password")
