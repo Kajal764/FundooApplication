@@ -48,28 +48,19 @@ public class NoteServiceTest {
     @Mock
     User user;
 
-    NoteDto noteDto;
-    Note note;
-    String token;
-    String exactToken;
-
-    @BeforeEach
-    void setUp() {
-        noteDto = new NoteDto("java", "this is desciption");
-        note = new Note();
-        BeanUtils.copyProperties(noteDto, note);
-        List<Note> mockList = new ArrayList<>();
-        user.setNoteList(mockList);
-        token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNjAwMTU1NTY0LCJleHAiOjE2MDAxNTkxNjR9.oBgxhHCmIlWEVB-07aG1-e0NpsBpWlAHwSSrlaxblYReJCWAWmWV7HhZ3OZHf6E_zxFea9Omj0C4YlC9VaqDAw";
-        exactToken = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNjAwMTU1NTY0LCJleHAiOjE2MDAxNTkxNjR9.oBgxhHCmIlWEVB-07aG1-e0NpsBpWlAHwSSrlaxblYReJCWAWmWV7HhZ3OZHf6E_zxFea9Omj0C4YlC9VaqDAw";
-        when(jwtUtil.verify(any())).thenReturn("kajalw1998@gmail.com");
-        when(redisService.getToken(any())).thenReturn(exactToken);
-        when(noteRepository.save(any())).thenReturn(note);
-    }
-
 
     @Test
     void givenTitleAndDesciption_whenCreatingNote_ItShouldreturnNoteData() {
+        NoteDto noteDto = new NoteDto("java", "this is desciption");
+        Note note = new Note();
+        BeanUtils.copyProperties(noteDto, note);
+        List<Note> mockList = new ArrayList<>();
+        user.setNoteList(mockList);
+        String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNjAwMTU1NTY0LCJleHAiOjE2MDAxNTkxNjR9.oBgxhHCmIlWEVB-07aG1-e0NpsBpWlAHwSSrlaxblYReJCWAWmWV7HhZ3OZHf6E_zxFea9Omj0C4YlC9VaqDAw";
+        String exactToken = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNjAwMTU1NTY0LCJleHAiOjE2MDAxNTkxNjR9.oBgxhHCmIlWEVB-07aG1-e0NpsBpWlAHwSSrlaxblYReJCWAWmWV7HhZ3OZHf6E_zxFea9Omj0C4YlC9VaqDAw";
+        when(jwtUtil.verify(any())).thenReturn("kajalw1998@gmail.com");
+        when(redisService.getToken(any())).thenReturn(exactToken);
+        when(noteRepository.save(any())).thenReturn(note);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         ResponseDto response = noteService.createNote(noteDto, token);
         Assert.assertEquals(response.message, "Note created successfully");
@@ -77,6 +68,16 @@ public class NoteServiceTest {
 
     @Test
     void givenTitleAndDesciptionIfNotAuthenticate_whenCreatingNote_ItShouldThrowException() {
+        NoteDto noteDto = new NoteDto("java", "this is desciption");
+        Note note = new Note();
+        BeanUtils.copyProperties(noteDto, note);
+        List<Note> mockList = new ArrayList<>();
+        user.setNoteList(mockList);
+        String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNjAwMTU1NTY0LCJleHAiOjE2MDAxNTkxNjR9.oBgxhHCmIlWEVB-07aG1-e0NpsBpWlAHwSSrlaxblYReJCWAWmWV7HhZ3OZHf6E_zxFea9Omj0C4YlC9VaqDAw";
+        String exactToken = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNjAwMTU1NTY0LCJleHAiOjE2MDAxNTkxNjR9.oBgxhHCmIlWEVB-07aG1-e0NpsBpWlAHwSSrlaxblYReJCWAWmWV7HhZ3OZHf6E_zxFea9Omj0C4YlC9VaqDAw";
+        when(jwtUtil.verify(any())).thenReturn("kajalw1998@gmail.com");
+        when(redisService.getToken(any())).thenReturn(exactToken);
+        when(noteRepository.save(any())).thenReturn(note);
         when(userRepository.findByEmail(any())).thenReturn(null);
         try {
             noteService.createNote(noteDto, token);
@@ -84,5 +85,7 @@ public class NoteServiceTest {
             Assert.assertEquals(e.getMessage(), "Authentication Fail");
         }
     }
+
+
 
 }

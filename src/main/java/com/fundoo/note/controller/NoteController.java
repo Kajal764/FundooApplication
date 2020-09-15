@@ -2,6 +2,7 @@ package com.fundoo.note.controller;
 
 
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.service.INoteService;
 import com.fundoo.user.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,15 @@ public class NoteController {
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto createNote(@RequestBody NoteDto noteDto, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-       return noteService.createNote(noteDto, token);
+        return noteService.createNote(noteDto, token);
     }
+
+    @GetMapping(value = "/trash/{id}")
+    public ResponseDto trashNote(@PathVariable("id") int note_id, HttpServletRequest request) throws NoteException {
+        String token = request.getHeader("Authorization");
+        return noteService.trash(note_id, token);
+    }
+
+
 }
 

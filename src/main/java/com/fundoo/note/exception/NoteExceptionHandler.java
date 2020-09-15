@@ -11,6 +11,11 @@ public class NoteExceptionHandler {
 
     @ExceptionHandler(value = AuthenticationException.class)
     public ResponseEntity<Object> authenticationException(AuthenticationException authenticationException){
-        return new ResponseEntity<>(new ResponseDto(authenticationException.getMessage(),400),HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new ResponseDto(authenticationException.getMessage(),403),HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = NoteException.class)
+    public ResponseEntity<Object> noteException(NoteException noteException){
+        return new ResponseEntity<>(new ResponseDto(noteException.message,noteException.statusCode),HttpStatus.FORBIDDEN);
     }
 }
