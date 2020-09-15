@@ -30,6 +30,11 @@ public class NoteController {
         return noteService.trash(note_id, token);
     }
 
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseDto deleteNote(@PathVariable("id") int note_id,HttpServletRequest request) throws NoteException {
+        String token = request.getHeader("Authorization");
+        return noteService.deleteNote(note_id,token);
+    }
 
 }
 
