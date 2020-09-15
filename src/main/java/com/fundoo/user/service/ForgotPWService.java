@@ -39,7 +39,7 @@ public class ForgotPWService implements IForgotPWService {
 
     @Override
     public String redirectToUpatePassword(String token) {
-        String link = "http://localhost:8080/fundoo/update/" + token;
+        String link = "http://localhost:8080/fundoo/update_password/" + token;
         return link;
 
     }

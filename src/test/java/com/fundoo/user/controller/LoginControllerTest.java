@@ -44,7 +44,7 @@ public class LoginControllerTest {
 
     @Test
     void givenRequestForLogin_WhenGetResponse_ItShouldReturnStatusOk() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/login").content(toJson)
+        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/user/login").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
@@ -53,10 +53,9 @@ public class LoginControllerTest {
     @Test
     void givenRequestForLogin_WhenGetResponse_ItShouldReturnToken() throws Exception {
 
-        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/login").content(toJson)
+        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/user/login").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(token));
     }
-
 }

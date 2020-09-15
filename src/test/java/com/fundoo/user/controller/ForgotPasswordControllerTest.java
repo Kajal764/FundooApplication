@@ -38,7 +38,7 @@ public class ForgotPasswordControllerTest {
         ForgotPwDto forgotPwDto = new ForgotPwDto("kajalw1998@gmail.com");
         String toJson = gson.toJson(forgotPwDto);
         when(forgotPWService.checkDetails(any())).thenReturn(new ResponseDto("Otp Has been sent to your account", 200));
-        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/forgotpassword").content(toJson)
+        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/user/forgot_password").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
@@ -51,7 +51,7 @@ public class ForgotPasswordControllerTest {
         String toJson = gson.toJson(forgotPwDto);
 
         when(forgotPWService.checkDetails(any())).thenReturn(new ResponseDto("Otp Has been sent to your account", 200));
-        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/forgotpassword").content(toJson)
+        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/user/forgot_password").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Otp Has been sent to your account"));
     }
@@ -60,7 +60,7 @@ public class ForgotPasswordControllerTest {
     void givenRequestForResetPassword_WhenGetResponse_ItShouldReturnStatusOk() throws Exception {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         when(forgotPWService.redirectToUpatePassword(any())).thenReturn("http://localhost:8080/fundoo/update/" + token);
-        MvcResult mvcResult = mockMvc.perform(get("/fundoo/reset/" + token)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/user/reset_password/" + token)).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
 
@@ -69,7 +69,7 @@ public class ForgotPasswordControllerTest {
     void givenRequestForResetPassword_WhenGetResponse_ItShouldRedirectToUpadtePasswordApi() throws Exception {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         when(forgotPWService.redirectToUpatePassword(any())).thenReturn("http://localhost:8080/fundoo/update/" + token);
-        MvcResult mvcResult = mockMvc.perform(get("/fundoo/reset/" + token)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/user/reset_password/" + token)).andReturn();
         String updateApi = "http://localhost:8080/fundoo/update/eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         Assert.assertEquals(mvcResult.getResponse().getContentAsString(), updateApi);
     }

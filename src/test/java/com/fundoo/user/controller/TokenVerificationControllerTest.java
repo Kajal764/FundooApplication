@@ -26,7 +26,7 @@ public class TokenVerificationControllerTest {
     @Test
     void givenRequest_WhenGetResponse_ItShouldReturnStatusOk() throws Exception {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        MvcResult mvcResult = mockMvc.perform(get("/fundoo/verifyUser")
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/user/verify")
                 .param("token", token)).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
@@ -35,7 +35,7 @@ public class TokenVerificationControllerTest {
     void givenRequest_WhenGetResponse_ItShouldReturnSuccessVerifyMessage() throws Exception {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         when(registrationService.verifyUser(token)).thenReturn("Verify User Successfully");
-        MvcResult mvcResult = mockMvc.perform(get("/fundoo/verifyUser")
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/user/verify")
                 .param("token", token)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Verify User Successfully"));
     }

@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 
 @RestController
-@RequestMapping("/fundoo")
+@RequestMapping("/fundoo/user")
 public class UserController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class UserController {
         return registrationService.register(registerUserDto);
     }
 
-    @GetMapping("/verifyUser")
+    @GetMapping("/verify")
     public Object validateUser(@RequestParam String token) {
         return registrationService.verifyUser(token);
     }
@@ -47,17 +47,17 @@ public class UserController {
         return token;
     }
 
-    @PostMapping(value = "/forgotpassword")
+    @PostMapping(value = "/forgot_password")
     public ResponseDto forgotPassword(@RequestBody ForgotPwDto forgotPwDto) {
         return forgotPWService.checkDetails(forgotPwDto);
     }
 
-    @GetMapping(value = "/reset/{token}")
+    @GetMapping(value = "/reset_password/{token}")
     public String updatePassword(@PathVariable("token") String token) {
         return forgotPWService.redirectToUpatePassword(token);
     }
 
-    @PutMapping("update/{token}")
+    @PutMapping("update_password/{token}")
     public ResponseDto updatePassword(@PathVariable("token") String token, @RequestBody UpdatePasswordDto updatePasswordDto) {
         return updatePasswordService.update(token, updatePasswordDto);
     }

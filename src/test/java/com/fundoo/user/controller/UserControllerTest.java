@@ -43,23 +43,22 @@ public class UserControllerTest {
 
     @Test
     void givenRequest_WhenGetResponse_ItShouldReturnStatusOk() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/register").content(toJson)
+        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/user/register").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
 
     @Test
     void givenRequest_WhenGetResponse_ItShouldReturnSuccessMessage() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/register").content(toJson)
+        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/user/register").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Registration Successful"));
     }
 
     @Test
     void givenRequestWithAnotherMediaType_WhenGetResponse_ItShouldNotAccept() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/register").content(toJson)
+        MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/user/register").content(toJson)
                 .contentType(MediaType.APPLICATION_PROBLEM_XML_VALUE)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Unsupported Media Type"));
     }
-
 }

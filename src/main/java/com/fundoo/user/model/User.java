@@ -1,17 +1,16 @@
 package com.fundoo.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fundoo.note.model.Note;
 import com.fundoo.user.dto.RegisterUserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Column;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -44,6 +43,10 @@ public class User {
 
     private LocalDateTime createdDate;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "U_Id")
+    private List<Note> noteList;
+
     public User(RegisterUserDto registerUserDto) {
         this.firstName = registerUserDto.firstName;
         this.lastName = registerUserDto.lastName;
@@ -51,5 +54,4 @@ public class User {
         this.password = registerUserDto.password;
         this.mobileNumber = registerUserDto.mobileNumber;
     }
-
 }

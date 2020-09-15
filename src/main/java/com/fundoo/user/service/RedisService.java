@@ -13,7 +13,7 @@ public class RedisService {
         jedis.hset(clientId, TOKEN, jwtToken);
     }
 
-    public static String getToken(String clientId) {
+    public String getToken(String clientId) {
         return jedis.hget(clientId, TOKEN);
     }
 

@@ -11,7 +11,6 @@ public class JavaMailUtil {
     @Autowired
     JavaMailSender javaMailSender;
 
-
     public SimpleMailMessage sendMail(String email, String jwtToken) {
         SimpleMailMessage message = new SimpleMailMessage();
         String link = "http://localhost:8080/fundoo/verifyUser?token=";
@@ -24,7 +23,7 @@ public class JavaMailUtil {
 
     public SimpleMailMessage resetPwMail(String email, String jwtToken) {
         SimpleMailMessage message = new SimpleMailMessage();
-        String link = "http://localhost:8080/fundoo/reset/";
+        String link = "http://localhost:8080/fundoo/reset_password/";
         message.setTo(email);
         message.setSubject("Password Reset Request");
         message.setText("To reset your password, click the link : " + (link + jwtToken));
