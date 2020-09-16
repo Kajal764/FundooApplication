@@ -98,7 +98,7 @@ class NoteService implements INoteService {
     }
 
     @Override
-    public ResponseDto updateNote(NoteDto noteDto, String token) {
+    public ResponseDto updateNote(int noteId, String token) {
         return null;
     }
 }
