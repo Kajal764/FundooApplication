@@ -1,9 +1,7 @@
 package com.fundoo.note.controller;
 
-
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.exception.NoteException;
-import com.fundoo.note.model.Note;
 import com.fundoo.note.service.INoteService;
 import com.fundoo.user.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/fundoo/note")
@@ -39,10 +36,12 @@ public class NoteController {
         return noteService.trashNoteDelete(note_id,token);
     }
 
-    @PutMapping(value = "/update/{note_Id}")
-    public ResponseDto updateNote(@PathVariable("note_Id") int noteId , HttpServletRequest request){
+    @PutMapping(value = "/update")
+    public Object updateNote(@RequestBody NoteDto noteDto, HttpServletRequest request) throws NoteException {
         String token = request.getHeader("Authorization");
-        return noteService.updateNote(noteId,token);
+        if(noteService.updateNote(noteDto,token))
+            return new ResponseDto("Note Updated",200);
+        return new ResponseDto("Error Updating Note",400);
     }
 
 }

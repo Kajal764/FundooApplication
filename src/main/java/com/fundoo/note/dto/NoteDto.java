@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class NoteDto {
 
+    public int note_id;
+
     @NotNull(message = "Title must not be null")
     public String title;
 

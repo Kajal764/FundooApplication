@@ -22,7 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -54,7 +58,9 @@ public class NoteServiceTest {
 
     @BeforeEach
     void setUp() {
-        noteDto = new NoteDto("java", "this is desciption");
+
+        noteDto = new NoteDto(3, "java", "this is description");
+
         note = new Note();
         BeanUtils.copyProperties(noteDto, note);
 
@@ -122,13 +128,16 @@ public class NoteServiceTest {
     }
 
     @Test
-    void givenIdForNoteTrash_whenNoteIsNotInTrash_ItShouldThrowException() throws NoteException {
+    void givenIdForNoteTrash_whenNoteIsNotInTrash_ItShouldThrowException() {
         int note_id = 4;
         note.setTrash(false);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(noteRepository.findById(4)).thenReturn(Optional.of(note));
         try {
-            noteService.trashNoteDelete(note_id,token);
+
+            noteService.trashNoteDelete(note_id, token);
+            noteService.trashNoteDelete(note_id, token);
+
         } catch (NoteException e) {
             Assert.assertEquals(e.getMessage(), "Note is not in trash");
         }
@@ -144,6 +153,30 @@ public class NoteServiceTest {
         } catch (AuthenticationException e) {
             Assert.assertEquals(e.getMessage(), "User Don't have permission");
         }
+    }
+
+    @Test
+    void givenNoteId_WhenUpdateNote_ItShouldReturnUpdateNote() throws NoteException {
+        NoteDto noteDto = new NoteDto(4, "java", "this is desciption");
+        Note note = new Note();
+        BeanUtils.copyProperties(noteDto, note);
+
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+        when(noteRepository.save(any())).thenReturn(note);
+        Assert.assertTrue(noteService.updateNote(noteDto, token));
+
+    }
+
+    @Test
+    void givenNoteId_WhenUpdateNoteNotPresent_ItShouldReturnUpdateNote() {
+        NoteDto noteDto = new NoteDto(4, "java", "this is desciption");
+
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        NoteException noteException = assertThrows(NoteException.class, () -> noteService.updateNote(noteDto, token));
+        assertThat(noteException.getMessage(), is("Note Is Not Present"));
     }
 
 }

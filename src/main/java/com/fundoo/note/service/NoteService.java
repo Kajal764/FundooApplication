@@ -51,7 +51,7 @@ class NoteService implements INoteService {
                 throw new AuthenticationException("Authentication Fail");
             }
         }
-        return false;
+        throw new AuthenticationException("User Don't have permission");
     }
 
     public ResponseDto createNote(NoteDto noteDto, String authorizationHeader) {
@@ -98,7 +98,17 @@ class NoteService implements INoteService {
     }
 
     @Override
-    public ResponseDto updateNote(int noteId, String token) {
-        return null;
+    public boolean updateNote(NoteDto noteDto, String token) throws NoteException {
+        Optional<User> user = checkUserWithEmailId(token);
+        if (checkAuthorization(user)) {
+            Optional<Note> note = noteRepository.findById(noteDto.note_id);
+            return note.map((value) -> {
+                value.setTitle(noteDto.title);
+                value.setDescription(noteDto.description);
+                noteRepository.save(value);
+                return true;
+            }).orElseThrow(() -> new NoteException("Note Is Not Present"));
+        }
+        return false;
     }
 }

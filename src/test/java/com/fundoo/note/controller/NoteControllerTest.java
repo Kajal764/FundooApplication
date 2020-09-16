@@ -35,9 +35,10 @@ public class NoteControllerTest {
 
     Gson gson = new Gson();
 
+
     @Test
     void givenRequest_whenCreatingNote_ItShouldReturnStatusCreated() throws Exception {
-        NoteDto noteDto = new NoteDto("java", "this is desciption");
+        NoteDto noteDto = new NoteDto(5,"java", "this is desciption");
         Note note = new Note();
         BeanUtils.copyProperties(noteDto,note);
         String toJson = gson.toJson(noteDto);
@@ -50,7 +51,7 @@ public class NoteControllerTest {
 
     @Test
     void givenRequest_whenCreatingNote_ItShouldReturnNoteData() throws Exception {
-        NoteDto noteDto = new NoteDto("java", "this is desciption");
+        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
         Note note = new Note();
         BeanUtils.copyProperties(noteDto,note);
         note.setCreatedDate(LocalDateTime.now());
@@ -80,36 +81,49 @@ public class NoteControllerTest {
     }
 
     @Test
-    void givenRequestToUpdateNote_WhenNoteUpdate_ItShouldReturnStatusOk() throws Exception {
-
-        when(noteService.updateNote(anyInt(),any())).thenReturn(new ResponseDto("Note Updated Successfully",200));
-
-        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/update/5")
+    void givenRequestToUpdateNote_WhenNoteUpdate_ItShouldReturnStatusOk() throws Exception, NoteException {
+        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
+        String toJson = gson.toJson(noteDto);
+        when(noteService.updateNote(any(),any())).thenReturn(true);
+        MvcResult mvcResult = mockMvc.perform(put("/fundoo/note/update").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
     }
 
     @Test
-    void givenRequestToUpdateNote_WhenNoteUpdate_ItShouldReturnSuccessMessage() throws Exception {
+    void givenRequestToUpdateNote_WhenNoteUpdate_ItShouldReturnSuccessMessage() throws Exception, NoteException {
 
-        when(noteService.updateNote(anyInt(),any())).thenReturn(new ResponseDto("Note Updated Successfully",200));
-
-        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/update/5")
+        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
+        String toJson = gson.toJson(noteDto);
+        when(noteService.updateNote(any(),any())).thenReturn(true);
+        MvcResult mvcResult = mockMvc.perform(put("/fundoo/note/update").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
-
-        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Updated Successfully"));
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Updated"));
     }
 
 
     @Test
-    void givenDifferentMethodToUpdateNote_WhenNoteUpdate_ItShouldReturnMethodNotSupportedMessage() throws Exception {
+    void givenDifferentMethodToUpdateNote_WhenNoteUpdate_ItShouldReturnMethodNotSupportedMessage() throws Exception, NoteException {
 
-        when(noteService.updateNote(anyInt(),any())).thenReturn(new ResponseDto("Note Updated Successfully",200));
-
-        MvcResult mvcResult = this.mockMvc.perform(get("/fundoo/note/update/5")
+        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
+        String toJson = gson.toJson(noteDto);
+        when(noteService.updateNote(any(),any())).thenReturn(true);
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/note/update").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
+
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Request method 'GET' not supported"));
+    }
+
+    @Test
+    void givenRequestToUpdateNote_WhenNoteNotUpdate_ItShouldReturnErrorMessage() throws Exception, NoteException {
+
+        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
+        String toJson = gson.toJson(noteDto);
+        when(noteService.updateNote(any(),any())).thenReturn(false);
+        MvcResult mvcResult = mockMvc.perform(put("/fundoo/note/update").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Updating Note"));
     }
 
 }
