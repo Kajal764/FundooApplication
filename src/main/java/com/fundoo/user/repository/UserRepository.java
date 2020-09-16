@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
@@ -17,8 +18,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "update user u set u.password =:password where u.email = :email",nativeQuery = true)
-    void updatePassword(@Param("password") String password,@Param("email") String email);
+    @Query(value = "update user u set u.password =:password,u.account_updated_date=:time where u.email = :email", nativeQuery = true)
+    void updatePasswordAndTime(@Param("password") String password, @Param("time") LocalDateTime time,@Param("email") String email);
+
 
 }
 

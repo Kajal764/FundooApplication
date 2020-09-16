@@ -59,7 +59,7 @@ public class ForgotPasswordControllerTest {
     @Test
     void givenRequestForResetPassword_WhenGetResponse_ItShouldReturnStatusOk() throws Exception {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        when(forgotPWService.redirectToUpatePassword(any())).thenReturn("http://localhost:8080/fundoo/update/" + token);
+        when(forgotPWService.redirectToUpdatePassword(any())).thenReturn("http://localhost:8080/fundoo/update/" + token);
         MvcResult mvcResult = mockMvc.perform(get("/fundoo/user/reset_password/" + token)).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
@@ -68,7 +68,7 @@ public class ForgotPasswordControllerTest {
     @Test
     void givenRequestForResetPassword_WhenGetResponse_ItShouldRedirectToUpadtePasswordApi() throws Exception {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        when(forgotPWService.redirectToUpatePassword(any())).thenReturn("http://localhost:8080/fundoo/update/" + token);
+        when(forgotPWService.redirectToUpdatePassword(any())).thenReturn("http://localhost:8080/fundoo/update/" + token);
         MvcResult mvcResult = mockMvc.perform(get("/fundoo/user/reset_password/" + token)).andReturn();
         String updateApi = "http://localhost:8080/fundoo/update/eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         Assert.assertEquals(mvcResult.getResponse().getContentAsString(), updateApi);

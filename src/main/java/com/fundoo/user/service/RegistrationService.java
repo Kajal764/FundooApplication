@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -37,6 +38,7 @@ public class RegistrationService implements IRegitrationService {
         Optional<User> byEmail = userRepository.findByEmail(user.getEmail());
         if (byEmail.isPresent())
             throw new RegistrationException("User already register", 400);
+        user.setAccountCreatedDate(LocalDateTime.now());
         User save = userRepository.save(user);
         String jwtToken = jwtUtil.createJwtToken(save.getEmail());
         javaMailUtil.sendMail(save.getEmail(), jwtToken);

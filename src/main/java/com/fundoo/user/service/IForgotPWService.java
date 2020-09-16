@@ -8,5 +8,5 @@ import javax.mail.MessagingException;
 public interface IForgotPWService {
     ResponseDto checkDetails(ForgotPwDto forgotPwDto) throws MessagingException;
 
-    Object redirectToUpatePassword(String token);
+    Object redirectToUpdatePassword(String token);
 }

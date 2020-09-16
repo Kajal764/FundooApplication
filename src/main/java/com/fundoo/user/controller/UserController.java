@@ -54,7 +54,7 @@ public class UserController {
 
     @GetMapping(value = "/reset_password/{token}")
     public String updatePassword(@PathVariable("token") String token) {
-        return forgotPWService.redirectToUpatePassword(token);
+        return forgotPWService.redirectToUpdatePassword(token);
     }
 
     @PutMapping("update_password/{token}")

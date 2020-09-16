@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -31,8 +32,9 @@ public class UpdatePasswordService implements IUpdatePasswordService {
         if (userInfo.isPresent()) {
             if (updatePasswordDto.password.equals(updatePasswordDto.confirmPassword)) {
                 String encodedPassword = bCryptPasswordEncoder.encode(updatePasswordDto.password);
-                userRepository.updatePassword(encodedPassword, userInfo.get().getEmail());
-                return new ResponseDto("Password updated succesfully",200);
+                LocalDateTime time = LocalDateTime.now();
+                userRepository.updatePasswordAndTime(encodedPassword, time, userInfo.get().getEmail());
+                return new ResponseDto("Password updated succesfully", 200);
             }
             throw new LoginUserException("Password Not match");
         }

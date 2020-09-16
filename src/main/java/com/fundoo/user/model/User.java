@@ -41,11 +41,15 @@ public class User {
     @Column(nullable = false)
     private boolean isVarified;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime accountCreatedDate;
+
+    private LocalDateTime accountUpdatedDate;
+
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "U_Id")
     private List<Note> noteList;
+
 
     public User(RegisterUserDto registerUserDto) {
         this.firstName = registerUserDto.firstName;
