@@ -7,7 +7,6 @@ import com.fundoo.user.dto.ResponseDto;
 public interface INoteService {
     ResponseDto createNote(NoteDto noteDto, String token);
 
-    ResponseDto trash(int note_id, String token) throws NoteException;
-
     ResponseDto deleteNote(int note_id, String token) throws NoteException;
+    ResponseDto trashNoteDelete(int note_id, String token) throws NoteException;
 }

@@ -31,7 +31,7 @@ public class ForgotPWService implements IForgotPWService {
         if (!isDetailPresent.isEmpty()) {
             String jwtToken = jwtUtil.createJwtToken(forgotPwDto.email);
             javaMailUtil.resetPwMail(forgotPwDto.email,jwtToken);
-            return new ResponseDto("Otp Has been sent to your account", 200);
+            return new ResponseDto("Email Has been sent to your account", 200);
         }
         throw new LoginUserException("Account not found");
     }

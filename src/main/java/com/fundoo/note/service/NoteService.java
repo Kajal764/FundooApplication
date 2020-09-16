@@ -69,7 +69,7 @@ class NoteService implements INoteService {
 
 
     @Override
-    public ResponseDto trash(int note_id, String token) throws NoteException {
+    public ResponseDto deleteNote(int note_id, String token) throws NoteException {
         Optional<User> user = checkUserWithEmailId(token);
         if (checkAuthorization(user)) {
             Optional<Note> note = noteRepository.findById(note_id);
@@ -78,13 +78,13 @@ class NoteService implements INoteService {
                 noteRepository.save(note.get());
                 return new ResponseDto("Note trashed", 200);
             }
-            throw new NoteException("Note is not present", 404);
+            throw new NoteException("Note is not present");
         }
         throw new AuthenticationException("User Don't have permission");
     }
 
     @Override
-    public ResponseDto deleteNote(int note_id, String token) throws NoteException {
+    public ResponseDto trashNoteDelete(int note_id, String token) throws NoteException {
         Optional<User> user = checkUserWithEmailId(token);
         if (checkAuthorization(user)) {
             Optional<Note> note = noteRepository.findById(note_id);
@@ -92,7 +92,7 @@ class NoteService implements INoteService {
                 noteRepository.delete(note.get());
                 return new ResponseDto("Note Deleted Successfully", 200);
             }
-            throw new NoteException("Note is not in trash", 404);
+            throw new NoteException("Note is not in trash");
         }
         throw new AuthenticationException("User Don't have permission");
     }

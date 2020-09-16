@@ -4,6 +4,7 @@ import com.fundoo.user.dto.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,11 @@ public class FundooExceptionHandler {
     @ExceptionHandler(value = RegistrationException.class)
     public ResponseEntity<Object> exceptionHandler(RegistrationException registrationException) {
         return new ResponseEntity<>(new ResponseDto(registrationException.message, registrationException.statusCode), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<Object> methodNotSupported(HttpRequestMethodNotSupportedException e){
+        return new ResponseEntity<>(new ResponseDto(e.getMessage(), 405), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = LoginUserException.class)

@@ -46,7 +46,7 @@ public class ForgotPWServiceTest {
         when(javaMailUtil.resetPwMail("kajalw1998@gmail.com","token")).thenReturn(new SimpleMailMessage());
         when(jwtUtil.createJwtToken(any())).thenReturn(any());
         ResponseDto checkDetails = forgotPWService.checkDetails(new ForgotPwDto("kajalw1998@gmail.com"));
-        Assert.assertEquals(checkDetails.message,"Otp Has been sent to your account");
+        Assert.assertEquals(checkDetails.message,"Email Has been sent to your account");
     }
 
     @Test

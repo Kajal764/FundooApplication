@@ -16,6 +16,6 @@ public class NoteExceptionHandler {
 
     @ExceptionHandler(value = NoteException.class)
     public ResponseEntity<Object> noteException(NoteException noteException){
-        return new ResponseEntity<>(new ResponseDto(noteException.message,noteException.statusCode),HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new ResponseDto(noteException.getMessage(),400),HttpStatus.FORBIDDEN);
     }
 }

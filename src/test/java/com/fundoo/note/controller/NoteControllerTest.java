@@ -64,27 +64,32 @@ public class NoteControllerTest {
     }
 
     @Test
-    void givenRequest_whenNoteAddInTrash_ItShouldReturnStatusOk() throws Exception, NoteException {
+    void givenRequestToDelete_whenNoteAddInTrash_ItShouldReturnStatusOk() throws Exception, NoteException {
 
-        when(noteService.trash(anyInt(),anyString())).thenReturn(new ResponseDto("Note trashed", 200));
-        MvcResult mvcResult = this.mockMvc.perform(get("/fundoo/note/trash/5")).andReturn();
+        when(noteService.deleteNote(anyInt(),anyString())).thenReturn(new ResponseDto("Note trashed", 200));
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/delete/5")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
     }
 
 //    @Test
-//    void givenRequest_whenNoteAddInTrash_ItShouldReturnSuccessMessage() throws Exception, NoteException {
-//
-//        when(noteService.trash(anyInt(),anyString())).thenReturn(new ResponseDto("Note created successfully", 200));
-//        MvcResult mvcResult = this.mockMvc.perform(get("/fundoo/note/trash/4")).andReturn();
+//    void givenRequestToDelete_whenNoteAddInTrash_ItShouldReturnSuccessMessage() throws Exception, NoteException {
+//        ResponseDto response = new ResponseDto("Note trashed", 200);
+//        System.out.println("teset  "+response);
+//        when(noteService.deleteNote(anyInt(),anyString())).thenReturn(response);
+//       // when(noteService.deleteNote(anyInt(),anyString())).thenReturn(note_created_successfully);
+////        when(noteService.trash(anyInt(),anyString())).thenReturn(note_created_successfully);
+//        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/delete/4")).andReturn();
 //        System.out.println("dsjbhcds"+mvcResult.getResponse().getContentAsString());
 //    }
 
 
     @Test
-    void givenNoteDeleteRequest_WhenNotDelete_ItShouldReturnStatusOk() throws Exception, NoteException {
+    void givenRequestToDeleteNotePermanently_WhenNotIsInTrash_ItShouldReturnStatusOk() throws Exception, NoteException {
 
-        when(noteService.deleteNote(anyInt(),anyString())).thenReturn(new ResponseDto("Note trashed", 200));
-        MvcResult mvcResult = this.mockMvc.perform(delete("/fundoo/note/delete/5")).andReturn();
+        when(noteService.trashNoteDelete(anyInt(),anyString())).thenReturn(new ResponseDto("Note Deleted Successfully", 200));
+        MvcResult mvcResult = this.mockMvc.perform(delete("/fundoo/note/trash/5")).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
+
     }
 }

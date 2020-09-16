@@ -24,16 +24,17 @@ public class NoteController {
         return noteService.createNote(noteDto, token);
     }
 
-    @GetMapping(value = "/trash/{id}")
+    @PutMapping(value = "/delete/{id}")
     public ResponseDto trashNote(@PathVariable("id") int note_id, HttpServletRequest request) throws NoteException {
         String token = request.getHeader("Authorization");
-        return noteService.trash(note_id, token);
+        ResponseDto trash = noteService.deleteNote(note_id, token);
+        return trash;
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/trash/{id}")
     public ResponseDto deleteNote(@PathVariable("id") int note_id,HttpServletRequest request) throws NoteException {
         String token = request.getHeader("Authorization");
-        return noteService.deleteNote(note_id,token);
+        return noteService.trashNoteDelete(note_id,token);
     }
 
 }

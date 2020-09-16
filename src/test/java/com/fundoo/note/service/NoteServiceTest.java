@@ -95,7 +95,7 @@ public class NoteServiceTest {
         int note_id = 4;
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(noteRepository.findById(4)).thenReturn(Optional.of(note));
-        ResponseDto trash = noteService.trash(note_id, token);
+        ResponseDto trash = noteService.deleteNote(note_id, token);
         Assert.assertEquals(trash.message, "Note trashed");
     }
 
@@ -105,7 +105,7 @@ public class NoteServiceTest {
         when(userRepository.findByEmail(any())).thenReturn(null);
         when(noteRepository.findById(4)).thenReturn(Optional.of(note));
         try {
-            noteService.trash(note_id, token);
+            noteService.deleteNote(note_id, token);
         } catch (AuthenticationException e) {
             Assert.assertEquals(e.getMessage(), "User Don't have permission");
         }
@@ -118,18 +118,19 @@ public class NoteServiceTest {
         note.setTrash(true);
         when(noteRepository.findById(4)).thenReturn(Optional.of(note));
         ResponseDto trash = noteService.deleteNote(note_id, token);
-        Assert.assertEquals(trash.message, "Note Deleted Successfully");
+        Assert.assertEquals(trash.message, "Note trashed");
     }
 
     @Test
-    void givenIdForNoteDelete_whenNoteIsNotInTrash_ItShouldThrowException() throws NoteException {
+    void givenIdForNoteTrash_whenNoteIsNotInTrash_ItShouldThrowException() throws NoteException {
         int note_id = 4;
+        note.setTrash(false);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(noteRepository.findById(4)).thenReturn(Optional.of(note));
         try {
-            noteService.deleteNote(note_id, token);
+            noteService.trashNoteDelete(note_id,token);
         } catch (NoteException e) {
-            Assert.assertEquals(e.message, "Note is not in trash");
+            Assert.assertEquals(e.getMessage(), "Note is not in trash");
         }
     }
 
