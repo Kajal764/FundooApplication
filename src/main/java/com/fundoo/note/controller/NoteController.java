@@ -37,5 +37,11 @@ public class NoteController {
         return noteService.trashNoteDelete(note_id,token);
     }
 
+    @PutMapping(value = "/update")
+    public ResponseDto updateNote(@Valid @RequestBody NoteDto noteDto,HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        return noteService.updateNote(noteDto,token);
+    }
+
 }
 

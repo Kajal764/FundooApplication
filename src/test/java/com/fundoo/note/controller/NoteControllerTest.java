@@ -72,24 +72,53 @@ public class NoteControllerTest {
         Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
     }
 
-//    @Test
-//    void givenRequestToDelete_whenNoteAddInTrash_ItShouldReturnSuccessMessage() throws Exception, NoteException {
-//        ResponseDto response = new ResponseDto("Note trashed", 200);
-//        System.out.println("teset  "+response);
-//        when(noteService.deleteNote(anyInt(),anyString())).thenReturn(response);
-//       // when(noteService.deleteNote(anyInt(),anyString())).thenReturn(note_created_successfully);
-////        when(noteService.trash(anyInt(),anyString())).thenReturn(note_created_successfully);
-//        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/delete/4")).andReturn();
-//        System.out.println("dsjbhcds"+mvcResult.getResponse().getContentAsString());
-//    }
-
-
     @Test
     void givenRequestToDeleteNotePermanently_WhenNotIsInTrash_ItShouldReturnStatusOk() throws Exception, NoteException {
-
         when(noteService.trashNoteDelete(anyInt(),anyString())).thenReturn(new ResponseDto("Note Deleted Successfully", 200));
         MvcResult mvcResult = this.mockMvc.perform(delete("/fundoo/note/trash/5")).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
-
     }
+
+    @Test
+    void givenRequestToUpdateNote_WhenNoteUpdate_ItShouldReturnStatusOk() throws Exception {
+
+        NoteDto noteDto = new NoteDto("java", "this is desciption");
+        String toJson = gson.toJson(noteDto);
+
+        when(noteService.updateNote(any(),any())).thenReturn(new ResponseDto("Note Updated Successfully",200));
+
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/update").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
+    }
+
+    @Test
+    void givenRequestToUpdateNote_WhenNoteUpdate_ItShouldReturnSuccessMessage() throws Exception {
+
+        NoteDto noteDto = new NoteDto("java", "this is desciption");
+        String toJson = gson.toJson(noteDto);
+
+        when(noteService.updateNote(any(),any())).thenReturn(new ResponseDto("Note Updated Successfully",200));
+
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/update").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Updated Successfully"));
+    }
+
+
+    @Test
+    void givenDifferentMethodToUpdateNote_WhenNoteUpdate_ItShouldReturnMethodNotSupportedMessage() throws Exception {
+
+        NoteDto noteDto = new NoteDto("java", "this is desciption");
+        String toJson = gson.toJson(noteDto);
+
+        when(noteService.updateNote(any(),any())).thenReturn(new ResponseDto("Note Updated Successfully",200));
+
+        MvcResult mvcResult = this.mockMvc.perform(get("/fundoo/note/update").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Request method 'GET' not supported"));
+    }
+
 }

@@ -8,5 +8,8 @@ public interface INoteService {
     ResponseDto createNote(NoteDto noteDto, String token);
 
     ResponseDto deleteNote(int note_id, String token) throws NoteException;
+
     ResponseDto trashNoteDelete(int note_id, String token) throws NoteException;
+
+    ResponseDto updateNote(NoteDto noteDto, String token);
 }

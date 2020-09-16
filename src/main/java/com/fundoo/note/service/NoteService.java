@@ -96,4 +96,9 @@ class NoteService implements INoteService {
         }
         throw new AuthenticationException("User Don't have permission");
     }
+
+    @Override
+    public ResponseDto updateNote(NoteDto noteDto, String token) {
+        return null;
+    }
 }
