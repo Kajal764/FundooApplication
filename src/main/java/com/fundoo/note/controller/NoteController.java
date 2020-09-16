@@ -8,7 +8,7 @@ import com.fundoo.user.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -19,7 +19,7 @@ public class NoteController {
     INoteService noteService;
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto createNote(@RequestBody NoteDto noteDto, HttpServletRequest request) {
+    public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         return noteService.createNote(noteDto, token);
     }

@@ -1,5 +1,5 @@
 package com.fundoo.note.model;
-import com.fundoo.note.dto.NoteDto;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +21,7 @@ public class Note {
 
     private String title;
     private String description;
-    private LocalDateTime createdDate=LocalDateTime.now();
+    private LocalDateTime createdDate = LocalDateTime.now();
     private boolean isTrash;
 
 }

@@ -1,8 +1,6 @@
 package com.fundoo.note.dto;
 
 import lombok.*;
-
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
@@ -12,10 +10,10 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class NoteDto {
 
-    @NotNull
+    @NotNull(message = "Title must not be null")
     public String title;
 
-    @NotNull
+    @NotNull(message = "Description must not be null")
     public String description;
 
 }
