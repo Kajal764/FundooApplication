@@ -1,7 +1,6 @@
 package com.fundoo.note.service;
 
 import com.fundoo.note.dto.NoteDto;
-import com.fundoo.note.exception.AuthenticationException;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.repository.INoteRepository;
@@ -33,46 +32,23 @@ class NoteService implements INoteService {
     @Autowired
     RedisService redisService;
 
-    private Optional<User> checkUserWithEmailId(String authorizationHeader) {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String jwtToken = authorizationHeader.substring(7);
-            Object email = jwtUtil.verify(jwtToken);
-            Optional<User> user = userRepository.findByEmail(email.toString());
-            return user;
-        }
-        return null;
-    }
-
-    private boolean checkAuthorization(Optional<User> user) {
-        if (user != null) {
-            try {
-                redisService.getToken(user.get().getEmail());
-                return true;
-            } catch (NoSuchElementException e) {
-                throw new AuthenticationException("Authentication Fail");
-            }
-        }
-        throw new AuthenticationException("User Don't have permission");
-    }
-
-    public ResponseDto createNote(NoteDto noteDto, String authorizationHeader) {
-
-        Optional<User> user = checkUserWithEmailId(authorizationHeader);
-        if (checkAuthorization(user)) {
+    @Override
+    public ResponseDto createNote(NoteDto noteDto, String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isPresent()){
             Note newNote = new Note();
             BeanUtils.copyProperties(noteDto, newNote);
             user.get().getNoteList().add(newNote);
             noteRepository.save(newNote);
             return new ResponseDto("Note created successfully", 200);
         }
-        throw new AuthenticationException("User Don't have permission");
+        return new ResponseDto("User not present",403);
     }
 
-
     @Override
-    public ResponseDto deleteNote(int note_id, String token) throws NoteException {
-        Optional<User> user = checkUserWithEmailId(token);
-        if (checkAuthorization(user)) {
+    public ResponseDto deleteNote(int note_id, String email) throws NoteException {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user != null){
             Optional<Note> note = noteRepository.findById(note_id);
             if (note.isPresent()) {
                 note.get().setTrash(true);
@@ -81,13 +57,13 @@ class NoteService implements INoteService {
             }
             throw new NoteException("Note is not present");
         }
-        throw new AuthenticationException("User Don't have permission");
+        return new ResponseDto("User not present",403);
     }
 
     @Override
-    public ResponseDto trashNoteDelete(int note_id, String token) throws NoteException {
-        Optional<User> user = checkUserWithEmailId(token);
-        if (checkAuthorization(user)) {
+    public ResponseDto trashNoteDelete(int note_id, String email) throws NoteException {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
             Optional<Note> note = noteRepository.findById(note_id);
             if (note.isPresent() && note.get().isTrash() == true) {
                 noteRepository.delete(note.get());
@@ -95,13 +71,13 @@ class NoteService implements INoteService {
             }
             throw new NoteException("Note is not in trash");
         }
-        throw new AuthenticationException("User Don't have permission");
+        return new ResponseDto("User not present",403);
     }
 
     @Override
-    public boolean updateNote(NoteDto noteDto, String token) throws NoteException {
-        Optional<User> user = checkUserWithEmailId(token);
-        if (checkAuthorization(user)) {
+    public boolean updateNote(NoteDto noteDto, String email) throws NoteException {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
             Optional<Note> note = noteRepository.findById(noteDto.note_id);
             return note.map((value) -> {
                 value.setTitle(noteDto.title);

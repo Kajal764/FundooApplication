@@ -5,11 +5,11 @@ import com.fundoo.note.exception.NoteException;
 import com.fundoo.user.dto.ResponseDto;
 
 public interface INoteService {
-    ResponseDto createNote(NoteDto noteDto, String token);
+    ResponseDto createNote(NoteDto noteDto, String email);
 
-    ResponseDto deleteNote(int note_id, String token) throws NoteException;
+    ResponseDto deleteNote(int note_id, String email) throws NoteException;
 
-    ResponseDto trashNoteDelete(int note_id, String token) throws NoteException;
+    ResponseDto trashNoteDelete(int note_id, String email) throws NoteException;
 
-    boolean updateNote(NoteDto noteId, String token) throws NoteException;
+    boolean updateNote(NoteDto noteId, String email) throws NoteException;
 }

@@ -45,8 +45,8 @@ public class User {
 
     private LocalDateTime accountUpdatedDate;
 
-
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
+//    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "U_Id")
     private List<Note> noteList;
 

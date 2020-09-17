@@ -2,7 +2,6 @@ package com.fundoo.user.service;
 
 import com.fundoo.user.dto.LoginDto;
 import com.fundoo.user.dto.RegisterUserDto;
-import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.exception.LoginUserException;
 import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;

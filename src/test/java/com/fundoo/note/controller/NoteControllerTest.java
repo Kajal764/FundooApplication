@@ -35,25 +35,24 @@ public class NoteControllerTest {
 
     Gson gson = new Gson();
 
-
     @Test
     void givenRequest_whenCreatingNote_ItShouldReturnStatusCreated() throws Exception {
-        NoteDto noteDto = new NoteDto(5,"java", "this is desciption");
+        NoteDto noteDto = new NoteDto(5, "java", "this is desciption");
         Note note = new Note();
-        BeanUtils.copyProperties(noteDto,note);
+        BeanUtils.copyProperties(noteDto, note);
         String toJson = gson.toJson(noteDto);
         when(noteService.createNote(any(), any())).thenReturn(new ResponseDto("Note created successfully", 201));
 
         MvcResult mvcResult = this.mockMvc.perform(post("/fundoo/note/create").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
-        Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
+        Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
 
     @Test
     void givenRequest_whenCreatingNote_ItShouldReturnNoteData() throws Exception {
-        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
+        NoteDto noteDto = new NoteDto(2, "java", "this is desciption");
         Note note = new Note();
-        BeanUtils.copyProperties(noteDto,note);
+        BeanUtils.copyProperties(noteDto, note);
         note.setCreatedDate(LocalDateTime.now());
         String toJson = gson.toJson(noteDto);
         when(noteService.createNote(any(), any())).thenReturn(new ResponseDto("Note created successfully", 201));
@@ -67,36 +66,36 @@ public class NoteControllerTest {
     @Test
     void givenRequestToDelete_whenNoteAddInTrash_ItShouldReturnStatusOk() throws Exception, NoteException {
 
-        when(noteService.deleteNote(anyInt(),anyString())).thenReturn(new ResponseDto("Note trashed", 200));
+        when(noteService.deleteNote(anyInt(), anyString())).thenReturn(new ResponseDto("Note trashed", 200));
         MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/delete/5")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
-        Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
+        Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
 
     @Test
     void givenRequestToDeleteNotePermanently_WhenNotIsInTrash_ItShouldReturnStatusOk() throws Exception, NoteException {
-        when(noteService.trashNoteDelete(anyInt(),anyString())).thenReturn(new ResponseDto("Note Deleted Successfully", 200));
+        when(noteService.trashNoteDelete(anyInt(), anyString())).thenReturn(new ResponseDto("Note Deleted Successfully", 200));
         MvcResult mvcResult = this.mockMvc.perform(delete("/fundoo/note/trash/5")).andReturn();
-        Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
+        Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
 
     @Test
     void givenRequestToUpdateNote_WhenNoteUpdate_ItShouldReturnStatusOk() throws Exception, NoteException {
-        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
+        NoteDto noteDto = new NoteDto(2, "java", "this is desciption");
         String toJson = gson.toJson(noteDto);
-        when(noteService.updateNote(any(),any())).thenReturn(true);
+        when(noteService.updateNote(any(), any())).thenReturn(true);
         MvcResult mvcResult = mockMvc.perform(put("/fundoo/note/update").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
-        Assert.assertEquals(mvcResult.getResponse().getStatus(),200);
+        Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
 
     @Test
     void givenRequestToUpdateNote_WhenNoteUpdate_ItShouldReturnSuccessMessage() throws Exception, NoteException {
 
-        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
+        NoteDto noteDto = new NoteDto(2, "java", "this is desciption");
         String toJson = gson.toJson(noteDto);
-        when(noteService.updateNote(any(),any())).thenReturn(true);
+        when(noteService.updateNote(any(), any())).thenReturn(true);
         MvcResult mvcResult = mockMvc.perform(put("/fundoo/note/update").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Updated"));
@@ -106,9 +105,9 @@ public class NoteControllerTest {
     @Test
     void givenDifferentMethodToUpdateNote_WhenNoteUpdate_ItShouldReturnMethodNotSupportedMessage() throws Exception, NoteException {
 
-        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
+        NoteDto noteDto = new NoteDto(2, "java", "this is desciption");
         String toJson = gson.toJson(noteDto);
-        when(noteService.updateNote(any(),any())).thenReturn(true);
+        when(noteService.updateNote(any(), any())).thenReturn(true);
         MvcResult mvcResult = mockMvc.perform(get("/fundoo/note/update").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
@@ -118,9 +117,9 @@ public class NoteControllerTest {
     @Test
     void givenRequestToUpdateNote_WhenNoteNotUpdate_ItShouldReturnErrorMessage() throws Exception, NoteException {
 
-        NoteDto noteDto = new NoteDto(2,"java", "this is desciption");
+        NoteDto noteDto = new NoteDto(2, "java", "this is desciption");
         String toJson = gson.toJson(noteDto);
-        when(noteService.updateNote(any(),any())).thenReturn(false);
+        when(noteService.updateNote(any(), any())).thenReturn(false);
         MvcResult mvcResult = mockMvc.perform(put("/fundoo/note/update").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Updating Note"));
