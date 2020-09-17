@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -105,6 +106,7 @@ class NoteService implements INoteService {
             return note.map((value) -> {
                 value.setTitle(noteDto.title);
                 value.setDescription(noteDto.description);
+                value.setEditDate(LocalDateTime.now());
                 noteRepository.save(value);
                 return true;
             }).orElseThrow(() -> new NoteException("Note Is Not Present"));

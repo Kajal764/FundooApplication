@@ -71,7 +71,6 @@ public class NoteServiceTest {
         exactToken = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNjAwMTU1NTY0LCJleHAiOjE2MDAxNTkxNjR9.oBgxhHCmIlWEVB-07aG1-e0NpsBpWlAHwSSrlaxblYReJCWAWmWV7HhZ3OZHf6E_zxFea9Omj0C4YlC9VaqDAw";
         when(jwtUtil.verify(any())).thenReturn("kajalw1998@gmail.com");
         when(redisService.getToken(any())).thenReturn(exactToken);
-
     }
 
 

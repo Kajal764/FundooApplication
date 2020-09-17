@@ -22,6 +22,7 @@ public class Note {
     private String title;
     private String description;
     private LocalDateTime createdDate = LocalDateTime.now();
+    private LocalDateTime editDate;
     private boolean isTrash;
 
 }
