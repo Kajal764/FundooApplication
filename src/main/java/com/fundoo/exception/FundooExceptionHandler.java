@@ -1,5 +1,6 @@
 package com.fundoo.exception;
 
+import com.fundoo.label.exception.LabelException;
 import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.exception.LoginUserException;
 import com.fundoo.user.exception.RegistrationException;
@@ -27,6 +28,11 @@ public class FundooExceptionHandler {
     @ExceptionHandler(value = LoginUserException.class)
     public ResponseEntity<Object> loginExceptionHandler(LoginUserException loginException){
         return new ResponseEntity<>(new ResponseDto(loginException.getMessage(),400),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = LabelException.class)
+    public ResponseEntity<Object> labelExceptionHandler(LabelException exception){
+        return new ResponseEntity<>(new ResponseDto(exception.message,exception.statusCode),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)

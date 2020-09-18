@@ -6,15 +6,14 @@ import com.fundoo.user.service.RedisService;
 import com.fundoo.user.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-@WebFilter(urlPatterns = "/fundoo/note/*")
+
+@WebFilter(urlPatterns = {"/fundoo/note/*","/fundoo/label/*"})
 public class AuthenticationFilter implements Filter {
 
     @Autowired
@@ -51,7 +50,6 @@ public class AuthenticationFilter implements Filter {
             }catch (AuthenticationException exception){
                 handlerExceptionResolver.resolveException(request,response,null,exception);
             }
-
         }
     }
 
