@@ -5,10 +5,7 @@ import com.fundoo.label.service.ILabelService;
 import com.fundoo.user.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -35,4 +32,12 @@ public class LabelController {
             return new ResponseDto("Label Mapped Successfully",200);
         return new ResponseDto("Label Not Present",404);
     }
+
+   @PutMapping(value = "/edit",consumes = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseDto editLabel(@Valid @RequestBody LabelDto labelDto,HttpServletRequest request){
+       String email = (String) request.getAttribute("email");
+       if(labelService.editLabel(labelDto,email))
+           return new ResponseDto("Label Edited Successfully",201);
+       return new ResponseDto("Error Editing label",400);
+   }
 }

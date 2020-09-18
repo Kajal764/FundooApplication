@@ -57,7 +57,7 @@ public class LabelServiceTest {
     @BeforeEach
     void setUp() {
         email = "kajaldw666@gmail.com";
-        labelDto = new LabelDto(2, "java");
+        labelDto = new LabelDto(2,5,"java");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         label = new Label();
         BeanUtils.copyProperties(labelDto, label);

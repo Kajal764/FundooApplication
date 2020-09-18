@@ -18,6 +18,8 @@ public class LabelDto {
 
     private int note_Id;
 
+    private int label_Id;
+
     @NotNull(message = "Label must not be null")
     private String labelName;
 
