@@ -69,5 +69,10 @@ public class LabelService implements ILabelService {
             return true;
         }).orElseThrow(() -> new LabelException("Label Not Present", 404));
     }
+
+    @Override
+    public boolean deleteLabel(int note_id, String email) {
+        return true;
+    }
 }
 

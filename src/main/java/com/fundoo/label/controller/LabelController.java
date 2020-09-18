@@ -40,4 +40,12 @@ public class LabelController {
             return new ResponseDto("Label Edited Successfully", 201);
         return new ResponseDto("Error Editing label", 400);
     }
+
+    @DeleteMapping(value = "/delete/{label_Id}")
+    public ResponseDto deleteLabel(@PathVariable("label_Id") int note_id, HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        if (labelService.deleteLabel(note_id, email))
+            return new ResponseDto("Label Deleted", 202);
+        return new ResponseDto("Error Deleting label", 400);
+    }
 }
