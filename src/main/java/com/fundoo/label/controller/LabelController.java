@@ -27,4 +27,12 @@ public class LabelController {
             return new ResponseDto("Label Created",201);
         return new ResponseDto("Error Creating label",400);
     }
+
+    @PostMapping(value = "/noteLabel",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDto mapLabel(@RequestBody LabelDto labelDto,HttpServletRequest request){
+        String email= (String) request.getAttribute("email");
+        if(labelService.mapLabel(labelDto,email))
+            return new ResponseDto("Label Mapped Successfully",200);
+        return new ResponseDto("Label Not Present",404);
+    }
 }

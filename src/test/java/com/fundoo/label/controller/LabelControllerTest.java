@@ -5,6 +5,7 @@ import com.fundoo.label.service.ILabelService;
 import com.fundoo.note.exception.NoteException;
 import com.google.gson.Gson;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,25 +33,26 @@ public class LabelControllerTest {
     ILabelService labelService;
 
     Gson gson = new Gson();
+    LabelDto labelDto;
+    String toJson;
+
+    @BeforeEach
+    void setUp() {
+        labelDto = new LabelDto(4, "java");
+        toJson = gson.toJson(labelDto);
+    }
 
     @Test
     void givenRequestToCreateLabel_WhenLabelCreate_ItShouldReturnStatusOK() throws Exception, NoteException {
-
-        LabelDto labelDto = new LabelDto("java");
-        String toJson = gson.toJson(labelDto);
         when(labelService.createLabel(any(), any())).thenReturn(true);
         MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/create").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         assertThat(mvcResult.getResponse().getStatus(), is(200));
-
     }
 
     @Test
     void givenRequestToCreateLabel_WhenLabelCreate_ItShouldReturnSuccessMessage() throws Exception, NoteException {
-
-        LabelDto labelDto = new LabelDto("java");
-        String toJson = gson.toJson(labelDto);
         when(labelService.createLabel(any(), any())).thenReturn(true);
         MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/create").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
@@ -60,14 +62,34 @@ public class LabelControllerTest {
 
     @Test
     void givenRequestToCreateLabel_WhenLabelNotCreate_ItShouldReturnFailureMessage() throws Exception, NoteException {
-
-        LabelDto labelDto = new LabelDto("java");
-        String toJson = gson.toJson(labelDto);
         when(labelService.createLabel(any(), any())).thenReturn(false);
         MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/create").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Creating label"));
+    }
+
+    @Test
+    void givenRequestToMapLabel_WhenLabelMapWithNote_ItShouldReturnStatusOk() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/noteLabel").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        assertThat(mvcResult.getResponse().getStatus(), is(200));
+    }
+
+    @Test
+    void givenRequestToMapLabel_WhenLabelMapWithNote_ItShouldReturnSuccesMessage() throws Exception {
+        when(labelService.mapLabel(any(), any())).thenReturn(true);
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/noteLabel").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Mapped Successfully"));
+    }
+
+    @Test
+    void givenRequestToMapLabel_WhenLabelNotMapWithNote_ItShouldReturnFailureMessage() throws Exception {
+        when(labelService.mapLabel(any(), any())).thenReturn(false);
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/noteLabel").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Not Present"));
     }
 
 }

@@ -50,11 +50,6 @@ public class User {
     @JoinColumn(name = "U_Id")
     private List<Note> noteList;
 
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "U_Id")
-//    private List<Label> labelList;
-
-
     @OneToMany(mappedBy = "user")
     private  List<Label> labelList;
 

@@ -5,4 +5,6 @@ import com.fundoo.label.dto.LabelDto;
 
 public interface ILabelService {
     boolean createLabel(LabelDto labelDto, String token) ;
+
+    boolean mapLabel(LabelDto labelDto, String email);
 }
