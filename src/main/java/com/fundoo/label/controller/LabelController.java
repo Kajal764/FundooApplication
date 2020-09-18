@@ -17,27 +17,27 @@ public class LabelController {
     @Autowired
     ILabelService labelService;
 
-    @PostMapping(value = "/create",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto createLabel(@Valid @RequestBody LabelDto labelDto,HttpServletRequest request)  {
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDto createLabel(@Valid @RequestBody LabelDto labelDto, HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
-        if(labelService.createLabel(labelDto,email))
-            return new ResponseDto("Label Created",201);
-        return new ResponseDto("Error Creating label",400);
+        if (labelService.createLabel(labelDto, email))
+            return new ResponseDto("Label Created", 201);
+        return new ResponseDto("Error Creating label", 400);
     }
 
-    @PostMapping(value = "/noteLabel",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto mapLabel(@RequestBody LabelDto labelDto,HttpServletRequest request){
-        String email= (String) request.getAttribute("email");
-        if(labelService.mapLabel(labelDto,email))
-            return new ResponseDto("Label Mapped Successfully",200);
-        return new ResponseDto("Label Not Present",404);
+    @PostMapping(value = "/noteLabel", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDto mapLabel(@RequestBody LabelDto labelDto, HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        if (labelService.mapLabel(labelDto, email))
+            return new ResponseDto("Label Mapped Successfully", 200);
+        return new ResponseDto("Label Not Present", 404);
     }
 
-   @PutMapping(value = "/edit",consumes = MediaType.APPLICATION_JSON_VALUE )
-    public ResponseDto editLabel(@Valid @RequestBody LabelDto labelDto,HttpServletRequest request){
-       String email = (String) request.getAttribute("email");
-       if(labelService.editLabel(labelDto,email))
-           return new ResponseDto("Label Edited Successfully",201);
-       return new ResponseDto("Error Editing label",400);
-   }
+    @PutMapping(value = "/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDto editLabel(@Valid @RequestBody LabelDto labelDto, HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        if (labelService.editLabel(labelDto, email))
+            return new ResponseDto("Label Edited Successfully", 201);
+        return new ResponseDto("Error Editing label", 400);
+    }
 }

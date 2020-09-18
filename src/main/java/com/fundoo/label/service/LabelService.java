@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -60,7 +61,13 @@ public class LabelService implements ILabelService {
 
     @Override
     public boolean editLabel(LabelDto labelDto, String email) {
-        return true;
+        Optional<Label> label = labelRepository.findById(labelDto.getLabel_Id());
+        return label.map((value) -> {
+            value.setLabelName(labelDto.getLabelName());
+            value.setModifiedDate(LocalDateTime.now());
+            labelRepository.save(value);
+            return true;
+        }).orElseThrow(() -> new LabelException("Label Not Present", 404));
     }
 }
 
