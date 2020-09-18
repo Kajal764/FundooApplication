@@ -1,6 +1,8 @@
-package com.fundoo.user.exception;
+package com.fundoo.exception;
 
 import com.fundoo.user.dto.ResponseDto;
+import com.fundoo.user.exception.LoginUserException;
+import com.fundoo.user.exception.RegistrationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;

@@ -1,6 +1,7 @@
 package com.fundoo.user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fundoo.label.model.Label;
 import com.fundoo.note.model.Note;
 import com.fundoo.user.dto.RegisterUserDto;
 import lombok.Getter;
@@ -46,9 +47,12 @@ public class User {
     private LocalDateTime accountUpdatedDate;
 
     @OneToMany(fetch = FetchType.EAGER)
-//    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "U_Id")
     private List<Note> noteList;
+
+
+    @OneToMany(mappedBy = "user")
+    private  List<Label> labelList;
 
 
     public User(RegisterUserDto registerUserDto) {
