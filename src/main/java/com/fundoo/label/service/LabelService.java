@@ -57,5 +57,10 @@ public class LabelService implements ILabelService {
         }
         return false;
     }
+
+    @Override
+    public boolean editLabel(LabelDto labelDto, String email) {
+        return true;
+    }
 }
 

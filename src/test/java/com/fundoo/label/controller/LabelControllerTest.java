@@ -38,7 +38,7 @@ public class LabelControllerTest {
 
     @BeforeEach
     void setUp() {
-        labelDto = new LabelDto(4, "java");
+        labelDto = new LabelDto(4, 3, "java");
         toJson = gson.toJson(labelDto);
     }
 
@@ -90,6 +90,29 @@ public class LabelControllerTest {
         MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/noteLabel").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Not Present"));
+    }
+
+    @Test
+    void givenRequestToEditLabel_WhenEditLabel_ItShouldReturnStatusOk() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/edit").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        assertThat(mvcResult.getResponse().getStatus(), is(200));
+    }
+
+    @Test
+    void givenRequestToEditLabel_WhenEditLabel_ItShouldReturnSuccessMessage() throws Exception {
+        when(labelService.editLabel(any(), any())).thenReturn(true);
+        MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/edit").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Edited Successfully"));
+    }
+
+    @Test
+    void givenRequestToEditLabel_WhenNotAbleToEditLabel_ItShouldReturnFailureMessage() throws Exception {
+        when(labelService.editLabel(any(), any())).thenReturn(false);
+        MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/edit").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Editing label"));
     }
 
 }
