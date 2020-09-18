@@ -126,4 +126,19 @@ public class LabelServiceTest {
         verify(labelRepository, never()).save(label);
     }
 
+    @Test
+    void givenLabelToDeleteWithLabelId_WhenDeleteLabel_ItShouldReturnTrue() {
+        when(labelRepository.findById(anyInt())).thenReturn(Optional.of(label));
+        boolean result = labelService.deleteLabel(4, email);
+        verify(labelRepository).delete(label);
+        assertThat(result, is(true));
+    }
+
+    @Test
+    void givenLabelToDeleteWithLabelId_WhenLabelNotPresent_ItShouldReturnTrue() {
+        when(labelRepository.findById(anyInt())).thenReturn(Optional.empty());
+        assertThrows(LabelException.class, () -> labelService.deleteLabel(4, email));
+        verify(labelRepository, never()).delete(label);
+    }
+
 }

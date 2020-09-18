@@ -71,8 +71,12 @@ public class LabelService implements ILabelService {
     }
 
     @Override
-    public boolean deleteLabel(int note_id, String email) {
-        return true;
+    public boolean deleteLabel(int label_id, String email) {
+        Optional<Label> label = labelRepository.findById(label_id);
+        return label.map((value) -> {
+            labelRepository.delete(value);
+            return true;
+        }).orElseThrow(() -> new LabelException("Label Not Present", 404));
     }
 }
 
