@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -57,7 +57,7 @@ public class LabelServiceTest {
     @BeforeEach
     void setUp() {
         email = "kajaldw666@gmail.com";
-        labelDto = new LabelDto(2,5,"java");
+        labelDto = new LabelDto(2, 5, "java");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         label = new Label();
         BeanUtils.copyProperties(labelDto, label);
@@ -108,6 +108,21 @@ public class LabelServiceTest {
 
         assertThat(result, is(false));
         verifyNoInteractions(noteRepository);
+        verify(labelRepository, never()).save(label);
+    }
+
+    @Test
+    void givenLabelToEditWithLabelId_WhenEditLabel_ItShouldReturnTrue() {
+        when(labelRepository.findById(anyInt())).thenReturn(Optional.of(label));
+        boolean result = labelService.editLabel(labelDto, email);
+        verify(labelRepository).save(label);
+        assertThat(result, is(true));
+    }
+
+    @Test
+    void givenLabelToEditWithLabelId_WhenEditLabelNotPresent_ItShouldReturnTrue() {
+        when(labelRepository.findById(anyInt())).thenReturn(Optional.empty());
+        assertThrows(LabelException.class, () -> labelService.editLabel(labelDto, email));
         verify(labelRepository, never()).save(label);
     }
 
