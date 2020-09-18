@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class LabelDto {
 
+    private int note_Id;
+
     @NotNull(message = "Label must not be null")
     private String labelName;
 

@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,10 @@ public class Label {
     private Integer label_Id;
 
     private String labelName;
+
+    private LocalDateTime createdDate=LocalDateTime.now();
+
+    private LocalDateTime modifiedDate;
 
     @ManyToOne
     private User user;
