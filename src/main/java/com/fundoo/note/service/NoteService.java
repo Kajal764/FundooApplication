@@ -1,5 +1,7 @@
 package com.fundoo.note.service;
 
+import com.fundoo.label.model.Label;
+import com.fundoo.label.repository.LabelRepository;
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
@@ -31,23 +33,26 @@ class NoteService implements INoteService {
     @Autowired
     RedisService redisService;
 
+    @Autowired
+    LabelRepository labelRepository;
+
     @Override
     public ResponseDto createNote(NoteDto noteDto, String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             Note newNote = new Note();
             BeanUtils.copyProperties(noteDto, newNote);
             user.get().getNoteList().add(newNote);
             noteRepository.save(newNote);
             return new ResponseDto("Note created successfully", 200);
         }
-        return new ResponseDto("User not present",403);
+        return new ResponseDto("User not present", 403);
     }
 
     @Override
     public ResponseDto deleteNote(int note_id, String email) throws NoteException {
         Optional<User> user = userRepository.findByEmail(email);
-        if(user != null){
+        if (user != null) {
             Optional<Note> note = noteRepository.findById(note_id);
             if (note.isPresent()) {
                 note.get().setTrash(true);
@@ -56,7 +61,7 @@ class NoteService implements INoteService {
             }
             throw new NoteException("Note is not present");
         }
-        return new ResponseDto("User not present",403);
+        return new ResponseDto("User not present", 403);
     }
 
     @Override
@@ -64,13 +69,14 @@ class NoteService implements INoteService {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             Optional<Note> note = noteRepository.findById(note_id);
+
             if (note.isPresent() && note.get().isTrash() == true) {
                 noteRepository.delete(note.get());
                 return new ResponseDto("Note Deleted Successfully", 200);
             }
             throw new NoteException("Note is not in trash");
         }
-        return new ResponseDto("User not present",403);
+        return new ResponseDto("User not present", 403);
     }
 
     @Override

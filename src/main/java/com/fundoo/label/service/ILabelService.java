@@ -10,5 +10,5 @@ public interface ILabelService {
 
     boolean editLabel(LabelDto labelDto, String email);
 
-    boolean deleteLabel(int note_id, String email);
+    boolean deleteLabel(int label_id, String email);
 }
