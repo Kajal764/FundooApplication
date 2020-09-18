@@ -18,9 +18,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
 @SpringBootTest
@@ -114,6 +114,35 @@ public class LabelControllerTest {
         MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/edit").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Editing label"));
+    }
+
+    @Test
+    void givenRequestToDeleteLabel_WhenDeleteLabel_ItShouldReturnStatusOk() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(delete("/fundoo/label/delete/5").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        assertThat(mvcResult.getResponse().getStatus(), is(200));
+    }
+
+    @Test
+    void givenRequestToDeleteLabel_WhenDeleteLabel_ItShouldReturnSuccessMessage() throws Exception {
+        when(labelService.deleteLabel(anyInt(), any())).thenReturn(true);
+        MvcResult mvcResult = mockMvc.perform(delete("/fundoo/label/delete/5").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Deleted"));
+    }
+
+    @Test
+    void givenRequestToDeleteLabel_WhenDeleteLabelNotPresent_ItShouldReturnFailureMessage() throws Exception {
+        when(labelService.deleteLabel(anyInt(), any())).thenReturn(false);
+        MvcResult mvcResult = mockMvc.perform(delete("/fundoo/label/delete/5").content(toJson)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Deleting label"));
+    }
+
+    @Test
+    void givenRequestToDeleteLabelWithAnotheHttpMethod_WhenDeleteLabel_ItShouldReturnMethodNotSupportMessage() throws Exception {
+        when(labelService.deleteLabel(anyInt(), any())).thenReturn(false);
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/delete/5").content(toJson)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Request method 'POST' not supported"));
     }
 
 }
