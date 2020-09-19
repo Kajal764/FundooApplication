@@ -1,5 +1,6 @@
 package com.fundoo.note.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fundoo.label.model.Label;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class Note {
 
     private boolean isTrash;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "noteList",cascade = CascadeType.REMOVE)
     private List<Label> labelList;
 }

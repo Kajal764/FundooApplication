@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -93,5 +94,15 @@ class NoteService implements INoteService {
             }).orElseThrow(() -> new NoteException("Note Is Not Present"));
         }
         return false;
+    }
+
+    @Override
+    public List<Note> getNoteList(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            List<Note> noteList = user.get().getNoteList();
+            return noteList;
+        }
+        return null;
     }
 }

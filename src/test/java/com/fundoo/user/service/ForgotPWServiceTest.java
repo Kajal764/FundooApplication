@@ -19,6 +19,7 @@ import org.springframework.mail.SimpleMailMessage;
 
 import javax.mail.MessagingException;
 import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -39,28 +40,28 @@ public class ForgotPWServiceTest {
 
     @Test
     void givenDetails_WhenForgotPassword_ItShouldReturnSuccessMessage() throws MessagingException {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978675645");
         User user = new User(registerUserDto);
-        String email="kajalw1998@gmail.com";
+        String email = "kajalw1998@gmail.com";
         Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(javaMailUtil.resetPwMail("kajalw1998@gmail.com","token")).thenReturn(new SimpleMailMessage());
+        when(javaMailUtil.resetPwMail("kajalw1998@gmail.com", "token")).thenReturn(new SimpleMailMessage());
         when(jwtUtil.createJwtToken(any())).thenReturn(any());
         ResponseDto checkDetails = forgotPWService.checkDetails(new ForgotPwDto("kajalw1998@gmail.com"));
-        Assert.assertEquals(checkDetails.message,"Email Has been sent to your account");
+        Assert.assertEquals(checkDetails.message, "Email Has been sent to your account");
     }
 
     @Test
     void givenWrongDetails_WhenForgotPassword_ItShouldThrowException() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978675645");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978675645");
         User user = new User(registerUserDto);
-        String email="kajalw1998@gmail.com";
+        String email = "kajalw1998@gmail.com";
         Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(javaMailUtil.resetPwMail("kajalw1998@gmail.com","token")).thenReturn(new SimpleMailMessage());
+        when(javaMailUtil.resetPwMail("kajalw1998@gmail.com", "token")).thenReturn(new SimpleMailMessage());
         when(jwtUtil.createJwtToken(any())).thenReturn(any());
-        try{
+        try {
             forgotPWService.checkDetails(new ForgotPwDto("kajalw1998@gmail.com"));
-        }catch (LoginUserException e){
-            Assert.assertEquals(e.getMessage(),"Account not found");
+        } catch (LoginUserException e) {
+            Assert.assertEquals(e.getMessage(), "Account not found");
         }
     }
 

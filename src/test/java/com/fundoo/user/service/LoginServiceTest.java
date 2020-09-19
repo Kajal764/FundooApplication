@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -48,7 +49,7 @@ public class LoginServiceTest {
     @Test
     void givenUserLoginCredentials_WhenAccountNotActivate_ItShouldThrowException() {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978787878");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978787878");
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
         User user = new User(registerUserDto);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
@@ -66,30 +67,30 @@ public class LoginServiceTest {
     @Test
     void givenUserLoginCredentials_WhenLogin_ItShouldReturnToken() {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978787878");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978787878");
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
         User user = new User(registerUserDto);
         user.setVarified(true);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(encoder.matches(any(),any())).thenReturn(true);
+        when(encoder.matches(any(), any())).thenReturn(true);
         when(jwtUtil.createJwtToken(any())).thenReturn(token);
 
         String login = loginService.login(loginDto);
-        Assert.assertEquals(login,token);
+        Assert.assertEquals(login, token);
     }
 
     @Test
     void givenUserLoginPasswordWrong_WhenLogin_ItShouldThrowException() {
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234","8978787878");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978787878");
         User user = new User(registerUserDto);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(encoder.matches(any(),any())).thenReturn(false);
+        when(encoder.matches(any(), any())).thenReturn(false);
 
-        try{
+        try {
             loginService.login(loginDto);
-        }catch (LoginUserException e){
-            Assert.assertEquals(e.getMessage(),"Enter valid password");
+        } catch (LoginUserException e) {
+            Assert.assertEquals(e.getMessage(), "Enter valid password");
         }
     }
 

@@ -1,5 +1,6 @@
 package com.fundoo.note.service;
 
+import com.fundoo.label.model.Label;
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
@@ -146,5 +147,15 @@ public class NoteServiceTest {
         assertThat(noteException.getMessage(), is("Note Is Not Present"));
     }
 
+    @Test
+    void givenEmailToGetAllNote_WhenReturn_ItShouldReturnAllData() {
+        String email = "kdw@gmail.com";
+        List<Note> labelList = new ArrayList<>();
+        labelList.add(note);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(user.getNoteList()).thenReturn(labelList);
+        List<Note> notes = noteService.getNoteList(email);
+        Assert.assertEquals(notes.size(), 1);
+    }
 
 }

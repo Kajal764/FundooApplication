@@ -1,5 +1,6 @@
 package com.fundoo.note.controller;
 
+import com.fundoo.label.model.Label;
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
@@ -18,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -123,6 +126,19 @@ public class NoteControllerTest {
         MvcResult mvcResult = mockMvc.perform(put("/fundoo/note/update").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Updating Note"));
+    }
+
+    @Test
+    void givenRequestToGetAllNote_WhenNoteReturn_ItShouldReturnList() throws Exception {
+        Note note = new Note();
+        NoteDto noteDto = new NoteDto(2, "java", "this is desciption");
+        BeanUtils.copyProperties(noteDto, note);
+        List<Note> labelList = new ArrayList<>();
+        labelList.add(note);
+        when(noteService.getNoteList(any())).thenReturn(labelList);
+        MvcResult mvcResult = mockMvc.perform((get("/fundoo/note/fetchList")).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(note.getTitle()));
+
     }
 
 }
