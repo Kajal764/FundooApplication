@@ -2,12 +2,14 @@ package com.fundoo.label.controller;
 
 import com.fundoo.label.dto.LabelDto;
 import com.fundoo.label.dto.MapDto;
+import com.fundoo.label.model.Label;
 import com.fundoo.label.service.ILabelService;
 import com.fundoo.note.exception.NoteException;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +17,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -173,4 +178,15 @@ public class LabelControllerTest {
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Removing label"));
     }
 
+    @Test
+    void givenRequestToGetAllLabel_WhenLabelReturn_ItShouldReturnList() throws Exception {
+        Label label = new Label();
+        BeanUtils.copyProperties(labelDto, label);
+        List<Label> labelList = new ArrayList<>();
+        labelList.add(label);
+        when(labelService.getLabelList(any())).thenReturn(labelList);
+        MvcResult mvcResult = mockMvc.perform((get("/fundoo/label/fetchList")).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(label.getLabelName()));
+
+    }
 }

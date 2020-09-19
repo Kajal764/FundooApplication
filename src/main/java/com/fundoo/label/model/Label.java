@@ -1,4 +1,5 @@
 package com.fundoo.label.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fundoo.note.model.Note;
 import com.fundoo.user.model.User;
 import lombok.Getter;
@@ -27,9 +28,11 @@ public class Label {
 
     private LocalDateTime modifiedDate;
 
+    @JsonIgnore
     @ManyToOne
     private User user;
 
+    @JsonIgnore
     @ManyToMany
     private List<Note> noteList;
 

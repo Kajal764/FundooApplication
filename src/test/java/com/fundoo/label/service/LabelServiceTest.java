@@ -5,7 +5,6 @@ import com.fundoo.label.dto.MapDto;
 import com.fundoo.label.exception.LabelException;
 import com.fundoo.label.model.Label;
 import com.fundoo.label.repository.LabelRepository;
-import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.repository.INoteRepository;
 import com.fundoo.user.model.User;
@@ -173,5 +172,17 @@ public class LabelServiceTest {
         MapDto mapDto = new MapDto(4, 6);
         assertThrows(LabelException.class, () -> labelService.removeNoteLabel(mapDto));
         verify(labelRepository, never()).save(label);
+    }
+
+    @Test
+    void givenEmailToGetAllLabel_WhenReturn_ItShouldReturnAllData() {
+        Label label = new Label();
+        BeanUtils.copyProperties(labelDto, label);
+        List<Label> labelList = new ArrayList<>();
+        labelList.add(label);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(user.getLabelList()).thenReturn(labelList);
+        List<Label> labels = labelService.getLabelList(email);
+        Assert.assertEquals(labels.size(), 1);
     }
 }

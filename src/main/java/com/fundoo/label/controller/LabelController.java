@@ -2,16 +2,17 @@ package com.fundoo.label.controller;
 
 import com.fundoo.label.dto.LabelDto;
 import com.fundoo.label.dto.MapDto;
+import com.fundoo.label.exception.LabelException;
+import com.fundoo.label.model.Label;
 import com.fundoo.label.service.ILabelService;
 import com.fundoo.user.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/fundoo/label")
@@ -57,5 +58,14 @@ public class LabelController {
         if (labelService.removeNoteLabel(mapDto))
             return new ResponseDto("Label Remove", 202);
         return new ResponseDto("Error Removing label", 400);
+    }
+
+    @GetMapping("/fetchList")
+    public List<Label> fetchVerifiedUser(HttpServletRequest request){
+        String email = (String) request.getAttribute("email");
+        List<Label> list = labelService.getLabelList(email);
+        if(list.isEmpty())
+            throw new LabelException("Label Not Found",400);
+        return list;
     }
 }
