@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 public class User {
 
     @Id
@@ -46,10 +45,12 @@ public class User {
 
     private LocalDateTime accountUpdatedDate;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "U_Id")
     private List<Note> noteList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private  List<Label> labelList;
 

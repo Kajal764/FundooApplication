@@ -64,7 +64,6 @@ public class ForgotPasswordControllerTest {
         Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
 
-
     @Test
     void givenRequestForResetPassword_WhenGetResponse_ItShouldRedirectToUpadtePasswordApi() throws Exception {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
@@ -73,6 +72,5 @@ public class ForgotPasswordControllerTest {
         String updateApi = "http://localhost:8080/fundoo/update/eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
         Assert.assertEquals(mvcResult.getResponse().getContentAsString(), updateApi);
     }
-
 
 }

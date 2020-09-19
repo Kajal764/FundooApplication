@@ -8,6 +8,9 @@ import com.fundoo.user.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,4 +42,15 @@ public class LoginService implements ILoginService {
         }
         throw new LoginUserException("Enter valid password");
     }
+
+    public List<User> verifyAccount() {
+        List<User> varifiedUser = new ArrayList<>();
+        List<User> all = userRepository.findAll();
+        all.forEach(user -> {
+            if (user.isVarified() == true)
+                varifiedUser.add(user);
+        });
+        return varifiedUser;
+    }
+
 }

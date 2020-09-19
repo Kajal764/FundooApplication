@@ -1,11 +1,13 @@
 package com.fundoo.user.controller;
 
 import com.fundoo.user.dto.LoginDto;
+import com.fundoo.user.model.User;
 import com.fundoo.user.service.LoginService;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,9 +16,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -28,11 +33,13 @@ public class LoginControllerTest {
     @MockBean
     LoginService loginService;
 
+    @Mock
+    List<User> userList;
+
     Gson gson = new Gson();
     LoginDto loginDto;
     String toJson;
     String token;
-
 
     @BeforeEach
     void setUp() {
@@ -58,4 +65,5 @@ public class LoginControllerTest {
 
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Login Successful"));
     }
+
 }

@@ -1,6 +1,8 @@
 package com.fundoo.user.controller;
 
 import com.fundoo.user.dto.*;
+import com.fundoo.user.exception.LoginUserException;
+import com.fundoo.user.model.User;
 import com.fundoo.user.service.ForgotPWService;
 import com.fundoo.user.service.LoginService;
 import com.fundoo.user.service.RegistrationService;
@@ -13,6 +15,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/fundoo/user")
@@ -62,4 +65,11 @@ public class UserController {
         return updatePasswordService.update(token, updatePasswordDto);
     }
 
+    @GetMapping("/fetchVerifiedUser")
+    public List<User> fetchVerifiedUser(){
+        List<User> userList = loginService.verifyAccount();
+        if(userList.isEmpty())
+          throw new LoginUserException("User Data Not Found");
+        return userList;
+    }
 }
