@@ -1,9 +1,11 @@
 package com.fundoo.label.service;
 
 import com.fundoo.label.dto.LabelDto;
+import com.fundoo.label.dto.MapDto;
 import com.fundoo.label.exception.LabelException;
 import com.fundoo.label.model.Label;
 import com.fundoo.label.repository.LabelRepository;
+import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.repository.INoteRepository;
 import com.fundoo.user.model.User;
@@ -141,4 +143,35 @@ public class LabelServiceTest {
         verify(labelRepository, never()).delete(label);
     }
 
+    @Test
+    void givenLabelAndNoteId_WhenRemoveNote_ItShouldReturnTrue() {
+        mockLabellist = new ArrayList<>();
+        label.setNoteList(mockLabellist);
+
+        when(labelRepository.findById(anyInt())).thenReturn(Optional.of(label));
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+
+        MapDto mapDto = new MapDto(4, 6);
+        boolean result = labelService.removeNoteLabel(mapDto);
+        verify(labelRepository).save(label);
+        assertThat(result, is(true));
+
+    }
+
+    @Test
+    void givenLabelAndNoteId_WhenNoteNotPresent_ItShouldThrowException() {
+        when(labelRepository.findById(anyInt())).thenReturn(Optional.of(label));
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.empty());
+        MapDto mapDto = new MapDto(4, 6);
+        assertThrows(LabelException.class, () -> labelService.removeNoteLabel(mapDto));
+        verify(labelRepository, never()).save(label);
+    }
+
+    @Test
+    void givenLabelAndNoteId_WhenLabelNotPresent_ItShouldThrowException() {
+        when(labelRepository.findById(anyInt())).thenReturn(Optional.empty());
+        MapDto mapDto = new MapDto(4, 6);
+        assertThrows(LabelException.class, () -> labelService.removeNoteLabel(mapDto));
+        verify(labelRepository, never()).save(label);
+    }
 }
