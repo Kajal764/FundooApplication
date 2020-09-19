@@ -1,6 +1,7 @@
 package com.fundoo.label.service;
 
 import com.fundoo.label.dto.LabelDto;
+import com.fundoo.label.dto.MapDto;
 import com.fundoo.label.exception.LabelException;
 import com.fundoo.label.model.Label;
 import com.fundoo.label.repository.LabelRepository;
@@ -12,7 +13,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -77,6 +80,21 @@ public class LabelService implements ILabelService {
             labelRepository.delete(value);
             return true;
         }).orElseThrow(() -> new LabelException("Label Not Present", 404));
+    }
+
+    @Override
+    public boolean removeNoteLabel(MapDto mapDto) {
+        Optional<Label> label = labelRepository.findById(mapDto.getLabel_Id());
+        if(label.isPresent())
+        {
+            Optional<Note> note = noteRepository.findById(mapDto.getNote_Id());
+            return note.map((value) ->{
+                label.get().getNoteList().remove(value);
+                labelRepository.save(label.get());
+                return true;
+            }).orElseThrow(() -> new LabelException("Note Is Not Present", 404));
+        }
+        throw new LabelException("Label Note Present",404);
     }
 }
 

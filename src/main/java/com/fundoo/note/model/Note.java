@@ -31,6 +31,6 @@ public class Note {
 
     private boolean isTrash;
 
-    @ManyToMany(mappedBy = "noteList")
+    @ManyToMany(mappedBy = "noteList",cascade = CascadeType.REMOVE)
     private List<Label> labelList;
 }

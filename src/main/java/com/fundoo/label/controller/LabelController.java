@@ -1,10 +1,13 @@
 package com.fundoo.label.controller;
 
 import com.fundoo.label.dto.LabelDto;
+import com.fundoo.label.dto.MapDto;
 import com.fundoo.label.service.ILabelService;
 import com.fundoo.user.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,5 +50,12 @@ public class LabelController {
         if (labelService.deleteLabel(label_id, email))
             return new ResponseDto("Label Deleted", 202);
         return new ResponseDto("Error Deleting label", 400);
+    }
+
+    @PutMapping("/removeLabel")
+    public ResponseDto removeLabelNote(@RequestBody MapDto mapDto, HttpServletRequest request) {
+        if (labelService.removeNoteLabel(mapDto))
+            return new ResponseDto("Label Remove", 202);
+        return new ResponseDto("Error Removing label", 400);
     }
 }
