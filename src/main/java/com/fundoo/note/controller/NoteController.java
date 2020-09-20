@@ -1,8 +1,8 @@
 package com.fundoo.note.controller;
 
 import com.fundoo.label.exception.LabelException;
-import com.fundoo.label.model.Label;
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.service.INoteService;
@@ -12,8 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -39,7 +37,7 @@ public class NoteController {
     }
 
     @DeleteMapping(value = "/trash/{note_Id}")
-    public ResponseDto deleteNote(@PathVariable("note_Id") int note_id,HttpServletRequest request) throws NoteException {
+    public ResponseDto deleteNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) throws NoteException {
         Object email = request.getAttribute("email");
         return noteService.trashNoteDelete(note_id, (String) email);
     }
@@ -47,18 +45,27 @@ public class NoteController {
     @PutMapping(value = "/update")
     public Object updateNote(@RequestBody NoteDto noteDto, HttpServletRequest request) throws NoteException {
         Object email = request.getAttribute("email");
-        if(noteService.updateNote(noteDto, (String) email))
-            return new ResponseDto("Note Updated",200);
-        return new ResponseDto("Error Updating Note",400);
+        if (noteService.updateNote(noteDto, (String) email))
+            return new ResponseDto("Note Updated", 200);
+        return new ResponseDto("Error Updating Note", 400);
     }
 
     @GetMapping("/fetchList")
-    public List<Note> fetchVerifiedUser(HttpServletRequest request){
+    public List<Note> fetchVerifiedUser(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         List<Note> list = noteService.getNoteList(email);
-        if(list.isEmpty())
-            throw new LabelException("Note Not Found",400);
+        if (list.isEmpty())
+            throw new LabelException("Note Not Found", 400);
         return list;
+    }
+
+    @PostMapping("/sort")
+    public List<Note> sortList(@RequestBody SortDto sortDto, HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        List<Note> sortList = noteService.sort(sortDto, email);
+        if (sortList.isEmpty())
+            throw new LabelException("List Not Found", 400);
+        return sortList;
     }
 
 }

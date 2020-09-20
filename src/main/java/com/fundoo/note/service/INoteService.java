@@ -1,6 +1,7 @@
 package com.fundoo.note.service;
 
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.user.dto.ResponseDto;
@@ -15,5 +16,8 @@ public interface INoteService {
     ResponseDto trashNoteDelete(int note_id, String email) throws NoteException;
 
     boolean updateNote(NoteDto noteId, String email) throws NoteException;
+
     List<Note> getNoteList(String email);
+
+    List<Note> sort(SortDto sortDto, String email);
 }

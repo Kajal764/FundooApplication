@@ -1,8 +1,9 @@
 package com.fundoo.note.service;
 
-import com.fundoo.label.model.Label;
 import com.fundoo.label.repository.LabelRepository;
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.dto.SortDto;
+import com.fundoo.note.enumerations.SortBaseOn;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.repository.INoteRepository;
@@ -16,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 class NoteService implements INoteService {
@@ -105,4 +106,21 @@ class NoteService implements INoteService {
         }
         return null;
     }
+
+    @Override
+    public List<Note> sort(SortDto sortDto, String email) {
+
+        Optional<User> user = userRepository.findByEmail(email);
+        List<Note> noteList = user.get().getNoteList();
+        Note[] notes = noteList.toArray(new Note[noteList.size()]);
+
+        SortBaseOn sortBaseOn = sortDto.getSortBaseOn();
+
+        List<Note> collect = sortBaseOn.sortedNotes(notes);
+        if (sortDto.getType().equals("desc"))
+            Collections.reverse(collect);
+        return collect;
+
+    }
 }
+

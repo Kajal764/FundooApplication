@@ -1,7 +1,8 @@
 package com.fundoo.note.service;
 
-import com.fundoo.label.model.Label;
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.dto.SortDto;
+import com.fundoo.note.enumerations.SortBaseOn;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.repository.INoteRepository;
@@ -158,4 +159,22 @@ public class NoteServiceTest {
         Assert.assertEquals(notes.size(), 1);
     }
 
+    @Test
+    void givenSortValueAndType_WhenSorting_ItShouldReturnSortedData() {
+        SortDto sortDto = new SortDto(SortBaseOn.NAME, "asc");
+        Note note1 = new Note();
+        Note note2 = new Note();
+        NoteDto noteDto1 = new NoteDto(4, "va", "this is desciption");
+        NoteDto noteDto2 = new NoteDto(4, "spring", "this is desciption");
+        BeanUtils.copyProperties(noteDto1, note1);
+        BeanUtils.copyProperties(noteDto2, note2);
+        List<Note> list = new ArrayList<>();
+        list.add(note1);
+        list.add(note2);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(user.getNoteList()).thenReturn(list);
+        List<Note> sort = noteService.sort(sortDto, "kdw@gmail.com");
+        Assert.assertTrue(sort.get(0).getTitle().contains("spring"));
+        Assert.assertTrue(sort.get(1).getTitle().contains("va"));
+    }
 }

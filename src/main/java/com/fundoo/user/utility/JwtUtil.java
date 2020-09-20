@@ -13,7 +13,7 @@ public class JwtUtil {
 
     public String createJwtToken(String email) {
         return Jwts.builder().claim("email", email).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(120).toInstant()))
+                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(1200).toInstant()))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
     }
 

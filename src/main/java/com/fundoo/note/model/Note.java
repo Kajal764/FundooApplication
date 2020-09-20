@@ -33,6 +33,8 @@ public class Note {
     private boolean isTrash;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "noteList",cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
     private List<Label> labelList;
+
+
 }

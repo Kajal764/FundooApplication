@@ -1,7 +1,8 @@
 package com.fundoo.note.controller;
 
-import com.fundoo.label.model.Label;
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.dto.SortDto;
+import com.fundoo.note.enumerations.SortBaseOn;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.service.INoteService;
@@ -37,6 +38,7 @@ public class NoteControllerTest {
     INoteService noteService;
 
     Gson gson = new Gson();
+
 
     @Test
     void givenRequest_whenCreatingNote_ItShouldReturnStatusCreated() throws Exception {
@@ -138,7 +140,28 @@ public class NoteControllerTest {
         when(noteService.getNoteList(any())).thenReturn(labelList);
         MvcResult mvcResult = mockMvc.perform((get("/fundoo/note/fetchList")).contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(note.getTitle()));
-
     }
 
+    @Test
+    void givenRequestToGetSorting_WhenReturnDataItShouldReturnInSortedOrder() throws Exception {
+        SortDto sortDto = new SortDto(SortBaseOn.NAME, "asc");
+        String jsonDto = gson.toJson(sortDto);
+        Note note1 = new Note();
+        Note note2 = new Note();
+        NoteDto noteDto1 = new NoteDto(4, "java", "this is desciption");
+        NoteDto noteDto2 = new NoteDto(4, "spring", "this is desciption");
+        BeanUtils.copyProperties(noteDto1, note1);
+        BeanUtils.copyProperties(noteDto2, note2);
+        List<Note> list = new ArrayList<>();
+        list.add(note1);
+        list.add(note2);
+
+        when(noteService.sort(any(), any())).thenReturn(list);
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/note/sort").content(jsonDto)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(note1.getTitle()));
+
+    }
 }
