@@ -183,8 +183,6 @@ public class NoteServiceTest {
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
         boolean result = noteService.pinUnpinNote(4, "kdw@gmail.com");
         assertThat(result, is(true));
-
-
     }
 
     @Test
@@ -192,6 +190,22 @@ public class NoteServiceTest {
         note.setPin(true);
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
         boolean result = noteService.pinUnpinNote(4, "kdw@gmail.com");
+        assertThat(result, is(false));
+
+    }
+
+    @Test
+    void givenNoteIdToArchiveNote_WhenNoteUnArchive_ItShouldReturnTrue() {
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+        boolean result = noteService.archive(4, "kdw@gmail.com");
+        assertThat(result, is(true));
+    }
+
+    @Test
+    void givenNoteIdToUnArchiveNote_WhenNoteArchive_ItShouldReturnFalse() {
+        note.setArchive(true);
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+        boolean result = noteService.archive(4, "kdw@gmail.com");
         assertThat(result, is(false));
 
     }

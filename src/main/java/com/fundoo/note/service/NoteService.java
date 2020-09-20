@@ -136,5 +136,22 @@ class NoteService implements INoteService {
         noteRepository.save(note.get());
         return true;
     }
+
+    @Override
+    public boolean archive(int note_id, String email) {
+        Optional<Note> note = noteRepository.findById(note_id);
+        if(note.get().isArchive())
+        {
+            note.get().setArchive(false);
+            noteRepository.save(note.get());
+            return false;
+        }
+        else {
+            note.get().setArchive(true);
+            noteRepository.save(note.get());
+            return true;
+        }
+
+    }
 }
 

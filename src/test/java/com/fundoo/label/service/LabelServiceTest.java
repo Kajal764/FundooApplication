@@ -146,15 +146,12 @@ public class LabelServiceTest {
     void givenLabelAndNoteId_WhenRemoveNote_ItShouldReturnTrue() {
         mockLabellist = new ArrayList<>();
         label.setNoteList(mockLabellist);
-
         when(labelRepository.findById(anyInt())).thenReturn(Optional.of(label));
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
-
         MapDto mapDto = new MapDto(4, 6);
         boolean result = labelService.removeNoteLabel(mapDto);
         verify(labelRepository).save(label);
         assertThat(result, is(true));
-
     }
 
     @Test

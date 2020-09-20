@@ -73,7 +73,16 @@ public class NoteController {
         String email = (String) request.getAttribute("email");
         if (noteService.pinUnpinNote(note_id, email))
             return new ResponseDto("Note Pin", 200);
-        return new ResponseDto("Note Unpin",200);
+        return new ResponseDto("Note Unpin", 200);
+    }
+
+    @PutMapping(value = "/archive/{note_Id}")
+    public ResponseDto pinArchiveNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        if (noteService.archive(note_id, email)) {
+            return new ResponseDto("Note Archived", 200);
+        }
+        return new ResponseDto("Note Unarchived", 200);
     }
 
 }

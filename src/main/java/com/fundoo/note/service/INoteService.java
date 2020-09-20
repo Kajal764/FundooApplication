@@ -22,4 +22,6 @@ public interface INoteService {
     List<Note> sort(SortDto sortDto, String email);
 
     boolean pinUnpinNote(int note_id, String email);
+
+    boolean archive(int note_id, String email);
 }

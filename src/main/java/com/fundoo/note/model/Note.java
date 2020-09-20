@@ -34,6 +34,8 @@ public class Note {
 
     private boolean isPin;
 
+    private boolean isArchive;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
     private List<Label> labelList;

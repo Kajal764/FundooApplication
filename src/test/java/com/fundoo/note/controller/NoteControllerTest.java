@@ -173,12 +173,27 @@ public class NoteControllerTest {
     }
 
     @Test
-    void givenRequestToPinNote_WhenNoteUnPin_ItShouldReturnNotePinMessage() throws Exception, NoteException {
+    void givenRequestToPinNote_WhenNoteUnPin_ItShouldReturnNotePinMessage() throws Exception{
 
         when(noteService.pinUnpinNote(anyInt(), anyString())).thenReturn(false);
-        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/pinUnpin/5")
-                .contentType(MediaType.APPLICATION_JSON)).andReturn();
-        System.out.println(mvcResult.getResponse().getContentAsString());
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/pinUnpin/5")).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Unpin"));
     }
+
+    @Test
+    void givenRequestToArchiveNote_WhenNoteArchive_ItShouldReturnStatusOk() throws Exception{
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/archive/5")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
+    }
+
+    @Test
+    void givenRequestToArchiveNote_WhenNoteUnArchive_ItShouldReturnArchiveMessage() throws Exception, NoteException {
+
+        when(noteService.archive(anyInt(), anyString())).thenReturn(false);
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/archive/5")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Unarchived"));
+    }
+
 }
