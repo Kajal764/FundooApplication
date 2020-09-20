@@ -162,6 +162,23 @@ public class NoteControllerTest {
                 .andReturn();
 
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(note1.getTitle()));
+    }
 
+
+    @Test
+    void givenRequestToPinNote_WhenNotePin_ItShouldReturnStatusOk() throws Exception, NoteException {
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/pinUnpin/5")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
+    }
+
+    @Test
+    void givenRequestToPinNote_WhenNoteUnPin_ItShouldReturnNotePinMessage() throws Exception, NoteException {
+
+        when(noteService.pinUnpinNote(anyInt(), anyString())).thenReturn(false);
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/pinUnpin/5")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        System.out.println(mvcResult.getResponse().getContentAsString());
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Unpin"));
     }
 }

@@ -177,4 +177,22 @@ public class NoteServiceTest {
         Assert.assertTrue(sort.get(0).getTitle().contains("spring"));
         Assert.assertTrue(sort.get(1).getTitle().contains("va"));
     }
+
+    @Test
+    void givenNoteIdToPinNote_WhenNoteUnPin_ItShouldReturnTrue() {
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+        boolean result = noteService.pinUnpinNote(4, "kdw@gmail.com");
+        assertThat(result, is(true));
+
+
+    }
+
+    @Test
+    void givenNoteIdToUnPinNote_WhenNotePin_ItShouldReturnFalse() {
+        note.setPin(true);
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+        boolean result = noteService.pinUnpinNote(4, "kdw@gmail.com");
+        assertThat(result, is(false));
+
+    }
 }

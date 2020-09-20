@@ -17,8 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 class NoteService implements INoteService {
@@ -121,6 +122,19 @@ class NoteService implements INoteService {
             Collections.reverse(collect);
         return collect;
 
+    }
+
+    @Override
+    public boolean pinUnpinNote(int note_id, String email) {
+        Optional<Note> note = noteRepository.findById(note_id);
+        if (note.get().isPin()) {
+            note.get().setPin(false);
+            noteRepository.save(note.get());
+            return false;
+        }
+        note.get().setPin(true);
+        noteRepository.save(note.get());
+        return true;
     }
 }
 

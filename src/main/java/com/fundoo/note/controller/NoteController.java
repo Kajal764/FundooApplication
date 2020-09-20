@@ -12,8 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -59,13 +59,21 @@ public class NoteController {
         return list;
     }
 
-    @PostMapping("/sort")
+    @PostMapping(value = "/sort")
     public List<Note> sortList(@RequestBody SortDto sortDto, HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         List<Note> sortList = noteService.sort(sortDto, email);
         if (sortList.isEmpty())
             throw new LabelException("List Not Found", 400);
         return sortList;
+    }
+
+    @PutMapping(value = "/pinUnpin/{note_Id}")
+    public ResponseDto pinUnpinNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        if (noteService.pinUnpinNote(note_id, email))
+            return new ResponseDto("Note Pin", 200);
+        return new ResponseDto("Note Unpin",200);
     }
 
 }
