@@ -2,6 +2,7 @@ package com.fundoo.note.service;
 
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.dto.SortDto;
+import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.enumerations.SortBaseOn;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
@@ -179,14 +180,14 @@ public class NoteServiceTest {
     }
 
     @Test
-    void givenNoteIdToPinNote_WhenNoteUnPin_ItShouldReturnTrue() {
+    void givenNoteIdToPinNote_WhenNoteUnPin_ItShouldReturnTrue() throws NoteException {
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
         boolean result = noteService.pinUnpinNote(4, "kdw@gmail.com");
         assertThat(result, is(true));
     }
 
     @Test
-    void givenNoteIdToUnPinNote_WhenNotePin_ItShouldReturnFalse() {
+    void givenNoteIdToUnPinNote_WhenNotePin_ItShouldReturnFalse() throws NoteException {
         note.setPin(true);
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
         boolean result = noteService.pinUnpinNote(4, "kdw@gmail.com");
@@ -195,18 +196,54 @@ public class NoteServiceTest {
     }
 
     @Test
-    void givenNoteIdToArchiveNote_WhenNoteUnArchive_ItShouldReturnTrue() {
+    void givenNoteIdToArchiveNote_WhenNoteUnArchive_ItShouldReturnTrue() throws NoteException {
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
         boolean result = noteService.archive(4, "kdw@gmail.com");
         assertThat(result, is(true));
     }
 
     @Test
-    void givenNoteIdToUnArchiveNote_WhenNoteArchive_ItShouldReturnFalse() {
+    void givenNoteIdToUnArchiveNote_WhenNoteArchive_ItShouldReturnFalse() throws NoteException {
         note.setArchive(true);
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
         boolean result = noteService.archive(4, "kdw@gmail.com");
         assertThat(result, is(false));
+    }
 
+
+    @Test
+    void givenRequestToTrashNote_WhenReturn_ItShouldReturnList(){
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+
+        List<Note> list = new ArrayList<>();
+        Note note1 = new Note();
+        Note note2 = new Note();
+        note1.setTitle("trashNote");
+        note1.setTrash(true);
+        note2.setTitle("Untrash note");
+        list.add(note1);
+        list.add(note2);
+        when(user.getNoteList()).thenReturn(list);
+        List<Note> notes = noteService.getNotes(GetNote.TRASH, "Kdw@Gmail.com");
+
+       Assert.assertTrue(notes.get(0).getTitle().contains("trashNote"));
+    }
+
+    @Test
+    void givenRequestToArchiveNote_WhenReturn_ItShouldReturnList(){
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+
+        List<Note> list = new ArrayList<>();
+        Note note1 = new Note();
+        Note note2 = new Note();
+        note1.setTitle("archievedNote");
+        note1.setArchive(true);
+        note2.setTitle("note");
+        list.add(note1);
+        list.add(note2);
+        when(user.getNoteList()).thenReturn(list);
+        List<Note> notes = noteService.getNotes(GetNote.ARCHIVE, "Kdw@Gmail.com");
+
+        Assert.assertTrue(notes.get(0).getTitle().contains("archievedNote"));
     }
 }

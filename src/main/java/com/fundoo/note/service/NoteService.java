@@ -3,6 +3,7 @@ package com.fundoo.note.service;
 import com.fundoo.label.repository.LabelRepository;
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.dto.SortDto;
+import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.enumerations.SortBaseOn;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
@@ -103,6 +104,9 @@ class NoteService implements INoteService {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             List<Note> noteList = user.get().getNoteList();
+            noteList.removeIf(note -> note.isTrash());
+            noteList.removeIf(note -> note.isArchive());
+            noteList.removeIf(note -> note.isPin());
             return noteList;
         }
         return null;
@@ -125,33 +129,44 @@ class NoteService implements INoteService {
     }
 
     @Override
-    public boolean pinUnpinNote(int note_id, String email) {
+    public boolean pinUnpinNote(int note_id, String email) throws NoteException {
         Optional<Note> note = noteRepository.findById(note_id);
-        if (note.get().isPin()) {
-            note.get().setPin(false);
-            noteRepository.save(note.get());
-            return false;
-        }
-        note.get().setPin(true);
-        noteRepository.save(note.get());
-        return true;
-    }
-
-    @Override
-    public boolean archive(int note_id, String email) {
-        Optional<Note> note = noteRepository.findById(note_id);
-        if(note.get().isArchive())
-        {
-            note.get().setArchive(false);
-            noteRepository.save(note.get());
-            return false;
-        }
-        else {
-            note.get().setArchive(true);
+        if (note.isPresent()) {
+            if (note.get().isPin()) {
+                note.get().setPin(false);
+                noteRepository.save(note.get());
+                return false;
+            }
+            note.get().setPin(true);
             noteRepository.save(note.get());
             return true;
         }
+        throw new NoteException("Note Is Not Present");
+    }
 
+    @Override
+    public boolean archive(int note_id, String email) throws NoteException {
+        Optional<Note> note = noteRepository.findById(note_id);
+        if (note.isPresent()) {
+            if (note.get().isArchive()) {
+                note.get().setArchive(false);
+                noteRepository.save(note.get());
+                return false;
+            } else {
+                note.get().setArchive(true);
+                noteRepository.save(note.get());
+                return true;
+            }
+        }
+        throw new NoteException("Note Is Not Present");
+    }
+
+    @Override
+    public List<Note> getNotes(GetNote value, String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        List<Note> noteList = user.get().getNoteList();
+        List<Note> notes = value.getNote(noteList);
+        return notes;
     }
 }
 

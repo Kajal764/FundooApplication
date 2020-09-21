@@ -3,6 +3,7 @@ package com.fundoo.note.controller;
 import com.fundoo.label.exception.LabelException;
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.dto.SortDto;
+import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.service.INoteService;
@@ -51,7 +52,7 @@ public class NoteController {
     }
 
     @GetMapping("/fetchList")
-    public List<Note> fetchVerifiedUser(HttpServletRequest request) {
+    public List<Note> fetchNoteList(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         List<Note> list = noteService.getNoteList(email);
         if (list.isEmpty())
@@ -69,7 +70,7 @@ public class NoteController {
     }
 
     @PutMapping(value = "/pinUnpin/{note_Id}")
-    public ResponseDto pinUnpinNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) {
+    public ResponseDto pinUnpinNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) throws NoteException {
         String email = (String) request.getAttribute("email");
         if (noteService.pinUnpinNote(note_id, email))
             return new ResponseDto("Note Pin", 200);
@@ -77,7 +78,7 @@ public class NoteController {
     }
 
     @PutMapping(value = "/archive/{note_Id}")
-    public ResponseDto pinArchiveNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) {
+    public ResponseDto pinArchiveNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) throws NoteException {
         String email = (String) request.getAttribute("email");
         if (noteService.archive(note_id, email)) {
             return new ResponseDto("Note Archived", 200);
@@ -85,5 +86,34 @@ public class NoteController {
         return new ResponseDto("Note Unarchived", 200);
     }
 
+    @GetMapping("/fetch/trash")
+    public List<Note> fetchTrashNotes(HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        GetNote value=GetNote.TRASH;
+        List<Note> list = noteService.getNotes(value,email);
+        if (list.isEmpty())
+            throw new LabelException("Trash is empty", 400);
+        return list;
+    }
+
+    @GetMapping("/fetch/archive")
+    public List<Note> fetchArchiveNotes(HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        GetNote value=GetNote.ARCHIVE;
+        List<Note> list = noteService.getNotes(value,email);
+        if (list.isEmpty())
+            throw new LabelException("empty", 400);
+        return list;
+    }
+
+    @GetMapping("/fetch/pin")
+    public List<Note> fetchPinNotes(HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        GetNote value=GetNote.PIN;
+        List<Note> list = noteService.getNotes(value,email);
+        if (list.isEmpty())
+            throw new LabelException("empty", 400);
+        return list;
+    }
 }
 

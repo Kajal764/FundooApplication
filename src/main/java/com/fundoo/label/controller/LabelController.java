@@ -61,7 +61,7 @@ public class LabelController {
     }
 
     @GetMapping("/fetchList")
-    public List<Label> fetchVerifiedUser(HttpServletRequest request){
+    public List<Label> fetchLabelList(HttpServletRequest request){
         String email = (String) request.getAttribute("email");
         List<Label> list = labelService.getLabelList(email);
         if(list.isEmpty())

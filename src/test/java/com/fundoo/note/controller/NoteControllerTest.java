@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -173,7 +174,7 @@ public class NoteControllerTest {
     }
 
     @Test
-    void givenRequestToPinNote_WhenNoteUnPin_ItShouldReturnNotePinMessage() throws Exception{
+    void givenRequestToPinNote_WhenNoteUnPin_ItShouldReturnNotePinMessage() throws Exception, NoteException {
 
         when(noteService.pinUnpinNote(anyInt(), anyString())).thenReturn(false);
         MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/pinUnpin/5")).andReturn();
@@ -181,19 +182,42 @@ public class NoteControllerTest {
     }
 
     @Test
-    void givenRequestToArchiveNote_WhenNoteArchive_ItShouldReturnStatusOk() throws Exception{
+    void givenRequestToArchiveNote_WhenNoteArchive_ItShouldReturnStatusOk() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/archive/5")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
     }
 
     @Test
-    void givenRequestToArchiveNote_WhenNoteUnArchive_ItShouldReturnArchiveMessage() throws Exception, NoteException {
+    void givenRequestToUnArchiveNote_WhenNoteArchive_ItShouldReturnUNArchiveMessage() throws Exception, NoteException {
 
-        when(noteService.archive(anyInt(), anyString())).thenReturn(false);
+        when(noteService.archive(anyInt(), any())).thenReturn(false);
         MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/archive/5")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Unarchived"));
     }
 
+    @Test
+    void givenRequestToArchiveNote_WhenNoteUnArchive_ItShouldReturnArchiveMessage() throws Exception, NoteException {
+        when(noteService.archive(anyInt(), any())).thenReturn(true);
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/archive/5")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Archived"));
+    }
+
+    @Test
+    void givenRequestToGetTrashNote_WhenReturnNote_ItShouldReturnTrashNote() throws Exception {
+
+        Note note1 = new Note();
+        List<Note> list = new ArrayList<>();
+        note1.setTitle("first");
+        note1.setTrash(true);
+        list.add(note1);
+        when(noteService.getNotes(any(), any())).thenReturn(list);
+
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/note/fetch/trash")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(list.get(0).getTitle()));
+    }
 }

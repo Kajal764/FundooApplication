@@ -21,16 +21,17 @@ public class AuthenticationFilter implements Filter {
     UserRepository userRepository;
 
     @Autowired
-    JwtUtil jwtUtil = new JwtUtil();
+    JwtUtil jwtUtil;
 
     @Autowired
     HandlerExceptionResolver handlerExceptionResolver;
 
     @Autowired
-    RedisService redisService = new RedisService();
+    RedisService redisService;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
