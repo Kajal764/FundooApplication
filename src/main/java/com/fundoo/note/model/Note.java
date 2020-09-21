@@ -2,6 +2,7 @@ package com.fundoo.note.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fundoo.label.model.Label;
+import com.fundoo.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,5 +39,8 @@ public class Note {
 
     @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
     private List<Label> labelList;
+
+    @ManyToMany(mappedBy = "collaborateNotes",cascade = CascadeType.PERSIST)
+    private List<User> collaboratedUsers;
 
 }

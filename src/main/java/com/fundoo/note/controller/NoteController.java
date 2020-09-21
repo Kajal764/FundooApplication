@@ -48,7 +48,6 @@ public class NoteController {
         if (noteService.restoreTrashNote(note_id))
             return new ResponseDto("Note Restored", 200);
         return new ResponseDto("Error Restoring Note", 400);
-
     }
 
     @PutMapping(value = "/update")

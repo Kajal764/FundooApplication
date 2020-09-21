@@ -54,6 +54,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private  List<Label> labelList;
 
+    @JsonIgnore
+    @ManyToMany
+    private List<Note> collaborateNotes;
+
+
     public User(RegisterUserDto registerUserDto) {
         this.firstName = registerUserDto.firstName;
         this.lastName = registerUserDto.lastName;

@@ -63,7 +63,7 @@ class NoteService implements INoteService {
                 noteRepository.save(note.get());
                 return new ResponseDto("Note trashed", 200);
             }
-            throw new NoteException("Note is not present");
+            throw new NoteException("Note is not present", 404);
         }
         return new ResponseDto("User not present", 403);
     }
@@ -78,7 +78,7 @@ class NoteService implements INoteService {
                 noteRepository.delete(note.get());
                 return new ResponseDto("Note Deleted Successfully", 200);
             }
-            throw new NoteException("Note is not in trash");
+            throw new NoteException("Note is not in trash", 404);
         }
         return new ResponseDto("User not present", 403);
     }
@@ -94,7 +94,7 @@ class NoteService implements INoteService {
                 value.setEditDate(LocalDateTime.now());
                 noteRepository.save(value);
                 return true;
-            }).orElseThrow(() -> new NoteException("Note Is Not Present"));
+            }).orElseThrow(() -> new NoteException("Note Is Not Present", 404));
         }
         return false;
     }
@@ -141,7 +141,7 @@ class NoteService implements INoteService {
             noteRepository.save(note.get());
             return true;
         }
-        throw new NoteException("Note Is Not Present");
+        throw new NoteException("Note Is Not Present", 404);
     }
 
     @Override
@@ -158,7 +158,7 @@ class NoteService implements INoteService {
                 return true;
             }
         }
-        throw new NoteException("Note Is Not Present");
+        throw new NoteException("Note Is Not Present", 404);
     }
 
     @Override
@@ -177,7 +177,7 @@ class NoteService implements INoteService {
             noteRepository.save(note.get());
             return true;
         }
-        throw new NoteException("Note Is Not Is Trash");
+        throw new NoteException("Note Is Not Is Trash", 404);
     }
 }
 
