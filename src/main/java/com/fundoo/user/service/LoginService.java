@@ -53,4 +53,11 @@ public class LoginService implements ILoginService {
         return varifiedUser;
     }
 
+    @Override
+    public List<User> unVerifyAccount() {
+        List<User> userList = userRepository.findAll();
+        userList.removeIf(user -> user.isVarified());
+        return userList;
+    }
+
 }

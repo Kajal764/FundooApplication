@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -94,6 +96,17 @@ public class LoginServiceTest {
         }
     }
 
-
+    @Test
+    void whenGetUnverifiedUser_ItShouldReturnList() {
+        ArrayList<User> list = new ArrayList<>();
+        User user1 = new User();
+        User user2 = new User();
+        user1.setVarified(true);
+        list.add(user1);
+        list.add(user2);
+        when(userRepository.findAll()).thenReturn(list);
+        List<User> userList = loginService.unVerifyAccount();
+        Assert.assertEquals(userList.size(),1);
+    }
 }
 

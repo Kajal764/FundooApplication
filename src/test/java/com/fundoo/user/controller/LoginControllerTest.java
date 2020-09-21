@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,9 +33,6 @@ public class LoginControllerTest {
 
     @MockBean
     LoginService loginService;
-
-    @Mock
-    List<User> userList;
 
     Gson gson = new Gson();
     LoginDto loginDto;
@@ -66,4 +64,16 @@ public class LoginControllerTest {
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Login Successful"));
     }
 
+    @Test
+    void givenRequestToGetUnverifiedUser_WhenReturnItShouldReturnList() throws Exception {
+        List<User> userList = new ArrayList<>();
+        User user = new User();
+        user.setEmail("Kdw@gmail.com");
+        userList.add(user);
+        when(loginService.unVerifyAccount()).thenReturn(userList);
+        MvcResult mvcResult = this.mockMvc.perform(get("/fundoo/user/unVerifiedUser")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(user.getEmail()));
+    }
 }

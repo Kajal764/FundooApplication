@@ -66,10 +66,19 @@ public class UserController {
     }
 
     @GetMapping("/verifiedUser")
-    public List<User> fetchVerifiedUser(){
+    public List<User> VerifiedUser(){
         List<User> userList = loginService.verifyAccount();
         if(userList.isEmpty())
           throw new LoginUserException("User Data Not Found");
+        return userList;
+    }
+
+    @GetMapping("/unVerifiedUser")
+    public List<User> unVerifiedUser(){
+        List<User> userList = loginService.unVerifyAccount();
+        System.out.println("Inside");
+        if(userList.isEmpty())
+            throw new LoginUserException("User Data Not Found");
         return userList;
     }
 }

@@ -9,4 +9,6 @@ public interface ILoginService {
     String login(LoginDto loginDto);
 
     List<User> verifyAccount();
+
+    List<User> unVerifyAccount();
 }
