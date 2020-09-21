@@ -185,7 +185,7 @@ public class LabelControllerTest {
         List<Label> labelList = new ArrayList<>();
         labelList.add(label);
         when(labelService.getLabelList(any())).thenReturn(labelList);
-        MvcResult mvcResult = mockMvc.perform((get("/fundoo/label/fetchList")).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult mvcResult = mockMvc.perform((get("/fundoo/label/list")).contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(label.getLabelName()));
 
     }

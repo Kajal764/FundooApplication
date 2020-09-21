@@ -65,7 +65,7 @@ public class UserController {
         return updatePasswordService.update(token, updatePasswordDto);
     }
 
-    @GetMapping("/fetchVerifiedUser")
+    @GetMapping("/verifiedUser")
     public List<User> fetchVerifiedUser(){
         List<User> userList = loginService.verifyAccount();
         if(userList.isEmpty())

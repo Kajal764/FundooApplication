@@ -139,7 +139,7 @@ public class NoteControllerTest {
         List<Note> labelList = new ArrayList<>();
         labelList.add(note);
         when(noteService.getNoteList(any())).thenReturn(labelList);
-        MvcResult mvcResult = mockMvc.perform((get("/fundoo/note/fetchList")).contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult mvcResult = mockMvc.perform((get("/fundoo/note/list")).contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(note.getTitle()));
     }
 
@@ -175,7 +175,6 @@ public class NoteControllerTest {
 
     @Test
     void givenRequestToPinNote_WhenNoteUnPin_ItShouldReturnNotePinMessage() throws Exception, NoteException {
-
         when(noteService.pinUnpinNote(anyInt(), anyString())).thenReturn(false);
         MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/pinUnpin/5")).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Unpin"));
@@ -190,7 +189,6 @@ public class NoteControllerTest {
 
     @Test
     void givenRequestToUnArchiveNote_WhenNoteArchive_ItShouldReturnUNArchiveMessage() throws Exception, NoteException {
-
         when(noteService.archive(anyInt(), any())).thenReturn(false);
         MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/archive/5")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
@@ -207,15 +205,13 @@ public class NoteControllerTest {
 
     @Test
     void givenRequestToGetTrashNote_WhenReturnNote_ItShouldReturnTrashNote() throws Exception {
-
         Note note1 = new Note();
         List<Note> list = new ArrayList<>();
         note1.setTitle("first");
         note1.setTrash(true);
         list.add(note1);
         when(noteService.getNotes(any(), any())).thenReturn(list);
-
-        MvcResult mvcResult = mockMvc.perform(get("/fundoo/note/fetch/trash")
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/note/trashList")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(list.get(0).getTitle()));

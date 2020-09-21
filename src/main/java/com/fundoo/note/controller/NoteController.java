@@ -51,8 +51,8 @@ public class NoteController {
         return new ResponseDto("Error Updating Note", 400);
     }
 
-    @GetMapping("/fetchList")
-    public List<Note> fetchNoteList(HttpServletRequest request) {
+    @GetMapping("/list")
+    public List<Note> getNoteList(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         List<Note> list = noteService.getNoteList(email);
         if (list.isEmpty())
@@ -86,7 +86,7 @@ public class NoteController {
         return new ResponseDto("Note Unarchived", 200);
     }
 
-    @GetMapping("/fetch/trash")
+    @GetMapping("/trashList")
     public List<Note> fetchTrashNotes(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         GetNote value=GetNote.TRASH;
@@ -96,7 +96,7 @@ public class NoteController {
         return list;
     }
 
-    @GetMapping("/fetch/archive")
+    @GetMapping("/archiveList")
     public List<Note> fetchArchiveNotes(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         GetNote value=GetNote.ARCHIVE;
@@ -106,7 +106,7 @@ public class NoteController {
         return list;
     }
 
-    @GetMapping("/fetch/pin")
+    @GetMapping("/pinList")
     public List<Note> fetchPinNotes(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         GetNote value=GetNote.PIN;

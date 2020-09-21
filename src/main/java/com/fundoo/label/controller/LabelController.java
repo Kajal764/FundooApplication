@@ -60,7 +60,7 @@ public class LabelController {
         return new ResponseDto("Error Removing label", 400);
     }
 
-    @GetMapping("/fetchList")
+    @GetMapping("/list")
     public List<Label> fetchLabelList(HttpServletRequest request){
         String email = (String) request.getAttribute("email");
         List<Label> list = labelService.getLabelList(email);

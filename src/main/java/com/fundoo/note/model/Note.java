@@ -36,9 +36,7 @@ public class Note {
 
     private boolean isArchive;
 
-
     @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
     private List<Label> labelList;
-
 
 }
