@@ -103,6 +103,14 @@ public class NoteServiceTest {
     }
 
     @Test
+    void givenIdForNoteRestore_WhenRestoreNote_ItShouldReturnTrue() throws NoteException {
+        note.setTrash(true);
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+        boolean result = noteService.restoreTrashNote(4);
+        Assert.assertTrue(result);
+    }
+
+    @Test
     void givenIdForNoteTrash_whenNoteIsNotInTrash_ItShouldThrowException() {
         int note_id = 4;
         note.setTrash(false);
@@ -212,7 +220,7 @@ public class NoteServiceTest {
 
 
     @Test
-    void givenRequestToTrashNote_WhenReturn_ItShouldReturnList(){
+    void givenRequestToTrashNote_WhenReturn_ItShouldReturnList() {
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         List<Note> list = new ArrayList<>();
@@ -226,11 +234,11 @@ public class NoteServiceTest {
         when(user.getNoteList()).thenReturn(list);
         List<Note> notes = noteService.getNotes(GetNote.TRASH, "Kdw@Gmail.com");
 
-       Assert.assertTrue(notes.get(0).getTitle().contains("trashNote"));
+        Assert.assertTrue(notes.get(0).getTitle().contains("trashNote"));
     }
 
     @Test
-    void givenRequestToArchiveNote_WhenReturn_ItShouldReturnList(){
+    void givenRequestToArchiveNote_WhenReturn_ItShouldReturnList() {
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         List<Note> list = new ArrayList<>();
@@ -246,4 +254,6 @@ public class NoteServiceTest {
 
         Assert.assertTrue(notes.get(0).getTitle().contains("archievedNote"));
     }
+
+
 }

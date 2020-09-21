@@ -168,5 +168,16 @@ class NoteService implements INoteService {
         List<Note> notes = value.getNote(noteList);
         return notes;
     }
+
+    @Override
+    public boolean restoreTrashNote(int note_id) throws NoteException {
+        Optional<Note> note = noteRepository.findById(note_id);
+        if (note.get().isTrash() == true) {
+            note.get().setTrash(false);
+            noteRepository.save(note.get());
+            return true;
+        }
+        throw new NoteException("Note Is Not Is Trash");
+    }
 }
 

@@ -43,6 +43,14 @@ public class NoteController {
         return noteService.trashNoteDelete(note_id, (String) email);
     }
 
+    @PutMapping(value = "/restoreTrashNote/{note_Id}")
+    public ResponseDto restoreTrashNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) throws NoteException {
+        if (noteService.restoreTrashNote(note_id))
+            return new ResponseDto("Note Restored", 200);
+        return new ResponseDto("Error Restoring Note", 400);
+
+    }
+
     @PutMapping(value = "/update")
     public Object updateNote(@RequestBody NoteDto noteDto, HttpServletRequest request) throws NoteException {
         Object email = request.getAttribute("email");
@@ -89,8 +97,8 @@ public class NoteController {
     @GetMapping("/trashList")
     public List<Note> fetchTrashNotes(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
-        GetNote value=GetNote.TRASH;
-        List<Note> list = noteService.getNotes(value,email);
+        GetNote value = GetNote.TRASH;
+        List<Note> list = noteService.getNotes(value, email);
         if (list.isEmpty())
             throw new LabelException("Trash is empty", 400);
         return list;
@@ -99,8 +107,8 @@ public class NoteController {
     @GetMapping("/archiveList")
     public List<Note> fetchArchiveNotes(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
-        GetNote value=GetNote.ARCHIVE;
-        List<Note> list = noteService.getNotes(value,email);
+        GetNote value = GetNote.ARCHIVE;
+        List<Note> list = noteService.getNotes(value, email);
         if (list.isEmpty())
             throw new LabelException("empty", 400);
         return list;
@@ -109,11 +117,12 @@ public class NoteController {
     @GetMapping("/pinList")
     public List<Note> fetchPinNotes(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
-        GetNote value=GetNote.PIN;
-        List<Note> list = noteService.getNotes(value,email);
+        GetNote value = GetNote.PIN;
+        List<Note> list = noteService.getNotes(value, email);
         if (list.isEmpty())
             throw new LabelException("empty", 400);
         return list;
     }
+
 }
 

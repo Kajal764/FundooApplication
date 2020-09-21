@@ -46,8 +46,8 @@ public class UserController {
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
         String token = loginService.login(loginDto);
-        response.setHeader("AuthorizeToken",token);
-        return new ResponseDto("Login Successful",200);
+        response.setHeader("AuthorizeToken", token);
+        return new ResponseDto("Login Successful", 200);
     }
 
     @PostMapping(value = "/forgot_password")
@@ -66,18 +66,18 @@ public class UserController {
     }
 
     @GetMapping("/verifiedUser")
-    public List<User> VerifiedUser(){
+    public List<User> VerifiedUser() {
         List<User> userList = loginService.verifyAccount();
-        if(userList.isEmpty())
-          throw new LoginUserException("User Data Not Found");
+        if (userList.isEmpty())
+            throw new LoginUserException("User Data Not Found");
         return userList;
     }
 
     @GetMapping("/unVerifiedUser")
-    public List<User> unVerifiedUser(){
+    public List<User> unVerifiedUser() {
         List<User> userList = loginService.unVerifyAccount();
         System.out.println("Inside");
-        if(userList.isEmpty())
+        if (userList.isEmpty())
             throw new LoginUserException("User Data Not Found");
         return userList;
     }

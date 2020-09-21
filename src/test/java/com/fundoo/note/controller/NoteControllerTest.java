@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -76,6 +75,15 @@ public class NoteControllerTest {
         MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/delete/5")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertEquals(mvcResult.getResponse().getStatus(), 200);
+    }
+
+    @Test
+    void givenRequestToRestore_WhenNoteIsInTrash_ItShouldReturnSuccessMessage() throws Exception, NoteException {
+
+        when(noteService.restoreTrashNote(anyInt())).thenReturn(true);
+        MvcResult mvcResult = this.mockMvc.perform(put("/fundoo/note/restoreTrashNote/43")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Note Restored"));
     }
 
     @Test

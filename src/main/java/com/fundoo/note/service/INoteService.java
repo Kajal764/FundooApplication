@@ -27,4 +27,6 @@ public interface INoteService {
     boolean archive(int note_id, String email) throws NoteException;
 
     List<Note> getNotes(GetNote value, String email);
+
+    boolean restoreTrashNote(int note_id) throws NoteException;
 }
