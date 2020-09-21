@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public class CollaboratorServiceTest {
     User user;
 
     @Test
-    void givenNoteIdAndEmail_WhenCollaborateItShouldReturnTrue() throws NoteException {
+    void givenNoteIdAndEmail_WhenCollaborate_ItShouldReturnTrue() throws NoteException {
         CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(3, "kdw@gmail.com");
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
@@ -59,4 +60,5 @@ public class CollaboratorServiceTest {
         List<Note> collaboratorNotes = collaboratorService.getCollaboratorNotes("kdw@gmail.com");
         Assert.assertEquals(collaboratorNotes.size(), 1);
     }
+
 }

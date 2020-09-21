@@ -10,4 +10,6 @@ public interface ICollaborateService {
     boolean addCollaborator(CollaborateNoteDto collaborateNoteDto, String email) throws NoteException;
 
     List<Note> getCollaboratorNotes(String email) throws NoteException;
+
+    boolean removeCollaboration(CollaborateNoteDto collaborateNoteDto) throws NoteException;
 }

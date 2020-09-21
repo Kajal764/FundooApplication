@@ -28,7 +28,8 @@ public class CollaborateService implements ICollaborateService {
         Optional<User> anotherUser = userRepository.findByEmail(collaborateNoteDto.getEmail());
         if (anotherUser.isEmpty())
             throw new NoteException("User Not Present", 403);
-
+        if (note.get().getCollaboratedUsers().contains(anotherUser.get()))
+            throw new NoteException("Note Collaborate Already", 400);
         note.get().getCollaboratedUsers().add(anotherUser.get());
         anotherUser.get().getCollaborateNotes().add(note.get());
         noteRepository.save(note.get());
@@ -42,5 +43,19 @@ public class CollaborateService implements ICollaborateService {
         if (collaborateNotes.isEmpty())
             throw new NoteException("No Collaborate Note", 404);
         return collaborateNotes;
+    }
+
+    @Override
+    public boolean removeCollaboration(CollaborateNoteDto collaborateNoteDto) throws NoteException {
+        Optional<Note> note = noteRepository.findById(collaborateNoteDto.getNote_Id());
+        Optional<User> anotherUser = userRepository.findByEmail(collaborateNoteDto.getEmail());
+        if (anotherUser.isEmpty())
+            throw new NoteException("User Not Found", 403);
+        if (!note.get().getCollaboratedUsers().contains(anotherUser.get()))
+            throw new NoteException("Note Not Collaborate", 400);
+        note.get().getCollaboratedUsers().remove(anotherUser.get());
+        anotherUser.get().getCollaborateNotes().remove(note.get());
+        noteRepository.save(note.get());
+        return true;
     }
 }

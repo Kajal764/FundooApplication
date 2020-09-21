@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
@@ -49,5 +50,16 @@ public class CollaboratorControllerTest {
         MvcResult mvcResult = mockMvc.perform(post("/fundoo/note/collaborators").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Collaborated User Successfully"));
+    }
+
+    @Test
+    void givenRequestToRemoveCollaborateNote_WhenCollaborate_ItShouldReturnSuccessMessage() throws Exception, NoteException {
+
+        CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(3, "kdw@gmail.com");
+        String toJson = gson.toJson(collaborateNoteDto);
+        when(collaborateService.removeCollaboration(any())).thenReturn(true);
+        MvcResult mvcResult = mockMvc.perform(delete("/fundoo/note/removeCollaborate").content(toJson)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Collaboration remove Successfully"));
     }
 }
