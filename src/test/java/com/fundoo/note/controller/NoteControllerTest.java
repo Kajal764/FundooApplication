@@ -1,7 +1,6 @@
 package com.fundoo.note.controller;
 
 import com.fundoo.note.dto.NoteDto;
-import com.fundoo.note.dto.ReminderDto;
 import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.enumerations.SortBaseOn;
 import com.fundoo.note.exception.NoteException;
@@ -11,7 +10,6 @@ import com.fundoo.user.dto.ResponseDto;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,19 +19,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
 @SpringBootTest
@@ -235,4 +227,15 @@ public class NoteControllerTest {
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(list.get(0).getTitle()));
     }
 
+    @Test
+    void givenRequest_WhenGetReminderNotes_ItShouldReturnNotes() throws Exception {
+        Note note1 = new Note();
+        List<Note> list = new ArrayList<>();
+        note1.setTitle("reminder Note");
+        note1.setRemainder(LocalDateTime.now());
+        list.add(note1);
+        when(noteService.getReminderSetNotes()).thenReturn(list);
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/note/reminder").contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(list.get(0).getTitle()));
+    }
 }

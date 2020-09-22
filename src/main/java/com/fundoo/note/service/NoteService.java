@@ -202,5 +202,12 @@ class NoteService implements INoteService {
         }
         throw new NoteException("Note Not Found", 400);
     }
+
+    @Override
+    public List<Note> getReminderSetNotes() {
+        List<Note> allNotes = noteRepository.findAll();
+        allNotes.removeIf(note -> note.getRemainder() == null);
+        return allNotes;
+    }
 }
 

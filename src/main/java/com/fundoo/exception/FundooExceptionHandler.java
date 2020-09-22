@@ -1,6 +1,7 @@
 package com.fundoo.exception;
 
 import com.fundoo.label.exception.LabelException;
+import com.fundoo.note.exception.ReminderException;
 import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.exception.LoginUserException;
 import com.fundoo.user.exception.RegistrationException;
@@ -44,4 +45,11 @@ public class FundooExceptionHandler {
     public ResponseEntity<Object> mediaTypeNotSupportExceptionHandler(HttpMediaTypeNotSupportedException e) {
         return new ResponseEntity<>(new ResponseDto("Unsupported Media Type", 400), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = ReminderException.class)
+    public ResponseEntity<Object> reminderException(ReminderException exception){
+        return new ResponseEntity<>(new ResponseDto(exception.message,exception.statusCode),HttpStatus.BAD_REQUEST);
+    }
+
+
 }

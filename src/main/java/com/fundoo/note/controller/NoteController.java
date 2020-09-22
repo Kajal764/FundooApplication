@@ -6,6 +6,7 @@ import com.fundoo.note.dto.ReminderDto;
 import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.exception.NoteException;
+import com.fundoo.note.exception.ReminderException;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.service.INoteService;
 import com.fundoo.user.dto.ResponseDto;
@@ -140,5 +141,12 @@ public class NoteController {
         return new ResponseDto("Reminder Not Delete", 400);
     }
 
+    @GetMapping("/reminder")
+    public List<Note> getReminderNotes(HttpServletRequest request) {
+        List<Note> reminderSetNotes = noteService.getReminderSetNotes();
+        if (reminderSetNotes.isEmpty())
+            throw new ReminderException("Reminder Note Not Found", 400);
+        return reminderSetNotes;
+    }
 }
 

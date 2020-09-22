@@ -34,4 +34,6 @@ public interface INoteService {
     boolean setReminder(ReminderDto reminderDTO, String email) throws NoteException;
 
     boolean deleteReminder(ReminderDto reminderDTO, String email) throws NoteException;
+
+    List<Note> getReminderSetNotes();
 }

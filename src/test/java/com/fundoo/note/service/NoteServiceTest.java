@@ -279,4 +279,20 @@ public class NoteServiceTest {
         Assert.assertEquals(note.getRemainder(), null);
         verify(noteRepository).save(note);
     }
+
+    @Test
+    void whenGetReminderNotes_ItShouldReturnNotes() {
+        Note note1 = new Note();
+        Note note2 = new Note();
+        LocalDateTime now = LocalDateTime.now();
+        List<Note> list = new ArrayList<>();
+        note1.setTitle("reminder Note");
+        note1.setRemainder(now);
+        list.add(note1);
+        list.add(note2);
+        when(noteRepository.findAll()).thenReturn(list);
+        List<Note> reminderSetNotes = noteService.getReminderSetNotes();
+        Assert.assertEquals(reminderSetNotes.size(), 1);
+        Assert.assertEquals(reminderSetNotes.get(0).getRemainder(), now);
+    }
 }

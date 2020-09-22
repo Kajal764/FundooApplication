@@ -18,5 +18,7 @@ public class ReminderDto {
     private int note_Id;
 
     @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime remainder;
 }
