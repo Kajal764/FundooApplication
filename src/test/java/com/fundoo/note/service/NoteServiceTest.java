@@ -1,6 +1,7 @@
 package com.fundoo.note.service;
 
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.dto.ReminderDto;
 import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.enumerations.SortBaseOn;
@@ -18,6 +19,7 @@ import org.mockito.Mock;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -255,5 +258,25 @@ public class NoteServiceTest {
         Assert.assertTrue(notes.get(0).getTitle().contains("archievedNote"));
     }
 
+    @Test
+    void givenReminder_WhenSetReminderItShouldReturnTrue() throws NoteException {
+        LocalDateTime time = LocalDateTime.now();
+        ReminderDto reminderDto = new ReminderDto(4, time);
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+        boolean result = noteService.setReminder(reminderDto, "kdw@gmail.com");
+        Assert.assertEquals(result, true);
+        Assert.assertEquals(note.getRemainder(), time);
+        verify(noteRepository).save(note);
+    }
 
+    @Test
+    void givenReminder_WhenDeleteReminderItShouldReturnTrue() throws NoteException {
+        LocalDateTime time = LocalDateTime.now();
+        ReminderDto reminderDto = new ReminderDto(4, time);
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+        boolean result = noteService.deleteReminder(reminderDto, "kdw@gmail.com");
+        Assert.assertEquals(result, true);
+        Assert.assertEquals(note.getRemainder(), null);
+        verify(noteRepository).save(note);
+    }
 }

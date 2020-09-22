@@ -2,6 +2,7 @@ package com.fundoo.note.controller;
 
 import com.fundoo.label.exception.LabelException;
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.dto.ReminderDto;
 import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.exception.NoteException;
@@ -121,6 +122,22 @@ public class NoteController {
         if (list.isEmpty())
             throw new LabelException("empty", 400);
         return list;
+    }
+
+    @PutMapping(value = "/reminder")
+    public ResponseDto setReminder(@RequestBody ReminderDto reminderDTO, HttpServletRequest request) throws NoteException {
+        String email = (String) request.getAttribute("email");
+        if (noteService.setReminder(reminderDTO, email))
+            return new ResponseDto("Reminder Set", 200);
+        return new ResponseDto("Reminder Not Set", 400);
+    }
+
+    @DeleteMapping("/reminder")
+    public ResponseDto deleteReminder(@RequestBody ReminderDto reminderDTO, HttpServletRequest request) throws NoteException {
+        String email = (String) request.getAttribute("email");
+        if (noteService.deleteReminder(reminderDTO, email))
+            return new ResponseDto("Reminder Delete", 200);
+        return new ResponseDto("Reminder Not Delete", 400);
     }
 
 }

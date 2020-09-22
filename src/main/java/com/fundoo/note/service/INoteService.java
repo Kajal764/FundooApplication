@@ -1,6 +1,7 @@
 package com.fundoo.note.service;
 
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.dto.ReminderDto;
 import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.exception.NoteException;
@@ -29,4 +30,8 @@ public interface INoteService {
     List<Note> getNotes(GetNote value, String email);
 
     boolean restoreTrashNote(int note_id) throws NoteException;
+
+    boolean setReminder(ReminderDto reminderDTO, String email) throws NoteException;
+
+    boolean deleteReminder(ReminderDto reminderDTO, String email) throws NoteException;
 }

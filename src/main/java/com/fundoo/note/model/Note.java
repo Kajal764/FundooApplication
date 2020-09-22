@@ -1,12 +1,13 @@
 package com.fundoo.note.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fundoo.label.model.Label;
 import com.fundoo.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -37,10 +38,14 @@ public class Note {
 
     private boolean isArchive;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime remainder;
+
     @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
     private List<Label> labelList;
 
-    @ManyToMany(mappedBy = "collaborateNotes",cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "collaborateNotes", cascade = CascadeType.PERSIST)
     private List<User> collaboratedUsers;
 
 }

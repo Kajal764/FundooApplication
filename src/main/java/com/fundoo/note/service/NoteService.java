@@ -2,6 +2,7 @@ package com.fundoo.note.service;
 
 import com.fundoo.label.repository.LabelRepository;
 import com.fundoo.note.dto.NoteDto;
+import com.fundoo.note.dto.ReminderDto;
 import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.enumerations.SortBaseOn;
@@ -178,6 +179,28 @@ class NoteService implements INoteService {
             return true;
         }
         throw new NoteException("Note Is Not Is Trash", 404);
+    }
+
+    @Override
+    public boolean setReminder(ReminderDto reminderDTO, String email) throws NoteException {
+        Optional<Note> note = noteRepository.findById(reminderDTO.getNote_Id());
+        if (note.isPresent()) {
+            note.get().setRemainder(reminderDTO.getRemainder());
+            noteRepository.save(note.get());
+            return true;
+        }
+        throw new NoteException("Note Not Found", 400);
+    }
+
+    @Override
+    public boolean deleteReminder(ReminderDto reminderDTO, String email) throws NoteException {
+        Optional<Note> note = noteRepository.findById(reminderDTO.getNote_Id());
+        if (note.isPresent()) {
+            note.get().setRemainder(null);
+            noteRepository.save(note.get());
+            return true;
+        }
+        throw new NoteException("Note Not Found", 400);
     }
 }
 
