@@ -6,6 +6,7 @@ import com.fundoo.note.model.Note;
 import com.fundoo.note.repository.INoteRepository;
 import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
+import com.fundoo.user.utility.JavaMailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,12 @@ public class CollaborateService implements ICollaborateService {
     @Autowired
     INoteRepository noteRepository;
 
+    @Autowired
+    JavaMailUtil javaMailUtil;
+
     @Override
     public boolean addCollaborator(CollaborateNoteDto collaborateNoteDto, String email) throws NoteException {
-
+        Optional<User> mainUser = userRepository.findByEmail(email);
         Optional<Note> note = noteRepository.findById(collaborateNoteDto.getNote_Id());
         Optional<User> anotherUser = userRepository.findByEmail(collaborateNoteDto.getEmail());
         if (anotherUser.isEmpty())
@@ -32,6 +36,7 @@ public class CollaborateService implements ICollaborateService {
             throw new NoteException("Note Collaborate Already", 400);
         note.get().getCollaboratedUsers().add(anotherUser.get());
         anotherUser.get().getCollaborateNotes().add(note.get());
+        javaMailUtil.sendCollaborationInvite(collaborateNoteDto, mainUser, note);
         noteRepository.save(note.get());
         return true;
     }
@@ -59,3 +64,5 @@ public class CollaborateService implements ICollaborateService {
         return true;
     }
 }
+
+

@@ -6,14 +6,15 @@ import com.fundoo.note.model.Note;
 import com.fundoo.note.repository.INoteRepository;
 import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
+import com.fundoo.user.utility.JavaMailUtil;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.SimpleMailMessage;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,9 @@ public class CollaboratorServiceTest {
     @Mock
     User user;
 
+    @Mock
+    JavaMailUtil javaMailUtil;
+
     @Test
     void givenNoteIdAndEmail_WhenCollaborate_ItShouldReturnTrue() throws NoteException {
         CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(3, "kdw@gmail.com");
@@ -57,6 +61,7 @@ public class CollaboratorServiceTest {
         notes.add(note);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(user.getCollaborateNotes()).thenReturn(notes);
+        when(javaMailUtil.sendCollaborationInvite(any(), any(), any())).thenReturn(new SimpleMailMessage());
         List<Note> collaboratorNotes = collaboratorService.getCollaboratorNotes("kdw@gmail.com");
         Assert.assertEquals(collaboratorNotes.size(), 1);
     }

@@ -19,6 +19,6 @@ public class ReminderDto {
 
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm a")
     private LocalDateTime remainder;
 }

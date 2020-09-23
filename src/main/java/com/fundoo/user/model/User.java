@@ -7,7 +7,6 @@ import com.fundoo.user.dto.RegisterUserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -52,12 +51,11 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private  List<Label> labelList;
+    private List<Label> labelList;
 
     @JsonIgnore
     @ManyToMany
     private List<Note> collaborateNotes;
-
 
     public User(RegisterUserDto registerUserDto) {
         this.firstName = registerUserDto.firstName;

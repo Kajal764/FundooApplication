@@ -39,7 +39,7 @@ public class Note {
     private boolean isArchive;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm a")
     private LocalDateTime remainder;
 
     @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
@@ -47,5 +47,4 @@ public class Note {
 
     @ManyToMany(mappedBy = "collaborateNotes", cascade = CascadeType.PERSIST)
     private List<User> collaboratedUsers;
-
 }
