@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,7 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +40,9 @@ public class NoteServiceTest {
 
     @Mock
     INoteRepository noteRepository;
+
+    @Mock
+    IESService iesService;
 
     @Mock
     UserRepository userRepository;
@@ -70,9 +73,10 @@ public class NoteServiceTest {
 
 
     @Test
-    void givenTitleAndDesciption_whenCreatingNote_ItShouldreturnNoteData() {
+    void givenTitleAndDesciption_whenCreatingNote_ItShouldreturnNoteData() throws IOException {
         when(noteRepository.save(any())).thenReturn(note);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(iesService.saveNote(any())).thenReturn(anyString());
         ResponseDto response = noteService.createNote(noteDto, token);
         Assert.assertEquals(response.message, "Note created successfully");
     }
@@ -122,7 +126,7 @@ public class NoteServiceTest {
         try {
             noteService.trashNoteDelete(note_id, token);
             noteService.trashNoteDelete(note_id, token);
-        } catch (NoteException e) {
+        } catch (NoteException | IOException e) {
             Assert.assertEquals(e.getMessage(), "Note is not in trash");
         }
     }
@@ -295,4 +299,6 @@ public class NoteServiceTest {
         Assert.assertEquals(reminderSetNotes.size(), 1);
         Assert.assertEquals(reminderSetNotes.get(0).getRemainder(), now);
     }
+
+
 }

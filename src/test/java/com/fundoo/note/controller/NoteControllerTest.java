@@ -5,6 +5,7 @@ import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.enumerations.SortBaseOn;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
+import com.fundoo.note.service.IESService;
 import com.fundoo.note.service.INoteService;
 import com.fundoo.user.dto.ResponseDto;
 import com.google.gson.Gson;
@@ -38,6 +39,8 @@ public class NoteControllerTest {
     @MockBean
     INoteService noteService;
 
+    @MockBean
+    IESService iesService;
 
     Gson gson = new Gson();
 
@@ -237,5 +240,18 @@ public class NoteControllerTest {
         when(noteService.getReminderSetNotes()).thenReturn(list);
         MvcResult mvcResult = mockMvc.perform(get("/fundoo/note/reminder").contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(list.get(0).getTitle()));
+    }
+
+
+    @Test
+    void givenRequestToSearchNoteBaseOnTitleOrDescription_ThenReturnSearchList() throws Exception {
+        Note note1 = new Note();
+        List<Note> list = new ArrayList<>();
+        note1.setTitle("Note");
+        list.add(note1);
+        when(iesService.searchByTitle(any(), any())).thenReturn(list);
+        MvcResult mvcResult = mockMvc.perform(get("/fundoo/note/searchData/here")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(note1.getTitle()));
     }
 }

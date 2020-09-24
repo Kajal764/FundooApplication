@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -41,14 +42,18 @@ class NoteService implements INoteService {
     @Autowired
     LabelRepository labelRepository;
 
+    @Autowired
+    IESService iesService;
+
     @Override
-    public ResponseDto createNote(NoteDto noteDto, String email) {
+    public ResponseDto createNote(NoteDto noteDto, String email) throws IOException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             Note newNote = new Note();
             BeanUtils.copyProperties(noteDto, newNote);
             user.get().getNoteList().add(newNote);
             noteRepository.save(newNote);
+            iesService.saveNote(newNote);
             return new ResponseDto("Note created successfully", 200);
         }
         return new ResponseDto("User not present", 403);
@@ -70,13 +75,14 @@ class NoteService implements INoteService {
     }
 
     @Override
-    public ResponseDto trashNoteDelete(int note_id, String email) throws NoteException {
+    public ResponseDto trashNoteDelete(int note_id, String email) throws NoteException, IOException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             Optional<Note> note = noteRepository.findById(note_id);
 
             if (note.isPresent() && note.get().isTrash() == true) {
                 noteRepository.delete(note.get());
+                iesService.deleteNote(note.get());
                 return new ResponseDto("Note Deleted Successfully", 200);
             }
             throw new NoteException("Note is not in trash", 404);
@@ -94,6 +100,11 @@ class NoteService implements INoteService {
                 value.setDescription(noteDto.description);
                 value.setEditDate(LocalDateTime.now());
                 noteRepository.save(value);
+                try {
+                    iesService.updateNote(note.get());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return true;
             }).orElseThrow(() -> new NoteException("Note Is Not Present", 404));
         }
@@ -115,13 +126,10 @@ class NoteService implements INoteService {
 
     @Override
     public List<Note> sort(SortDto sortDto, String email) {
-
         Optional<User> user = userRepository.findByEmail(email);
         List<Note> noteList = user.get().getNoteList();
         Note[] notes = noteList.toArray(new Note[noteList.size()]);
-
         SortBaseOn sortBaseOn = sortDto.getSortBaseOn();
-
         List<Note> collect = sortBaseOn.sortedNotes(notes);
         if (sortDto.getType().equals("desc"))
             Collections.reverse(collect);

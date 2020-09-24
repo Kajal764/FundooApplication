@@ -8,6 +8,7 @@ import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.exception.ReminderException;
 import com.fundoo.note.model.Note;
+import com.fundoo.note.service.IESService;
 import com.fundoo.note.service.INoteService;
 import com.fundoo.user.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,8 +28,11 @@ public class NoteController {
     @Autowired
     INoteService noteService;
 
+    @Autowired
+    IESService iesService;
+
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, ServletRequest request) {
+    public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, ServletRequest request) throws IOException {
         Object email = request.getAttribute("email");
         return noteService.createNote(noteDto, (String) email);
     }
@@ -40,7 +45,7 @@ public class NoteController {
     }
 
     @DeleteMapping(value = "/trash/{note_Id}")
-    public ResponseDto deleteNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) throws NoteException {
+    public ResponseDto deleteNote(@PathVariable("note_Id") int note_id, HttpServletRequest request) throws NoteException, IOException {
         Object email = request.getAttribute("email");
         return noteService.trashNoteDelete(note_id, (String) email);
     }
@@ -148,5 +153,12 @@ public class NoteController {
             throw new ReminderException("Reminder Note Not Found", 400);
         return reminderSetNotes;
     }
+
+    @GetMapping("/searchData/{title}")
+    public List<Note> searchTitle(@PathVariable("title") String title, HttpServletRequest request) throws IOException {
+        String email = (String) request.getAttribute("email");
+        return iesService.searchByTitle(title, email);
+    }
+
 }
 

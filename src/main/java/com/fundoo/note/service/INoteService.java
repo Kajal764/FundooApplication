@@ -8,14 +8,15 @@ import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.user.dto.ResponseDto;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface INoteService {
-    ResponseDto createNote(NoteDto noteDto, String email);
+    ResponseDto createNote(NoteDto noteDto, String email) throws IOException;
 
     ResponseDto deleteNote(int note_id, String email) throws NoteException;
 
-    ResponseDto trashNoteDelete(int note_id, String email) throws NoteException;
+    ResponseDto trashNoteDelete(int note_id, String email) throws NoteException, IOException;
 
     boolean updateNote(NoteDto noteId, String email) throws NoteException;
 
