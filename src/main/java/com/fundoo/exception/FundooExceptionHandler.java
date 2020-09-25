@@ -22,18 +22,18 @@ public class FundooExceptionHandler {
     }
 
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<Object> methodNotSupported(HttpRequestMethodNotSupportedException e){
+    public ResponseEntity<Object> methodNotSupported(HttpRequestMethodNotSupportedException e) {
         return new ResponseEntity<>(new ResponseDto(e.getMessage(), 405), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = LoginUserException.class)
-    public ResponseEntity<Object> loginExceptionHandler(LoginUserException loginException){
-        return new ResponseEntity<>(new ResponseDto(loginException.getMessage(),400),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> loginExceptionHandler(LoginUserException loginException) {
+        return new ResponseEntity<>(new ResponseDto(loginException.getMessage(), 400), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = LabelException.class)
-    public ResponseEntity<Object> labelExceptionHandler(LabelException exception){
-        return new ResponseEntity<>(new ResponseDto(exception.message,exception.statusCode),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> labelExceptionHandler(LabelException exception) {
+        return new ResponseEntity<>(new ResponseDto(exception.message, exception.statusCode), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -47,8 +47,8 @@ public class FundooExceptionHandler {
     }
 
     @ExceptionHandler(value = ReminderException.class)
-    public ResponseEntity<Object> reminderException(ReminderException exception){
-        return new ResponseEntity<>(new ResponseDto(exception.message,exception.statusCode),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> reminderException(ReminderException exception) {
+        return new ResponseEntity<>(new ResponseDto(exception.message, exception.statusCode), HttpStatus.BAD_REQUEST);
     }
 
 

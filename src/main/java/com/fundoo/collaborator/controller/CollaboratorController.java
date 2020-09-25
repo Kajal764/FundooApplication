@@ -33,8 +33,8 @@ public class CollaboratorController {
     }
 
     @DeleteMapping("/removeCollaborate")
-    public ResponseDto deleteCollaborateNote(@RequestBody CollaborateNoteDto collaborateNoteDto,HttpServletRequest request) throws NoteException {
-        if(collaborateService.removeCollaboration(collaborateNoteDto))
+    public ResponseDto deleteCollaborateNote(@RequestBody CollaborateNoteDto collaborateNoteDto, HttpServletRequest request) throws NoteException {
+        if (collaborateService.removeCollaboration(collaborateNoteDto))
             return new ResponseDto("Collaboration remove Successfully", 200);
         return new ResponseDto("Collaboration Not Remove", 400);
     }

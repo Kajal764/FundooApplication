@@ -53,7 +53,9 @@ class NoteService implements INoteService {
             BeanUtils.copyProperties(noteDto, newNote);
             user.get().getNoteList().add(newNote);
             noteRepository.save(newNote);
-            iesService.saveNote(newNote);
+//            user.get().getNoteList().add(newNote);
+//            noteRepository.save(newNote);
+                    iesService.saveNote(newNote);
             return new ResponseDto("Note created successfully", 200);
         }
         return new ResponseDto("User not present", 403);

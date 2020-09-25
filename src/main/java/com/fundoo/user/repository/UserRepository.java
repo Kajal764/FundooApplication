@@ -21,6 +21,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "update user u set u.password =:password,u.account_updated_date=:time where u.email = :email", nativeQuery = true)
     void updatePasswordAndTime(@Param("password") String password, @Param("time") LocalDateTime time,@Param("email") String email);
 
-
 }
 

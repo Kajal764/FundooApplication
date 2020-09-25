@@ -32,10 +32,10 @@ public class CollaborateService implements ICollaborateService {
         Optional<User> anotherUser = userRepository.findByEmail(collaborateNoteDto.getEmail());
         if (anotherUser.isEmpty())
             throw new NoteException("User Not Present", 403);
-        if (note.get().getCollaboratedUsers().contains(anotherUser.get()))
+        if (anotherUser.get().getNoteList().contains(note.get()))
             throw new NoteException("Note Collaborate Already", 400);
-        note.get().getCollaboratedUsers().add(anotherUser.get());
-        anotherUser.get().getCollaborateNotes().add(note.get());
+        note.get().setCollaborateNote(true);
+        anotherUser.get().getNoteList().add(note.get());
         javaMailUtil.sendCollaborationInvite(collaborateNoteDto, mainUser, note);
         noteRepository.save(note.get());
         return true;
@@ -44,7 +44,8 @@ public class CollaborateService implements ICollaborateService {
     @Override
     public List<Note> getCollaboratorNotes(String email) throws NoteException {
         Optional<User> user = userRepository.findByEmail(email);
-        List<Note> collaborateNotes = user.get().getCollaborateNotes();
+        List<Note> collaborateNotes = user.get().getNoteList();
+        collaborateNotes.removeIf(note -> !note.isCollaborateNote());
         if (collaborateNotes.isEmpty())
             throw new NoteException("No Collaborate Note", 404);
         return collaborateNotes;
@@ -56,10 +57,11 @@ public class CollaborateService implements ICollaborateService {
         Optional<User> anotherUser = userRepository.findByEmail(collaborateNoteDto.getEmail());
         if (anotherUser.isEmpty())
             throw new NoteException("User Not Found", 403);
-        if (!note.get().getCollaboratedUsers().contains(anotherUser.get()))
+        if (!anotherUser.get().getNoteList().contains(note.get()))
             throw new NoteException("Note Not Collaborate", 400);
-        note.get().getCollaboratedUsers().remove(anotherUser.get());
-        anotherUser.get().getCollaborateNotes().remove(note.get());
+        anotherUser.get().getNoteList().remove(note.get());
+        if (note.get().getUserList().size() == 2)
+            note.get().setCollaborateNote(false);
         noteRepository.save(note.get());
         return true;
     }

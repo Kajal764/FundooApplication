@@ -35,13 +35,16 @@ public class Note {
 
     private boolean isArchive;
 
+    private boolean isCollaborateNote;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm a")
     private LocalDateTime remainder;
 
+    @ManyToMany(mappedBy = "noteList",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<User> userList;
+
     @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
     private List<Label> labelList;
 
-    @ManyToMany(mappedBy = "collaborateNotes", cascade = CascadeType.PERSIST)
-    private List<User> collaboratedUsers;
 }

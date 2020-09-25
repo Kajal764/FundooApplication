@@ -68,7 +68,7 @@ public class ESService implements IESService {
         QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.queryStringQuery("*" + title + "*")
                 .analyzeWildcard(true).field("title").field("description"));
         searchSourceBuilder.query(queryBuilder);
-        SearchRequest searchRequest = new SearchRequest();
+        SearchRequest searchRequest = new SearchRequest(INDEX);
         searchRequest.source(searchSourceBuilder);
         SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
         return getSearchResult(search);

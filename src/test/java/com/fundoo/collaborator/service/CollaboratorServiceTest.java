@@ -49,6 +49,7 @@ public class CollaboratorServiceTest {
         CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(3, "kdw@gmail.com");
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+        when(javaMailUtil.sendCollaborationInvite(any(),any(),any())).thenReturn(new SimpleMailMessage());
         boolean result = collaboratorService.addCollaborator(collaborateNoteDto, "kdw@gmail.com");
         verify(noteRepository).save(note);
         Assert.assertEquals(result, true);
@@ -57,11 +58,11 @@ public class CollaboratorServiceTest {
     @Test
     void whenReturnCollaborateNote_ItShouldReturnList() throws NoteException {
         Note note = new Note();
+        note.setCollaborateNote(true);
         List<Note> notes = new ArrayList<>();
         notes.add(note);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(user.getCollaborateNotes()).thenReturn(notes);
-        when(javaMailUtil.sendCollaborationInvite(any(), any(), any())).thenReturn(new SimpleMailMessage());
+        when(user.getNoteList()).thenReturn(notes);
         List<Note> collaboratorNotes = collaboratorService.getCollaboratorNotes("kdw@gmail.com");
         Assert.assertEquals(collaboratorNotes.size(), 1);
     }

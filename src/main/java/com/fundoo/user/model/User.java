@@ -31,31 +31,32 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String mobileNumber;
 
+    @JsonIgnore
     @Column(nullable = false)
     private boolean isVarified;
 
+    @JsonIgnore
     private LocalDateTime accountCreatedDate;
 
+    @JsonIgnore
     private LocalDateTime accountUpdatedDate;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "U_Id")
+    @ManyToMany
     private List<Note> noteList;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Label> labelList;
 
-    @JsonIgnore
-    @ManyToMany
-    private List<Note> collaborateNotes;
 
     public User(RegisterUserDto registerUserDto) {
         this.firstName = registerUserDto.firstName;
