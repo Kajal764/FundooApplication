@@ -22,7 +22,7 @@ public class LabelController {
     ILabelService labelService;
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto createLabel(@Valid @RequestBody LabelDto labelDto, HttpServletRequest request) {
+    public ResponseDto createLabel(@Valid @RequestBody LabelDto labelDto, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
         String email = (String) request.getAttribute("email");
         if (labelService.createLabel(labelDto, email))
             return new ResponseDto("Label Created", 201);
@@ -30,7 +30,7 @@ public class LabelController {
     }
 
     @PostMapping(value = "/noteLabel", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto mapLabel(@RequestBody LabelDto labelDto, HttpServletRequest request) {
+    public ResponseDto mapLabel(@RequestBody LabelDto labelDto, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
         String email = (String) request.getAttribute("email");
         if (labelService.mapLabel(labelDto, email))
             return new ResponseDto("Label Mapped Successfully", 200);
@@ -38,7 +38,7 @@ public class LabelController {
     }
 
     @PutMapping(value = "/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto editLabel(@Valid @RequestBody LabelDto labelDto, HttpServletRequest request) {
+    public ResponseDto editLabel(@Valid @RequestBody LabelDto labelDto, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
         String email = (String) request.getAttribute("email");
         if (labelService.editLabel(labelDto, email))
             return new ResponseDto("Label Edited Successfully", 201);
@@ -46,7 +46,7 @@ public class LabelController {
     }
 
     @DeleteMapping(value = "/delete/{label_Id}")
-    public ResponseDto deleteLabel(@PathVariable("label_Id") int label_id, HttpServletRequest request) {
+    public ResponseDto deleteLabel(@PathVariable("label_Id") int label_id, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
         String email = (String) request.getAttribute("email");
         if (labelService.deleteLabel(label_id, email))
             return new ResponseDto("Label Deleted", 202);
@@ -54,14 +54,14 @@ public class LabelController {
     }
 
     @PutMapping("/removeLabel")
-    public ResponseDto removeLabelNote(@RequestBody MapDto mapDto, HttpServletRequest request) {
+    public ResponseDto removeLabelNote(@RequestBody MapDto mapDto, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
         if (labelService.removeNoteLabel(mapDto))
             return new ResponseDto("Label Remove", 202);
         return new ResponseDto("Error Removing label", 400);
     }
 
     @GetMapping("/list")
-    public List<Label> fetchLabelList(HttpServletRequest request){
+    public List<Label> fetchLabelList(HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken){
         String email = (String) request.getAttribute("email");
         List<Label> list = labelService.getLabelList(email);
         if(list.isEmpty())

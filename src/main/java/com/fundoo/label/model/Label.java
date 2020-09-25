@@ -24,8 +24,10 @@ public class Label {
 
     private String labelName;
 
+    @JsonIgnore
     private LocalDateTime createdDate=LocalDateTime.now();
 
+    @JsonIgnore
     private LocalDateTime modifiedDate;
 
     @JsonIgnore

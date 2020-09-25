@@ -1,7 +1,12 @@
 package com.fundoo.note.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;

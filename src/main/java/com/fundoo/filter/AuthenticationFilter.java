@@ -32,11 +32,10 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        String authorizationHeader = request.getHeader("Authorization");
+        String authorizationHeader = request.getHeader("AuthorizeToken");
         try {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 String jwtToken = authorizationHeader.substring(7);

@@ -41,7 +41,7 @@ public class Note {
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm a")
     private LocalDateTime remainder;
 
-    @ManyToMany(mappedBy = "noteList",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> userList;
 
     @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)

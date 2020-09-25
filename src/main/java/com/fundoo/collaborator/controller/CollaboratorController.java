@@ -19,7 +19,7 @@ public class CollaboratorController {
     ICollaborateService collaborateService;
 
     @PostMapping("/collaborators")
-    public ResponseDto addCollaborator(@RequestBody CollaborateNoteDto collaborateNoteDto, HttpServletRequest request) throws NoteException {
+    public ResponseDto addCollaborator(@RequestBody CollaborateNoteDto collaborateNoteDto, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
         if (collaborateService.addCollaborator(collaborateNoteDto, email))
             return new ResponseDto("Collaborated User Successfully", 200);
@@ -27,13 +27,13 @@ public class CollaboratorController {
     }
 
     @GetMapping("/collaborateNotes")
-    public List<Note> getCollaboratorNote(HttpServletRequest request) throws NoteException {
+    public List<Note> getCollaboratorNote(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
         return collaborateService.getCollaboratorNotes(email);
     }
 
     @DeleteMapping("/removeCollaborate")
-    public ResponseDto deleteCollaborateNote(@RequestBody CollaborateNoteDto collaborateNoteDto, HttpServletRequest request) throws NoteException {
+    public ResponseDto deleteCollaborateNote(@RequestBody CollaborateNoteDto collaborateNoteDto, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         if (collaborateService.removeCollaboration(collaborateNoteDto))
             return new ResponseDto("Collaboration remove Successfully", 200);
         return new ResponseDto("Collaboration Not Remove", 400);
