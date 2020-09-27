@@ -9,8 +9,8 @@ public class RedisService {
 
     private static Jedis jedis = new Jedis();
 
-    @Value("${redis.token}")
-    private static String TOKEN;
+  //  @Value("${redis.token}")
+    private static String TOKEN = "jwtToken";
 
     public static void setToken(String clientId, String jwtToken) {
         jedis.hset(clientId, TOKEN, jwtToken);
