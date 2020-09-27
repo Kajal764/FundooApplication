@@ -1,5 +1,6 @@
 package com.fundoo.user.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
@@ -7,7 +8,9 @@ import redis.clients.jedis.Jedis;
 public class RedisService {
 
     private static Jedis jedis = new Jedis();
-    private static String TOKEN = "jwtToken";
+
+    @Value("${redis.token}")
+    private static String TOKEN;
 
     public static void setToken(String clientId, String jwtToken) {
         jedis.hset(clientId, TOKEN, jwtToken);

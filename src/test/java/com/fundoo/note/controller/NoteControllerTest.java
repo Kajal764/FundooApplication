@@ -5,7 +5,7 @@ import com.fundoo.note.dto.SortDto;
 import com.fundoo.note.enumerations.SortBaseOn;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
-import com.fundoo.note.service.IESService;
+import com.fundoo.note.service.IElasticSearchService;
 import com.fundoo.note.service.INoteService;
 import com.fundoo.user.dto.ResponseDto;
 import com.google.gson.Gson;
@@ -40,7 +40,7 @@ public class NoteControllerTest {
     INoteService noteService;
 
     @MockBean
-    IESService iesService;
+    IElasticSearchService IElasticSearchService;
 
     Gson gson = new Gson();
 
@@ -249,7 +249,7 @@ public class NoteControllerTest {
         List<Note> list = new ArrayList<>();
         note1.setTitle("Note");
         list.add(note1);
-        when(iesService.searchByTitle(any(), any())).thenReturn(list);
+        when(IElasticSearchService.searchByTitle(any(), any())).thenReturn(list);
         MvcResult mvcResult = mockMvc.perform(get("/fundoo/note/searchData/here")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains(note1.getTitle()));

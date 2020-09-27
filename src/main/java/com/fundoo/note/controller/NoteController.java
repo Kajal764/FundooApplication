@@ -8,7 +8,7 @@ import com.fundoo.note.enumerations.GetNote;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.exception.ReminderException;
 import com.fundoo.note.model.Note;
-import com.fundoo.note.service.IESService;
+import com.fundoo.note.service.IElasticSearchService;
 import com.fundoo.note.service.INoteService;
 import com.fundoo.user.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class NoteController {
     INoteService noteService;
 
     @Autowired
-    IESService iesService;
+    IElasticSearchService IElasticSearchService;
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken, HttpServletRequest request) throws IOException {
@@ -156,7 +156,7 @@ public class NoteController {
     @GetMapping("/searchData/{title}")
     public List<Note> searchTitle(@PathVariable("title") String title, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws IOException {
         String email = (String) request.getAttribute("email");
-        return iesService.searchByTitle(title, email);
+        return IElasticSearchService.searchByTitle(title, email);
     }
 
 }

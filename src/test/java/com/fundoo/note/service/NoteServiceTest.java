@@ -42,7 +42,7 @@ public class NoteServiceTest {
     INoteRepository noteRepository;
 
     @Mock
-    IESService iesService;
+    IElasticSearchService IElasticSearchService;
 
     @Mock
     UserRepository userRepository;
@@ -76,7 +76,7 @@ public class NoteServiceTest {
     void givenTitleAndDesciption_whenCreatingNote_ItShouldreturnNoteData() throws IOException {
         when(noteRepository.save(any())).thenReturn(note);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(iesService.saveNote(any())).thenReturn(anyString());
+        when(IElasticSearchService.saveNote(any())).thenReturn(anyString());
         ResponseDto response = noteService.createNote(noteDto, token);
         Assert.assertEquals(response.message, "Note created successfully");
     }

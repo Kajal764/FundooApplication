@@ -17,6 +17,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,16 +27,20 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ESService implements IESService {
-
-    private final String INDEX = "fundoonote";
-    private final String TYPE = "note";
+public class ElasticSearchService implements IElasticSearchService {
 
     @Autowired
     private RestHighLevelClient client;
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Value("${elasticsearch.index}")
+    private String INDEX;
+
+    @Value("${elasticsearch.type}")
+    private String TYPE;
+
 
     @Override
     @SuppressWarnings("unchecked")

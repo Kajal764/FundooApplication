@@ -43,7 +43,7 @@ class NoteService implements INoteService {
     LabelRepository labelRepository;
 
     @Autowired
-    IESService iesService;
+    IElasticSearchService IElasticSearchService;
 
     @Override
     public ResponseDto createNote(NoteDto noteDto, String email) throws IOException {
@@ -53,7 +53,7 @@ class NoteService implements INoteService {
             BeanUtils.copyProperties(noteDto, newNote);
             user.get().getNoteList().add(newNote);
             noteRepository.save(newNote);
-            iesService.saveNote(newNote);
+            IElasticSearchService.saveNote(newNote);
             return new ResponseDto("Note created successfully", 200);
         }
         return new ResponseDto("User not present", 403);
@@ -82,7 +82,7 @@ class NoteService implements INoteService {
 
             if (note.isPresent() && note.get().isTrash() == true) {
                 noteRepository.delete(note.get());
-                iesService.deleteNote(note.get());
+                IElasticSearchService.deleteNote(note.get());
                 return new ResponseDto("Note Deleted Successfully", 200);
             }
             throw new NoteException("Note is not in trash", 404);
@@ -101,7 +101,7 @@ class NoteService implements INoteService {
                 value.setEditDate(LocalDateTime.now());
                 noteRepository.save(value);
                 try {
-                    iesService.updateNote(note.get());
+                    IElasticSearchService.updateNote(note.get());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

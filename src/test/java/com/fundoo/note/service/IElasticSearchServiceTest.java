@@ -12,14 +12,14 @@ import java.io.IOException;
 import java.util.List;
 
 @SpringBootTest
-public class IESServiceTest {
+public class IElasticSearchServiceTest {
 
     @Autowired
-    ESService esService;
+    ElasticSearchService elasticSearchService;
 
     @Test
     void givenSearchValue_WhenReturn_ItShouldGiveList() throws IOException {
-        List<Note> list = esService.searchByTitle("java", "kdw@gmail.com");
+        List<Note> list = elasticSearchService.searchByTitle("java", "kdw@gmail.com");
         Assert.assertTrue(list.get(0).getTitle().contains("java"));
     }
 
@@ -28,7 +28,7 @@ public class IESServiceTest {
         NoteDto noteDto = new NoteDto(5, "Spring", "this is description");
         Note note = new Note();
         BeanUtils.copyProperties(noteDto, note);
-        String result = esService.saveNote(note);
+        String result = elasticSearchService.saveNote(note);
         Assert.assertEquals(result, "CREATED");
     }
 
@@ -37,7 +37,7 @@ public class IESServiceTest {
         NoteDto noteDto = new NoteDto(3, "java", "here is update message");
         Note note = new Note();
         BeanUtils.copyProperties(noteDto, note);
-        String result = esService.deleteNote(note);
+        String result = elasticSearchService.deleteNote(note);
         Assert.assertEquals(result, "DELETED");
     }
 }

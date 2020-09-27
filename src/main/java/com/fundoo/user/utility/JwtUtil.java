@@ -2,14 +2,15 @@ package com.fundoo.user.utility;
 
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.factory.annotation.Value;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Service
 public class JwtUtil {
 
-    private String SECRET_KEY = "Its_Secret_Key";
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
 
     public String createJwtToken(String email) {
         return Jwts.builder().claim("email", email).setIssuedAt(new Date(System.currentTimeMillis()))
