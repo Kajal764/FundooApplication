@@ -3,6 +3,7 @@ package com.fundoo.user.service;
 import com.fundoo.user.dto.*;
 import com.fundoo.user.exception.LoginUserException;
 import com.fundoo.user.exception.RegistrationException;
+import com.fundoo.user.model.MailData;
 import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
 import com.fundoo.user.utility.JavaMailUtil;
@@ -34,6 +35,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     BCryptPasswordEncoder encoder;
 
+    @Autowired
+    RabbitMqSender rabbitMqSender;
+
+    @Autowired
+    MailData mailData;
+
     @Override
     public ResponseDto register(RegisterUserDto registerUserDto) {
         registerUserDto.password = bCryptPasswordEncoder.encode(registerUserDto.password);
@@ -45,7 +52,11 @@ public class UserServiceImpl implements UserService {
         user.setAccountCreatedDate(LocalDateTime.now());
         User save = userRepository.save(user);
         String jwtToken = jwtUtil.createJwtToken(save.getEmail());
-        javaMailUtil.sendMail(save.getEmail(), jwtToken);
+        String link = "http://localhost:8080/fundoo/user/verify?token=";
+        mailData.setEmail(save.getEmail());
+        mailData.setMessage("Registration Successful to activate your account click on this link   " + (link + jwtToken));
+        mailData.setSubject("Account verification mail");
+        rabbitMqSender.send(mailData);
         return new ResponseDto("Registration Successful", 200);
     }
 

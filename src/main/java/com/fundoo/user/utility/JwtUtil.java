@@ -3,6 +3,7 @@ package com.fundoo.user.utility;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+
 import java.time.ZonedDateTime;
 import java.util.Date;
 
@@ -26,8 +27,7 @@ public class JwtUtil {
             return claimsJws.getBody().get("email");
         } catch (ExpiredJwtException e) {
             return "Token Expired";
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return " Some other exception in JWT parsing ";
         }
     }

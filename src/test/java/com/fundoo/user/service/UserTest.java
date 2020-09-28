@@ -6,6 +6,7 @@ import com.fundoo.user.dto.RegisterUserDto;
 import com.fundoo.user.dto.ResponseDto;
 import com.fundoo.user.exception.LoginUserException;
 import com.fundoo.user.exception.RegistrationException;
+import com.fundoo.user.model.MailData;
 import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
 import com.fundoo.user.utility.JavaMailUtil;
@@ -49,14 +50,24 @@ public class UserTest {
     @Mock
     BCryptPasswordEncoder encoder;
 
+    @Mock
+    RabbitMqSender rabbitMqSender;
+
+    @Mock
+    MailData mailData;
+
+
     @Test
     void givenUserDetails_WhenRegister_ItShouldSaveRegistrationDetails() throws MessagingException, UnsupportedEncodingException {
         RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978675645");
         User user = new User(registerUserDto);
         when(userRepository.save(any())).thenReturn(user);
-        when(javaMailUtil.sendMail("kajalw1998@gmail.com", "sdjfdsf")).thenReturn(new SimpleMailMessage());
         when(bCryptPasswordEncoder.encode(any())).thenReturn("nmdf");
         when(jwtUtil.createJwtToken(any())).thenReturn("sdjkfsdn");
+        mailData.getEmail();
+        mailData.getSubject();
+        mailData.getMessage();
+        when(rabbitMqSender.send(mailData)).thenReturn("sdfd");
         ResponseDto register = userService.register(registerUserDto);
         ResponseDto expectedResult = new ResponseDto("Registration Successful", 200);
         Assert.assertEquals(register.toString(), expectedResult.toString());

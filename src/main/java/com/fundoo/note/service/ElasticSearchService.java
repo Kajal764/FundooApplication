@@ -41,7 +41,6 @@ public class ElasticSearchService implements IElasticSearchService {
     @Value("${elasticsearch.type}")
     private String TYPE;
 
-
     @Override
     @SuppressWarnings("unchecked")
     public String saveNote(Note newNote) throws IOException {
