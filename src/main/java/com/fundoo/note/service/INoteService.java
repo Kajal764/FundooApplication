@@ -14,7 +14,7 @@ import java.util.List;
 public interface INoteService {
     ResponseDto createNote(NoteDto noteDto, String email) throws IOException;
 
-    ResponseDto deleteNote(int note_id, String email) throws NoteException;
+    ResponseDto deleteNote(int note_id, String email) throws NoteException, IOException;
 
     ResponseDto trashNoteDelete(int note_id, String email) throws NoteException, IOException;
 

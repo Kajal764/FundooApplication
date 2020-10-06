@@ -37,7 +37,7 @@ public class NoteController {
     }
 
     @PutMapping(value = "/delete/{note_Id}")
-    public ResponseDto trashNote(@PathVariable("note_Id") int note_id, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
+    public ResponseDto trashNote(@PathVariable("note_Id") int note_id, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException, IOException {
         Object email = request.getAttribute("email");
         ResponseDto trash = noteService.deleteNote(note_id, (String) email);
         return trash;

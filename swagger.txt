@@ -1,0 +1,76 @@
+http://localhost:8080/fundoo/update/eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzM
+
+
+
+7304278325
+
+Dd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ
+
+
+
+
+
+
+  @Test
+    void givenNoteIdAndEmail_WhenRemoveCollaborate_ItShouldReturnTrue() throws NoteException {
+        CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(3, "kdw@gmail.com");
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+
+        when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
+
+        note.getCollaboratedUsers().add(user);
+        user.getCollaborateNotes().add(note);
+//
+//        note.get().getCollaboratedUsers().remove(anotherUser.get());
+//        anotherUser.get().getCollaborateNotes().remove(note.get());
+
+
+        boolean result = collaboratorService.removeCollaboration(collaborateNoteDto);
+      //  verify(noteRepository).save(note);
+        Assert.assertEquals(result, true);
+    }
+
+
+
+
+
+
+
+package com.fundoo.configuration;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+@EnableSwagger2
+@Configuration
+public class SwaggerConfiguration {
+
+    @Bean
+    public Docket api(){
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.fundoo"))
+                .paths(PathSelectors.any()).build();
+    }
+}
+
+
+
+<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>3.0.0</version>
+            <scope>compile</scope>
+        </dependency>

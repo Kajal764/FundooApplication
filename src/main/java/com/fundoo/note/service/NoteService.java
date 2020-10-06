@@ -60,13 +60,14 @@ class NoteService implements INoteService {
     }
 
     @Override
-    public ResponseDto deleteNote(int note_id, String email) throws NoteException {
+    public ResponseDto deleteNote(int note_id, String email) throws NoteException, IOException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user != null) {
             Optional<Note> note = noteRepository.findById(note_id);
             if (note.isPresent()) {
                 note.get().setTrash(true);
                 noteRepository.save(note.get());
+                IElasticSearchService.deleteNote(note.get());
                 return new ResponseDto("Note trashed", 200);
             }
             throw new NoteException("Note is not present", 404);
@@ -82,7 +83,7 @@ class NoteService implements INoteService {
 
             if (note.isPresent() && note.get().isTrash() == true) {
                 noteRepository.delete(note.get());
-                IElasticSearchService.deleteNote(note.get());
+//                IElasticSearchService.deleteNote(note.get());
                 return new ResponseDto("Note Deleted Successfully", 200);
             }
             throw new NoteException("Note is not in trash", 404);

@@ -127,7 +127,6 @@ public class UserServiceImpl implements UserService {
     public String redirectToUpdatePassword(String token) {
         String link = "http://localhost:8080/fundoo/user/update_password/" + token;
         return link;
-
     }
 
     @Override

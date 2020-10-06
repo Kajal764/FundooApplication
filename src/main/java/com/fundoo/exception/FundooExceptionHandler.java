@@ -12,6 +12,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @ControllerAdvice
 public class FundooExceptionHandler {
@@ -51,5 +52,9 @@ public class FundooExceptionHandler {
         return new ResponseEntity<>(new ResponseDto(exception.message, exception.statusCode), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = MaxUploadSizeExceededException.class)
+    public ResponseEntity<Object> handleFileSizeLimitExceeded(MaxUploadSizeExceededException exc) {
+        return new ResponseEntity<>(new ResponseDto("File Size Should be less than 10 MB", 400), HttpStatus.BAD_REQUEST);
+    }
 
 }

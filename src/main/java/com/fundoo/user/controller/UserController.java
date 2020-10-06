@@ -16,21 +16,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/fundoo/user")
+@CrossOrigin("*")
 public class UserController {
+
     @Autowired
     UserService userService;
-
-//    @Autowired
-//    RegistrationService registrationService;
-//
-//    @Autowired
-//    LoginService loginService;
-//
-//    @Autowired
-//    ForgotPWService forgotPWService;
-//
-//    @Autowired
-//    UpdatePasswordService updatePasswordService;
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto registerUser(@Valid @RequestBody RegisterUserDto registerUserDto) throws MessagingException, UnsupportedEncodingException {

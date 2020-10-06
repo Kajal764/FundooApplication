@@ -82,7 +82,7 @@ public class NoteServiceTest {
     }
 
     @Test
-    void givenIdForNoteTrash_whenTrashNote_ItShouldReturnSuccessMessage() throws NoteException {
+    void givenIdForNoteTrash_whenTrashNote_ItShouldReturnSuccessMessage() throws NoteException, IOException {
         int note_id = 4;
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(noteRepository.findById(4)).thenReturn(Optional.of(note));
@@ -91,7 +91,7 @@ public class NoteServiceTest {
     }
 
     @Test
-    void givenIdForNoteTrash_whenUserNotAuthenticate_ItShouldThrowException() throws NoteException {
+    void givenIdForNoteTrash_whenUserNotAuthenticate_ItShouldThrowException() throws NoteException, IOException {
         int note_id = 4;
         when(userRepository.findByEmail(any())).thenReturn(null);
         when(noteRepository.findById(4)).thenReturn(Optional.of(note));
@@ -100,7 +100,7 @@ public class NoteServiceTest {
     }
 
     @Test
-    void givenIdForNoteDelete_whenDeleteNote_ItShouldReturnSuccessMessage() throws NoteException {
+    void givenIdForNoteDelete_whenDeleteNote_ItShouldReturnSuccessMessage() throws NoteException, IOException {
         int note_id = 4;
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         note.setTrash(true);
@@ -132,7 +132,7 @@ public class NoteServiceTest {
     }
 
     @Test
-    void givenIdForNoteDelete_whenUserNotAuthenticate_ItShouldThrowException() throws NoteException {
+    void givenIdForNoteDelete_whenUserNotAuthenticate_ItShouldThrowException() throws NoteException, IOException {
         int note_id = 4;
         when(userRepository.findByEmail(any())).thenReturn(null);
         when(noteRepository.findById(4)).thenReturn(Optional.of(note));
