@@ -26,8 +26,4 @@ public class RegisterUserDto {
     @Pattern(regexp = "^((?=.*[A-Z])(?=.*[@#$%]).{6,})$" ,message = "Password Should contain One Uppercase and Symbol and greater than 6 character")
     public String password;
 
-    @Column(nullable = false)
-    @Pattern(regexp = "^[7-9]\\d{9}$",message = "Invalid mobile no")
-    public String mobileNumber;
-
 }

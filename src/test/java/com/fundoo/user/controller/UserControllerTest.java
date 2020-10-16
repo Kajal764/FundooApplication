@@ -45,7 +45,7 @@ public class UserControllerTest {
 
     @BeforeEach
     void setUp() throws MessagingException, UnsupportedEncodingException {
-        registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "Asha@se", "8978675645");
+        registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "Asha@se");
         toJson = gson.toJson(registerUserDto);
         when(userService.register(any())).thenReturn(new ResponseDto("Registration Successfull", 200));
     }

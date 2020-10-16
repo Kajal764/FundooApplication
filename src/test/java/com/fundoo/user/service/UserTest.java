@@ -59,7 +59,7 @@ public class UserTest {
 
     @Test
     void givenUserDetails_WhenRegister_ItShouldSaveRegistrationDetails() throws MessagingException, UnsupportedEncodingException {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978675645");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         User user = new User(registerUserDto);
         when(userRepository.save(any())).thenReturn(user);
         when(bCryptPasswordEncoder.encode(any())).thenReturn("nmdf");
@@ -75,7 +75,7 @@ public class UserTest {
 
     @Test
     void givenAlreadyRegisterDetails_WhenRegister_ItShouldNotSave() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978675645");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         User user = new User(registerUserDto);
         when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(user));
         when(bCryptPasswordEncoder.encode(any())).thenReturn("nmdf");
@@ -89,7 +89,7 @@ public class UserTest {
     @Test
     void givenRequestForVerify_WhenGetTokenShouldActivateVarifiedAccount() throws UnsupportedEncodingException {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978675645");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         User user = new User(registerUserDto);
         when(jwtUtil.verify(token)).thenReturn(new Object());
         when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(user));
@@ -113,7 +113,7 @@ public class UserTest {
     @Test
     void givenUserLoginCredentials_WhenAccountNotActivate_ItShouldThrowException() {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978787878");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
         User user = new User(registerUserDto);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
@@ -130,7 +130,7 @@ public class UserTest {
     @Test
     void givenUserLoginCredentials_WhenLogin_ItShouldReturnToken() {
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImthamFsdzE5OThAZ21haWwuY29tIiwiaWF0IjoxNTk5OTE4NzA3LCJleHAiOjE1OTk5MTkzMDd9.VqayWCMHfA4zbjiIcBs_8Awvy9NsQNI1fIJmK3YXf5dgLc7xB1VPtLz2uo4j0V36Q3MNn5u7iOwWPAflAoS3RQ";
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978787878");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
         User user = new User(registerUserDto);
         user.setVarified(true);
@@ -144,7 +144,7 @@ public class UserTest {
     @Test
     void givenUserLoginPasswordWrong_WhenLogin_ItShouldThrowException() {
         LoginDto loginDto = new LoginDto("kajaldw666@gmail.com", "Asha@123");
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978787878");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         User user = new User(registerUserDto);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(encoder.matches(any(), any())).thenReturn(false);
@@ -170,7 +170,7 @@ public class UserTest {
 
     @Test
     void givenDetails_WhenForgotPassword_ItShouldReturnSuccessMessage() throws MessagingException {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978675645");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         User user = new User(registerUserDto);
         String email = "kajalw1998@gmail.com";
         Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
@@ -182,7 +182,7 @@ public class UserTest {
 
     @Test
     void givenWrongDetails_WhenForgotPassword_ItShouldThrowException() {
-        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234", "8978675645");
+        RegisterUserDto registerUserDto = new RegisterUserDto("kajal", "waghmare", "kajalw1998@gmail.com", "1234");
         User user = new User(registerUserDto);
         String email = "kajalw1998@gmail.com";
         Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));

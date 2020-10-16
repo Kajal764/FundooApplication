@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         mailData.setMessage("Registration Successful to activate your account click on this link   " + (link + jwtToken));
         mailData.setSubject("Account verification mail");
         rabbitMqSender.send(mailData);
-        return new ResponseDto("Registration Successful", 200);
+        return new ResponseDto("Registration Successful,Check mail to activate your account", 200);
     }
 
     @Override
@@ -113,7 +113,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseDto checkDetails(ForgotPwDto forgotPwDto) {
-        System.out.println(userRepository.findByEmail(forgotPwDto.email));
         Optional<User> isDetailPresent = userRepository.findByEmail(forgotPwDto.email);
         if (!isDetailPresent.isEmpty()) {
             String jwtToken = jwtUtil.createJwtToken(forgotPwDto.email);
@@ -131,7 +130,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseDto update(String token, UpdatePasswordDto updatePasswordDto) {
+        System.out.println(token);
         Object verify = jwtUtil.verify(token);
+        System.out.println("verify " + verify);
         Optional<User> userInfo = userRepository.findByEmail(verify.toString());
         if (userInfo.isPresent()) {
             if (updatePasswordDto.password.equals(updatePasswordDto.confirmPassword)) {

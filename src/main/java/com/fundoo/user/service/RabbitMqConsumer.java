@@ -1,4 +1,4 @@
-package com.fundoo.user.service;
+package com.fundoo.user.service;//package com.fundoo.user.service;
 
 import com.fundoo.user.model.MailData;
 import com.fundoo.user.utility.JavaMailUtil;

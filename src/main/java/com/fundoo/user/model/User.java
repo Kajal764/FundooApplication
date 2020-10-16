@@ -37,10 +37,6 @@ public class User {
 
     @JsonIgnore
     @Column(nullable = false)
-    private String mobileNumber;
-
-    @JsonIgnore
-    @Column(nullable = false)
     private boolean isVarified;
 
     @JsonIgnore
@@ -63,6 +59,5 @@ public class User {
         this.lastName = registerUserDto.lastName;
         this.email = registerUserDto.email;
         this.password = registerUserDto.password;
-        this.mobileNumber = registerUserDto.mobileNumber;
     }
 }

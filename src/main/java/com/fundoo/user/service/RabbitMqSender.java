@@ -1,5 +1,6 @@
 package com.fundoo.user.service;
 
+
 import com.fundoo.user.model.MailData;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

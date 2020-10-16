@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/fundoo/user")
-@CrossOrigin("*")
+@CrossOrigin(exposedHeaders = "AuthorizeToken")
 public class UserController {
 
     @Autowired

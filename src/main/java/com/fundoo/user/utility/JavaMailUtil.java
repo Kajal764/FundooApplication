@@ -31,10 +31,11 @@ public class JavaMailUtil {
 
     public SimpleMailMessage resetPwMail(String email, String jwtToken) {
         SimpleMailMessage message = new SimpleMailMessage();
-        String link = "http://localhost:8080/fundoo/user/reset_password/";
+        String link="http://localhost:4200/update-password";
+       // String link = "http://localhost:8080/fundoo/user/reset_password/";
         message.setTo(email);
         message.setSubject("Password Reset Request");
-        message.setText("To reset your password, click the link : " + (link + jwtToken));
+        message.setText("To reset your password, click the link : " + (link +";token="+ jwtToken));
         javaMailSender.send(message);
         return message;
     }
