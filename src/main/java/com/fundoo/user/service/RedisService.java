@@ -17,6 +17,8 @@ public class RedisService {
     }
 
     public String getToken(String clientId) {
+        System.out.println(clientId);
+        System.out.println(jedis.hget(clientId, TOKEN));
         return jedis.hget(clientId, TOKEN);
     }
 

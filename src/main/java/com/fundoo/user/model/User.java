@@ -53,7 +53,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Label> labelList;
 
-
     public User(RegisterUserDto registerUserDto) {
         this.firstName = registerUserDto.firstName;
         this.lastName = registerUserDto.lastName;

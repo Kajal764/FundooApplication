@@ -15,7 +15,7 @@ public class NoteServiceInterceptorAppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(noteServiceInterceptor).addPathPatterns(
-                "/fundoo/note/*",
-                "/fundoo/label/*");
+                "/fundoo/note/**",
+                "/fundoo/label/**");
     }
 }

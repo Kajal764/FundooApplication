@@ -28,6 +28,9 @@ public class Note {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    public String color = "#fff";
+
     @JsonIgnore
     private LocalDateTime createdDate = LocalDateTime.now();
 
@@ -46,13 +49,14 @@ public class Note {
     @JsonIgnore
     private boolean isCollaborateNote;
 
+
     @JsonIgnore
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm a")
     private LocalDateTime remainder;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY)
     private List<User> userList;
 
     @JsonIgnore

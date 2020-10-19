@@ -34,6 +34,7 @@ public class NoteServiceInterceptor implements HandlerInterceptor {
 
         String authorizationHeader = request.getHeader("AuthorizeToken");
 
+        System.out.println(authorizationHeader);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String jwtToken = authorizationHeader.substring(7);
             Object email = jwtUtil.verify(jwtToken);

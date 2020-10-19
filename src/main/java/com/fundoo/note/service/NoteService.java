@@ -1,6 +1,7 @@
 package com.fundoo.note.service;
 
 import com.fundoo.label.repository.LabelRepository;
+import com.fundoo.note.dto.NoteColorDto;
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.dto.ReminderDto;
 import com.fundoo.note.dto.SortDto;
@@ -83,7 +84,6 @@ class NoteService implements INoteService {
 
             if (note.isPresent() && note.get().isTrash() == true) {
                 noteRepository.delete(note.get());
-//                IElasticSearchService.deleteNote(note.get());
                 return new ResponseDto("Note Deleted Successfully", 200);
             }
             throw new NoteException("Note is not in trash", 404);
@@ -135,7 +135,6 @@ class NoteService implements INoteService {
         if (sortDto.getType().equals("desc"))
             Collections.reverse(collect);
         return collect;
-
     }
 
     @Override
@@ -217,6 +216,22 @@ class NoteService implements INoteService {
         List<Note> allNotes = noteRepository.findAll();
         allNotes.removeIf(note -> note.getRemainder() == null);
         return allNotes;
+    }
+
+    @Override
+    public boolean setNoteColor(NoteColorDto noteColorDto, String email) throws NoteException {
+        Optional<Note> note = noteRepository.findById(noteColorDto.note_id);
+        if (note.isPresent()) {
+            note.get().setColor(noteColorDto.color);
+            noteRepository.save(note.get());
+            try {
+                IElasticSearchService.updateNote(note.get());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        throw new NoteException("Note Not Found", 400);
     }
 }
 

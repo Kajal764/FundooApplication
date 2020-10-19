@@ -1,5 +1,6 @@
 package com.fundoo.note.service;
 
+import com.fundoo.note.dto.NoteColorDto;
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.dto.ReminderDto;
 import com.fundoo.note.dto.SortDto;
@@ -37,4 +38,6 @@ public interface INoteService {
     boolean deleteReminder(ReminderDto reminderDTO, String email) throws NoteException;
 
     List<Note> getReminderSetNotes();
+
+    boolean setNoteColor(NoteColorDto noteColorDto, String email) throws NoteException;
 }
