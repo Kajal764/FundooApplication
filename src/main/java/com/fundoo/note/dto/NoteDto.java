@@ -1,9 +1,14 @@
 package com.fundoo.note.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,5 +26,13 @@ public class NoteDto {
     @NotNull
     @Length(min = 1, message = "Description must not be null")
     public String description;
+
+    public String color;
+
+    @JsonIgnore
+    private boolean isPin;
+
+    @JsonIgnore
+    private boolean isArchive;
 
 }
