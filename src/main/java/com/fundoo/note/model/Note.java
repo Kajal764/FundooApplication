@@ -49,7 +49,6 @@ public class Note {
     @JsonIgnore
     private boolean isCollaborateNote;
 
-
     @JsonIgnore
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm a")
@@ -59,7 +58,6 @@ public class Note {
     @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY)
     private List<User> userList;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
     private List<Label> labelList;
 

@@ -1,5 +1,6 @@
 package com.fundoo.note.service;
 
+import com.fundoo.label.model.Label;
 import com.fundoo.label.repository.LabelRepository;
 import com.fundoo.note.dto.NoteColorDto;
 import com.fundoo.note.dto.NoteDto;
@@ -230,6 +231,17 @@ class NoteService implements INoteService {
                 e.printStackTrace();
             }
             return true;
+        }
+        throw new NoteException("Note Not Found", 400);
+    }
+
+    @Override
+    public List<Note> getMapNote(String email, Integer label_id) throws NoteException {
+        Optional<Label> label = labelRepository.findById(label_id);
+        List<Note> noteList;
+        if (label.isPresent()) {
+            noteList = label.get().getNoteList();
+            return noteList;
         }
         throw new NoteException("Note Not Found", 400);
     }

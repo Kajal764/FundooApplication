@@ -171,5 +171,11 @@ public class NoteController {
         return new ResponseDto("Error, for setting note color", 200);
     }
 
+    @GetMapping("/mapNote/{labelId}")
+    public List<Note> getMappingNotes(@PathVariable("labelId") Integer label_Id, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws IOException, NoteException {
+        String email = (String) request.getAttribute("email");
+        List<Note> mapNote = noteService.getMapNote(email, label_Id);
+        return mapNote;
+    }
 }
 

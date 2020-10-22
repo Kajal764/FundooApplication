@@ -53,6 +53,8 @@ public class LabelService implements ILabelService {
         if (label.isPresent()) {
             Optional<Note> note = noteRepository.findById(labelDto.getNote_Id());
             return note.map((value) -> {
+                if(label.get().getNoteList().contains(value))
+                    return false;
                 label.get().getNoteList().add(value);
                 labelRepository.save(label.get());
                 return true;

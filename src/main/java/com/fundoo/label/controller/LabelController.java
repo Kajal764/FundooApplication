@@ -34,10 +34,10 @@ public class LabelController {
         String email = (String) request.getAttribute("email");
         if (labelService.mapLabel(labelDto, email))
             return new ResponseDto("Label Mapped Successfully", 200);
-        return new ResponseDto("Label Not Present", 404);
+        return new ResponseDto("Label Already Map", 404);
     }
 
-    @PutMapping(value = "/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto editLabel(@Valid @RequestBody LabelDto labelDto, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
         String email = (String) request.getAttribute("email");
         if (labelService.editLabel(labelDto, email))
@@ -53,7 +53,7 @@ public class LabelController {
         return new ResponseDto("Error Deleting label", 400);
     }
 
-    @PutMapping("/removeLabel")
+    @PostMapping("/removeLabel")
     public ResponseDto removeLabelNote(@RequestBody MapDto mapDto, HttpServletRequest request,@RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
         if (labelService.removeNoteLabel(mapDto))
             return new ResponseDto("Label Remove", 202);
