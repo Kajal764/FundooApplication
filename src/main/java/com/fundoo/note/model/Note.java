@@ -49,9 +49,7 @@ public class Note {
     @JsonIgnore
     private boolean isCollaborateNote;
 
-    @JsonIgnore
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm a")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     private LocalDateTime remainder;
 
     @JsonIgnore
