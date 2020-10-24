@@ -31,4 +31,6 @@ public class NoteDto {
     private boolean isArchive;
 
     private List<Label> labelList;
+
+    private String remainder;
 }

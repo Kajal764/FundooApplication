@@ -53,9 +53,6 @@ public class Note {
 
     private String remainder;
 
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-//    private Date remainder;
-
     @JsonIgnore
     @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY)
     private List<User> userList;
