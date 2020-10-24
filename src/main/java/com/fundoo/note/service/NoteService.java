@@ -61,13 +61,11 @@ class NoteService implements INoteService {
             noteRepository.save(newNote);
 
             Optional<Note> note = noteRepository.findById(newNote.getNote_Id());
-            if (note.isPresent()) {
+            if (noteDto.getLabelList().size() > 0 && note.isPresent()) {
                 for (int i = 0; i < noteDto.getLabelList().size(); i++) {
                     noteService.mapLabel(newNote.getNote_Id(), noteDto.getLabelList().get(i).getLabelName());
                 }
-
             }
-
             IElasticSearchService.saveNote(newNote);
             return new ResponseDto("Note created successfully", 200);
         }
@@ -89,22 +87,6 @@ class NoteService implements INoteService {
         }
         return false;
     }
-
-
-//    public boolean mapLabel(LabelDto labelDto, String email) {
-//        Optional<Label> label = labelRepository.findBylabelName(labelDto.getLabelName());
-//        if (label.isPresent()) {
-//            Optional<Note> note = noteRepository.findById(labelDto.getNote_Id());
-//            return note.map((value) -> {
-//                if (label.get().getNoteList().contains(value))
-//                    return false;
-//                label.get().getNoteList().add(value);
-//                labelRepository.save(label.get());
-//                return true;
-//            }).orElseThrow(() -> new LabelException("Note Is Not Present", 404));
-//        }
-//        return false;
-//    }
 
 
     @Override
@@ -239,6 +221,7 @@ class NoteService implements INoteService {
     @Override
     public boolean setReminder(ReminderDto reminderDTO, String email) throws NoteException {
         Optional<Note> note = noteRepository.findById(reminderDTO.getNote_Id());
+        System.out.println("date" + reminderDTO.getRemainder());
         if (note.isPresent()) {
             note.get().setRemainder(reminderDTO.getRemainder());
             noteRepository.save(note.get());
@@ -291,5 +274,7 @@ class NoteService implements INoteService {
         }
         throw new NoteException("Note Not Found", 400);
     }
+
+
 }
 

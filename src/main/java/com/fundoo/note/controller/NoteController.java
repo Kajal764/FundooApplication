@@ -134,9 +134,8 @@ public class NoteController {
     }
 
     @PutMapping(value = "/reminder")
-    public ResponseDto setReminder(@RequestBody ReminderDto reminderDTO,HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
+    public ResponseDto setReminder(@RequestBody ReminderDto reminderDTO, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
-        System.out.println(new Date());
         if (noteService.setReminder(reminderDTO, email))
             return new ResponseDto("Reminder Set", 200);
         return new ResponseDto("Reminder Not Set", 400);
@@ -179,5 +178,6 @@ public class NoteController {
         List<Note> mapNote = noteService.getMapNote(email, label_Id);
         return mapNote;
     }
+
 }
 

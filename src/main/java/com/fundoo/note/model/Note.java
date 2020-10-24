@@ -51,8 +51,10 @@ public class Note {
     @JsonIgnore
     private boolean isCollaborateNote;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private Date remainder;
+    private String remainder;
+
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+//    private Date remainder;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY)

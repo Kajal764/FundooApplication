@@ -17,9 +17,14 @@ public class ReminderDto {
     @NotNull
     private int note_Id;
 
-    @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private Date remainder;
+    public String remainder;
+
+
+//    public Date remainder;
+
+//    @NotNull
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+//    private Date remainder;
 
 
 }

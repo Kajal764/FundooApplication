@@ -42,4 +42,5 @@ public interface INoteService {
     boolean setNoteColor(NoteColorDto noteColorDto, String email) throws NoteException;
 
     List<Note> getMapNote(String email, Integer label_id) throws NoteException;
+
 }
