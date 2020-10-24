@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -35,6 +36,7 @@ public class NoteController {
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken, HttpServletRequest request) throws IOException {
         Object email = request.getAttribute("email");
+        System.out.println(new Date());
         return noteService.createNote(noteDto, (String) email);
     }
 
@@ -48,7 +50,6 @@ public class NoteController {
     @DeleteMapping(value = "/trash/{note_Id}")
     public ResponseDto deleteNote(@PathVariable("note_Id") int note_id, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException, IOException {
         Object email = request.getAttribute("email");
-        System.out.println(email);
         return noteService.trashNoteDelete(note_id, (String) email);
     }
 
@@ -133,17 +134,18 @@ public class NoteController {
     }
 
     @PutMapping(value = "/reminder")
-    public ResponseDto setReminder(@RequestBody ReminderDto reminderDTO, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
+    public ResponseDto setReminder(@RequestBody ReminderDto reminderDTO,HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
+        System.out.println(new Date());
         if (noteService.setReminder(reminderDTO, email))
             return new ResponseDto("Reminder Set", 200);
         return new ResponseDto("Reminder Not Set", 400);
     }
 
-    @DeleteMapping("/reminder")
-    public ResponseDto deleteReminder(@RequestBody ReminderDto reminderDTO, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
+    @DeleteMapping("/reminder/{note_Id}")
+    public ResponseDto deleteReminder(@PathVariable("note_Id") int note_id, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
-        if (noteService.deleteReminder(reminderDTO, email))
+        if (noteService.deleteReminder(note_id, email))
             return new ResponseDto("Reminder Delete", 200);
         return new ResponseDto("Reminder Not Delete", 400);
     }

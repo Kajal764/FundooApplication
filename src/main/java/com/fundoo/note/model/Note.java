@@ -8,7 +8,9 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -50,7 +52,7 @@ public class Note {
     private boolean isCollaborateNote;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime remainder;
+    private Date remainder;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY)

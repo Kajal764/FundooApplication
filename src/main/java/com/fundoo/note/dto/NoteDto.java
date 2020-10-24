@@ -1,14 +1,11 @@
 package com.fundoo.note.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fundoo.label.model.Label;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,10 +26,9 @@ public class NoteDto {
 
     public String color;
 
-    @JsonIgnore
     private boolean isPin;
 
-    @JsonIgnore
     private boolean isArchive;
 
+    private List<Label> labelList;
 }

@@ -47,13 +47,12 @@ public class LabelService implements ILabelService {
         return false;
     }
 
-    @Override
     public boolean mapLabel(LabelDto labelDto, String email) {
         Optional<Label> label = labelRepository.findBylabelName(labelDto.getLabelName());
         if (label.isPresent()) {
             Optional<Note> note = noteRepository.findById(labelDto.getNote_Id());
             return note.map((value) -> {
-                if(label.get().getNoteList().contains(value))
+                if (label.get().getNoteList().contains(value))
                     return false;
                 label.get().getNoteList().add(value);
                 labelRepository.save(label.get());

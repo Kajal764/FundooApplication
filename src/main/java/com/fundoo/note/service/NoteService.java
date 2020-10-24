@@ -1,5 +1,6 @@
 package com.fundoo.note.service;
 
+import com.fundoo.label.exception.LabelException;
 import com.fundoo.label.model.Label;
 import com.fundoo.label.repository.LabelRepository;
 import com.fundoo.note.dto.NoteColorDto;
@@ -33,6 +34,9 @@ class NoteService implements INoteService {
     INoteRepository noteRepository;
 
     @Autowired
+    LabelRepository labelRepository;
+
+    @Autowired
     JwtUtil jwtUtil = new JwtUtil();
 
     @Autowired
@@ -42,7 +46,7 @@ class NoteService implements INoteService {
     RedisService redisService;
 
     @Autowired
-    LabelRepository labelRepository;
+    NoteService noteService;
 
     @Autowired
     IElasticSearchService IElasticSearchService;
@@ -55,11 +59,53 @@ class NoteService implements INoteService {
             BeanUtils.copyProperties(noteDto, newNote);
             user.get().getNoteList().add(newNote);
             noteRepository.save(newNote);
+
+            Optional<Note> note = noteRepository.findById(newNote.getNote_Id());
+            if (note.isPresent()) {
+                for (int i = 0; i < noteDto.getLabelList().size(); i++) {
+                    noteService.mapLabel(newNote.getNote_Id(), noteDto.getLabelList().get(i).getLabelName());
+                }
+
+            }
+
             IElasticSearchService.saveNote(newNote);
             return new ResponseDto("Note created successfully", 200);
         }
         return new ResponseDto("User not present", 403);
     }
+
+    private boolean mapLabel(Integer note_id, String labelName) {
+        System.out.println(note_id + "   " + labelName);
+        Optional<Label> label = labelRepository.findBylabelName(labelName);
+        if (label.isPresent()) {
+            Optional<Note> note = noteRepository.findById(note_id);
+            return note.map((value) -> {
+                if (label.get().getNoteList().contains(value))
+                    return false;
+                label.get().getNoteList().add(value);
+                labelRepository.save(label.get());
+                return true;
+            }).orElseThrow(() -> new LabelException("Note Is Not Present", 404));
+        }
+        return false;
+    }
+
+
+//    public boolean mapLabel(LabelDto labelDto, String email) {
+//        Optional<Label> label = labelRepository.findBylabelName(labelDto.getLabelName());
+//        if (label.isPresent()) {
+//            Optional<Note> note = noteRepository.findById(labelDto.getNote_Id());
+//            return note.map((value) -> {
+//                if (label.get().getNoteList().contains(value))
+//                    return false;
+//                label.get().getNoteList().add(value);
+//                labelRepository.save(label.get());
+//                return true;
+//            }).orElseThrow(() -> new LabelException("Note Is Not Present", 404));
+//        }
+//        return false;
+//    }
+
 
     @Override
     public ResponseDto deleteNote(int note_id, String email) throws NoteException, IOException {
@@ -202,8 +248,8 @@ class NoteService implements INoteService {
     }
 
     @Override
-    public boolean deleteReminder(ReminderDto reminderDTO, String email) throws NoteException {
-        Optional<Note> note = noteRepository.findById(reminderDTO.getNote_Id());
+    public boolean deleteReminder(int note_id, String email) throws NoteException {
+        Optional<Note> note = noteRepository.findById(note_id);
         if (note.isPresent()) {
             note.get().setRemainder(null);
             noteRepository.save(note.get());
