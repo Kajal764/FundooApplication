@@ -53,8 +53,7 @@ public class Note {
 
     private String remainder;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "noteList")
     private List<User> userList;
 
     @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
