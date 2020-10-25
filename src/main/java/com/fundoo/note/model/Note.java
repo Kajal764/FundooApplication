@@ -39,16 +39,16 @@ public class Note {
     private LocalDateTime editDate;
 
     @JsonIgnore
-    private boolean isTrash;
+    private boolean isTrash=false;
 
     @JsonIgnore
-    private boolean isPin;
+    private boolean isPin=false;
 
     @JsonIgnore
-    private boolean isArchive;
+    private boolean isArchive=false;
 
     @JsonIgnore
-    private boolean isCollaborateNote;
+    private boolean isCollaborateNote=false;
 
     private String remainder;
 

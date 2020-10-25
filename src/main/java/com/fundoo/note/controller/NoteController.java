@@ -34,7 +34,7 @@ public class NoteController {
     IElasticSearchService IElasticSearchService;
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken, HttpServletRequest request) throws IOException {
+    public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken, HttpServletRequest request) throws IOException, NoteException {
         Object email = request.getAttribute("email");
         return noteService.createNote(noteDto, (String) email);
     }

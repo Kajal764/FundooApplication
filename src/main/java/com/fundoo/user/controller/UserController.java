@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/fundoo/user")
@@ -70,5 +71,13 @@ public class UserController {
         if (userList.isEmpty())
             throw new LoginUserException("User Data Not Found");
         return userList;
+    }
+
+    @GetMapping("/user-data/{email}")
+    public Optional<User> getUser(@PathVariable("email") String email) {
+      Optional<User> user = userService.getUser(email);
+        if (user==null)
+            throw new LoginUserException("User Data Not Found");
+        return user;
     }
 }

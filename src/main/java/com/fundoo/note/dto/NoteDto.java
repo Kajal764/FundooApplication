@@ -33,4 +33,6 @@ public class NoteDto {
     private List<Label> labelList;
 
     private String remainder;
+
+    private String collaborateUser;
 }

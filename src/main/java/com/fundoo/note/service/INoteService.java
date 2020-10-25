@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface INoteService {
-    ResponseDto createNote(NoteDto noteDto, String email) throws IOException;
+    ResponseDto createNote(NoteDto noteDto, String email) throws IOException, NoteException;
 
     ResponseDto deleteNote(int note_id, String email) throws NoteException, IOException;
 

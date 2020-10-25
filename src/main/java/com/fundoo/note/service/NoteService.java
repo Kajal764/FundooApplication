@@ -1,5 +1,7 @@
 package com.fundoo.note.service;
 
+import com.fundoo.collaborator.dto.CollaborateNoteDto;
+import com.fundoo.collaborator.service.CollaborateService;
 import com.fundoo.label.exception.LabelException;
 import com.fundoo.label.model.Label;
 import com.fundoo.label.repository.LabelRepository;
@@ -49,10 +51,13 @@ class NoteService implements INoteService {
     NoteService noteService;
 
     @Autowired
+    CollaborateService collaborateService;
+
+    @Autowired
     IElasticSearchService IElasticSearchService;
 
     @Override
-    public ResponseDto createNote(NoteDto noteDto, String email) throws IOException {
+    public ResponseDto createNote(NoteDto noteDto, String email) throws IOException, NoteException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             Note newNote = new Note();
@@ -65,6 +70,13 @@ class NoteService implements INoteService {
                 for (int i = 0; i < noteDto.getLabelList().size(); i++) {
                     noteService.mapLabel(newNote.getNote_Id(), noteDto.getLabelList().get(i).getLabelName());
                 }
+            }
+
+            System.out.println(noteDto.getCollaborateUser()+"user");
+
+            if (noteDto.getCollaborateUser() != null) {
+                CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(note.get().getNote_Id(), noteDto.getCollaborateUser());
+                collaborateService.addCollaborator(collaborateNoteDto,email);
             }
             IElasticSearchService.saveNote(newNote);
             return new ResponseDto("Note created successfully", 200);

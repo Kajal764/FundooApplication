@@ -130,7 +130,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseDto update(String token, UpdatePasswordDto updatePasswordDto) {
-        System.out.println(token);
         Object verify = jwtUtil.verify(token);
         System.out.println("verify " + verify);
         Optional<User> userInfo = userRepository.findByEmail(verify.toString());
@@ -144,5 +143,14 @@ public class UserServiceImpl implements UserService {
             throw new LoginUserException("Password Not match");
         }
         throw new LoginUserException("Account not present");
+    }
+
+    @Override
+    public Optional<User> getUser(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isPresent())
+            return user;
+        throw new LoginUserException("User Not login");
+
     }
 }

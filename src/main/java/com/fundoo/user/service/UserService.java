@@ -6,6 +6,7 @@ import com.fundoo.user.model.User;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -24,5 +25,7 @@ public interface UserService {
     String redirectToUpdatePassword(String token);
 
     ResponseDto update(String token, UpdatePasswordDto updatePasswordDto);
+
+    Optional<User> getUser(String email);
 
 }
