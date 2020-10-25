@@ -5,6 +5,7 @@ import com.fundoo.collaborator.service.ICollaborateService;
 import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.user.dto.ResponseDto;
+import com.fundoo.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +33,17 @@ public class CollaboratorController {
         return collaborateService.getCollaboratorNotes(email);
     }
 
-    @DeleteMapping("/removeCollaborate")
+    @PutMapping("/removeCollaborate")
     public ResponseDto deleteCollaborateNote(@RequestBody CollaborateNoteDto collaborateNoteDto, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         if (collaborateService.removeCollaboration(collaborateNoteDto))
             return new ResponseDto("Collaboration remove Successfully", 200);
         return new ResponseDto("Collaboration Not Remove", 400);
+    }
+
+    @GetMapping("/collaborateUser/{note_Id}")
+    public List<User> getCollaboratUser(@PathVariable("note_Id") int note_id, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
+        String email = (String) request.getAttribute("email");
+        return collaborateService.getCollaboratUsers(email, note_id);
     }
 
 }

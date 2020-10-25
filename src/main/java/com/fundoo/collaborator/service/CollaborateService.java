@@ -65,6 +65,15 @@ public class CollaborateService implements ICollaborateService {
         noteRepository.save(note.get());
         return true;
     }
+
+    @Override
+    public List<User> getCollaboratUsers(String email, int note_id) throws NoteException {
+        Optional<Note> note = noteRepository.findById(note_id);
+        if (note.isPresent()) {
+            return note.get().getUserList();
+        }
+        throw new NoteException("User not collaborate", 400);
+    }
 }
 
 
