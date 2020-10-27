@@ -1,19 +1,23 @@
 package com.fundoo.profileupdate.service;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.fundoo.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Date;
 
 @Service
@@ -33,6 +37,9 @@ public class AmazonClientImpl implements AmazonClient {
     @Value("${amazonProperties.secretKey}")
     private String secretKey;
 
+    @Autowired
+    UserRepository userRepository;
+
     @PostConstruct
     private void initializeAmazon() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
@@ -41,21 +48,18 @@ public class AmazonClientImpl implements AmazonClient {
 
     @Override
     public String uploadFile(MultipartFile multipartFile) {
-
-        String fileUrl = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
             uploadFileTos3bucket(fileName, file);
-
             file.delete();
-            return fileUrl;
+            return fileName;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
 
     private File convertMultiPartToFile(MultipartFile multipartFile) throws IOException {
         File convFile = new File(multipartFile.getOriginalFilename());
@@ -73,5 +77,27 @@ public class AmazonClientImpl implements AmazonClient {
         s3client.putObject(new PutObjectRequest(bucketName, fileName, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
+
+    @Override
+    public ByteArrayOutputStream downloadFile(String keyName) {
+        try {
+            S3Object s3object = s3client.getObject(new GetObjectRequest(bucketName, keyName));
+            InputStream is = s3object.getObjectContent();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            int len;
+            byte[] buffer = new byte[4096];
+            while ((len = is.read(buffer, 0, buffer.length)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            return baos;
+        } catch (IOException ioe) {
+        } catch (AmazonServiceException ase) {
+            throw ase;
+        } catch (AmazonClientException ace) {
+            throw ace;
+        }
+        return null;
+    }
+
 
 }

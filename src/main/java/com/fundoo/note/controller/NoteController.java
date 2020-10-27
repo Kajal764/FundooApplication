@@ -74,7 +74,6 @@ public class NoteController {
         List<Note> list = noteService.getNoteList(email);
         if (list.isEmpty())
             throw new LabelException("Note Not Found", 400);
-        System.out.println(list);
         return list;
     }
 
