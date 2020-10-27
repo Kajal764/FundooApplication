@@ -32,7 +32,6 @@ public class JavaMailUtil {
     public SimpleMailMessage resetPwMail(String email, String jwtToken) {
         SimpleMailMessage message = new SimpleMailMessage();
         String link="http://localhost:4200/update-password";
-       // String link = "http://localhost:8080/fundoo/user/reset_password/";
         message.setTo(email);
         message.setSubject("Password Reset Request");
         message.setText("To reset your password, click the link : " + (link +";token="+ jwtToken));
@@ -42,7 +41,7 @@ public class JavaMailUtil {
 
     public SimpleMailMessage sendCollaborationInvite(CollaborateNoteDto collaborateNoteDto, Optional<User> mainUser, Optional<Note> note) {
         SimpleMailMessage message = new SimpleMailMessage();
-        String loginlink = "http://localhost:8080//fundoo/user/login";
+        String loginlink = "http://localhost:4200/login";
         message.setTo(collaborateNoteDto.getEmail());
         message.setSubject("Note share with you  " + note.get().getTitle());
         message.setText(mainUser.get().getEmail() + " Share this note title " + note.get().getTitle() + " description " + note.get().getDescription() + " Login here " + loginlink);

@@ -72,8 +72,6 @@ class NoteService implements INoteService {
                 }
             }
 
-            System.out.println(noteDto.getCollaborateUser()+"user");
-
             if (noteDto.getCollaborateUser() != null) {
                 CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(note.get().getNote_Id(), noteDto.getCollaborateUser());
                 collaborateService.addCollaborator(collaborateNoteDto,email);
