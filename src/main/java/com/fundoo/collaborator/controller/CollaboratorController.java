@@ -9,6 +9,7 @@ import com.fundoo.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class CollaboratorController {
     ICollaborateService collaborateService;
 
     @PostMapping("/collaborators")
-    public ResponseDto addCollaborator(@RequestBody CollaborateNoteDto collaborateNoteDto, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
+    public ResponseDto addCollaborator(@RequestBody CollaborateNoteDto collaborateNoteDto, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException, MessagingException {
         String email = (String) request.getAttribute("email");
         if (collaborateService.addCollaborator(collaborateNoteDto, email))
             return new ResponseDto("Collaborated User Successfully", 200);

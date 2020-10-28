@@ -23,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -57,7 +58,7 @@ class NoteService implements INoteService {
     IElasticSearchService IElasticSearchService;
 
     @Override
-    public ResponseDto createNote(NoteDto noteDto, String email) throws IOException, NoteException {
+    public ResponseDto createNote(NoteDto noteDto, String email) throws IOException, NoteException, MessagingException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             Note newNote = new Note();

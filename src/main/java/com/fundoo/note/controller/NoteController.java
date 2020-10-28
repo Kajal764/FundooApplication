@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -34,9 +35,8 @@ public class NoteController {
     IElasticSearchService IElasticSearchService;
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken, HttpServletRequest request) throws IOException, NoteException {
+    public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken, HttpServletRequest request) throws IOException, NoteException, MessagingException {
         Object email = request.getAttribute("email");
-        System.out.println(noteDto.getRemainder());
         return noteService.createNote(noteDto, (String) email);
     }
 

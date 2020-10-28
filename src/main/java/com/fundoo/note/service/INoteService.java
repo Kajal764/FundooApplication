@@ -9,11 +9,12 @@ import com.fundoo.note.exception.NoteException;
 import com.fundoo.note.model.Note;
 import com.fundoo.user.dto.ResponseDto;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 
 public interface INoteService {
-    ResponseDto createNote(NoteDto noteDto, String email) throws IOException, NoteException;
+    ResponseDto createNote(NoteDto noteDto, String email) throws IOException, NoteException, MessagingException;
 
     ResponseDto deleteNote(int note_id, String email) throws NoteException, IOException;
 

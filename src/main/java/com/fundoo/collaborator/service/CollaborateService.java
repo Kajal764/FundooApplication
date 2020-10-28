@@ -7,9 +7,11 @@ import com.fundoo.note.repository.INoteRepository;
 import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
 import com.fundoo.user.utility.JavaMailUtil;
+import com.fundoo.user.utility.template.CollaborationInvitationTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +27,12 @@ public class CollaborateService implements ICollaborateService {
     @Autowired
     JavaMailUtil javaMailUtil;
 
+    @Autowired
+    CollaborationInvitationTemplate collaborationInvitationTemplate;
+
+
     @Override
-    public boolean addCollaborator(CollaborateNoteDto collaborateNoteDto, String email) throws NoteException {
+    public boolean addCollaborator(CollaborateNoteDto collaborateNoteDto, String email) throws NoteException, MessagingException {
         Optional<User> mainUser = userRepository.findByEmail(email);
         Optional<Note> note = noteRepository.findById(collaborateNoteDto.getNote_Id());
         Optional<User> anotherUser = userRepository.findByEmail(collaborateNoteDto.getEmail());
@@ -36,7 +42,9 @@ public class CollaborateService implements ICollaborateService {
             throw new NoteException("Note Collaborate Already", 400);
         note.get().setCollaborateNote(true);
         anotherUser.get().getNoteList().add(note.get());
-        javaMailUtil.sendCollaborationInvite(collaborateNoteDto, mainUser, note);
+        String template = collaborationInvitationTemplate.getHeader(mainUser, note);
+        javaMailUtil.sendCollaborationInvite(anotherUser.get().getEmail(), "Note Shared With You!!", template);
+
         noteRepository.save(note.get());
         return true;
     }
