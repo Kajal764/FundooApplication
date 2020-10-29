@@ -26,4 +26,7 @@ public class RegisterUserDto {
     @Pattern(regexp = "^((?=.*[A-Z])(?=.*[@#$%]).{6,})$" ,message = "Password Should contain One Uppercase and Symbol and greater than 6 character")
     public String password;
 
+    @Column(nullable = false)
+    public String city;
+
 }

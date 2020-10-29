@@ -39,6 +39,9 @@ public class User {
     @Column(nullable = false)
     private boolean isVarified;
 
+    @Column(nullable = false)
+    private String city;
+
     @JsonIgnore
     private LocalDateTime accountCreatedDate;
 
@@ -58,5 +61,6 @@ public class User {
         this.lastName = registerUserDto.lastName;
         this.email = registerUserDto.email;
         this.password = registerUserDto.password;
+        this.city = registerUserDto.city;
     }
 }
