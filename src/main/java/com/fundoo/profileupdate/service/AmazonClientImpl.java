@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
+import com.fundoo.properties.FileProperties;
 import com.fundoo.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,24 +26,21 @@ public class AmazonClientImpl implements AmazonClient {
 
     private AmazonS3 s3client;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    FileProperties properties;
+
     @Value("${amazonProperties.endpointUrl}")
     private String endpointUrl;
 
     @Value("${amazonProperties.bucketName}")
     private String bucketName;
 
-    @Value("${amazonProperties.accessKey}")
-    private String accessKey;
-
-    @Value("${amazonProperties.secretKey}")
-    private String secretKey;
-
-    @Autowired
-    UserRepository userRepository;
-
     @PostConstruct
     private void initializeAmazon() {
-        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+        AWSCredentials credentials = new BasicAWSCredentials(properties.getAccessKey(), properties.getSecretKey());
         this.s3client = new AmazonS3Client(credentials);
     }
 
@@ -59,7 +57,6 @@ public class AmazonClientImpl implements AmazonClient {
         }
         return null;
     }
-
 
     private File convertMultiPartToFile(MultipartFile multipartFile) throws IOException {
         File convFile = new File(multipartFile.getOriginalFilename());
@@ -98,6 +95,4 @@ public class AmazonClientImpl implements AmazonClient {
         }
         return null;
     }
-
-
 }

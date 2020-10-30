@@ -1,11 +1,12 @@
 package com.fundoo;
 
+import com.fundoo.properties.FileProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+@EnableConfigurationProperties({FileProperties.class})
 @SpringBootApplication
-@ServletComponentScan
 public class FundooapplicationApplication {
     public static void main(String[] args) {
         SpringApplication.run(FundooapplicationApplication.class, args);

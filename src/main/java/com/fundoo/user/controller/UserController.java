@@ -37,7 +37,6 @@ public class UserController {
     public ResponseDto login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
         String token = userService.login(loginDto);
         response.setHeader("AuthorizeToken", token);
-        System.out.println(response.getHeader("AuthorizeToken"));
         return new ResponseDto("Login Successful", 200);
     }
 

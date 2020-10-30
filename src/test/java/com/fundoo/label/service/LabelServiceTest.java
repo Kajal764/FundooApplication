@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -32,6 +32,9 @@ public class LabelServiceTest {
 
     @InjectMocks
     LabelService labelService;
+
+//    @Mock
+//    FileProperties fileProperties;
 
     @Mock
     UserRepository userRepository;

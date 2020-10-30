@@ -35,13 +35,14 @@ public class JavaMailUtil {
         return message;
     }
 
-    public void sendCollaborationInvite(String email, String subject, String template) throws MessagingException {
+    public String sendCollaborationInvite(String email, String subject, String template) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setTo(email);
         helper.setSubject(subject);
         helper.setText(template, true);
         javaMailSender.send(message);
+        return "Collaborate user successfully";
     }
 
 }

@@ -1,18 +1,20 @@
 package com.fundoo.label.controller;
 
+import com.fundoo.configuration.NoteServiceInterceptorAppConfig;
+import com.fundoo.intercepter.NoteServiceInterceptor;
 import com.fundoo.label.dto.LabelDto;
 import com.fundoo.label.dto.MapDto;
 import com.fundoo.label.model.Label;
 import com.fundoo.label.service.ILabelService;
 import com.fundoo.note.exception.NoteException;
+import com.fundoo.properties.FileProperties;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,8 +31,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(LabelController.class)
 public class LabelControllerTest {
 
     @Autowired
@@ -38,6 +39,15 @@ public class LabelControllerTest {
 
     @MockBean
     ILabelService labelService;
+
+    @MockBean
+    FileProperties fileProperties;
+
+    @MockBean
+    NoteServiceInterceptor noteServiceInterceptor;
+
+    @MockBean
+    NoteServiceInterceptorAppConfig noteServiceInterceptorAppConfig;
 
     Gson gson = new Gson();
     LabelDto labelDto;
@@ -54,20 +64,18 @@ public class LabelControllerTest {
     }
 
     @Test
-    void givenRequestToCreateLabel_WhenLabelCreate_ItShouldReturnStatusOK() throws Exception, NoteException {
-        when(labelService.createLabel(any(), any())).thenReturn(true);
+    void givenRequestToCreateLabel_WhenLabelCreate_ItShouldReturnStatusOK() throws Exception {
+        when(labelService.createLabel(any(), any())).thenReturn(false);
         MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/create").content(labelJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
-
         assertThat(mvcResult.getResponse().getStatus(), is(200));
     }
 
     @Test
-    void givenRequestToCreateLabel_WhenLabelCreate_ItShouldReturnSuccessMessage() throws Exception, NoteException {
+    void givenRequestToCreateLabel_WhenLabelCreate_ItShouldReturnSuccessMessage() throws Exception {
         when(labelService.createLabel(any(), any())).thenReturn(true);
         MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/create").content(labelJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
-
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Created"));
     }
 
@@ -76,7 +84,6 @@ public class LabelControllerTest {
         when(labelService.createLabel(any(), any())).thenReturn(false);
         MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/create").content(labelJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
-
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Creating label"));
     }
 
@@ -100,12 +107,12 @@ public class LabelControllerTest {
         when(labelService.mapLabel(any(), any())).thenReturn(false);
         MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/noteLabel").content(labelJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
-        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Not Present"));
+        Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Already Map"));
     }
 
     @Test
     void givenRequestToEditLabel_WhenEditLabel_ItShouldReturnStatusOk() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/edit").content(labelJson)
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/edit").content(labelJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         assertThat(mvcResult.getResponse().getStatus(), is(200));
     }
@@ -113,7 +120,7 @@ public class LabelControllerTest {
     @Test
     void givenRequestToEditLabel_WhenEditLabel_ItShouldReturnSuccessMessage() throws Exception {
         when(labelService.editLabel(any(), any())).thenReturn(true);
-        MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/edit").content(labelJson)
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/edit").content(labelJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Edited Successfully"));
     }
@@ -121,7 +128,7 @@ public class LabelControllerTest {
     @Test
     void givenRequestToEditLabel_WhenNotAbleToEditLabel_ItShouldReturnFailureMessage() throws Exception {
         when(labelService.editLabel(any(), any())).thenReturn(false);
-        MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/edit").content(labelJson)
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/edit").content(labelJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Editing label"));
     }
@@ -157,7 +164,7 @@ public class LabelControllerTest {
 
     @Test
     void givenRequestToRemoveLabel_WhenRemoveLabel_ItShouldReturnStatusOk() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/removeLabel").content(mapJson)
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/removeLabel").content(mapJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         assertThat(mvcResult.getResponse().getStatus(), is(200));
     }
@@ -165,7 +172,7 @@ public class LabelControllerTest {
     @Test
     void givenRequestToRemoveLabel_WhenRemoveLabel_ItShouldReturnSuccessMessage() throws Exception {
         when(labelService.removeNoteLabel(any())).thenReturn(true);
-        MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/removeLabel").content(mapJson)
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/removeLabel").content(mapJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Label Remove"));
     }
@@ -173,7 +180,7 @@ public class LabelControllerTest {
     @Test
     void givenRequestToRemoveLabel_WhenLabelNotRemove_ItShouldReturnFailureMessage() throws Exception {
         when(labelService.removeNoteLabel(any())).thenReturn(false);
-        MvcResult mvcResult = mockMvc.perform(put("/fundoo/label/removeLabel").content(mapJson)
+        MvcResult mvcResult = mockMvc.perform(post("/fundoo/label/removeLabel").content(mapJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Error Removing label"));
     }

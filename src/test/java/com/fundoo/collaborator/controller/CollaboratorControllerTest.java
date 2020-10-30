@@ -2,12 +2,16 @@ package com.fundoo.collaborator.controller;
 
 import com.fundoo.collaborator.dto.CollaborateNoteDto;
 import com.fundoo.collaborator.service.ICollaborateService;
+import com.fundoo.configuration.NoteServiceInterceptorAppConfig;
+import com.fundoo.intercepter.NoteServiceInterceptor;
 import com.fundoo.note.exception.NoteException;
+import com.fundoo.properties.FileProperties;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -16,19 +20,26 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(CollaboratorController.class)
 public class CollaboratorControllerTest {
-
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
     ICollaborateService collaborateService;
+
+    @MockBean
+    FileProperties fileProperties;
+
+    @MockBean
+    NoteServiceInterceptor noteServiceInterceptor;
+
+    @MockBean
+    NoteServiceInterceptorAppConfig noteServiceInterceptorAppConfig;
+
     Gson gson = new Gson();
 
     @Test
@@ -58,7 +69,7 @@ public class CollaboratorControllerTest {
         CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(3, "kdw@gmail.com");
         String toJson = gson.toJson(collaborateNoteDto);
         when(collaborateService.removeCollaboration(any())).thenReturn(true);
-        MvcResult mvcResult = mockMvc.perform(delete("/fundoo/note/removeCollaborate").content(toJson)
+        MvcResult mvcResult = mockMvc.perform(put("/fundoo/note/removeCollaborate").content(toJson)
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertTrue(mvcResult.getResponse().getContentAsString().contains("Collaboration remove Successfully"));
     }

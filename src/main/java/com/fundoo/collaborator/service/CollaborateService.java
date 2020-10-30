@@ -83,5 +83,3 @@ public class CollaborateService implements ICollaborateService {
         throw new NoteException("User not collaborate", 400);
     }
 }
-
-

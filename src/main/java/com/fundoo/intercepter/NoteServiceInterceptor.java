@@ -9,13 +9,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @CrossOrigin
 @Component
-public class NoteServiceInterceptor implements HandlerInterceptor {
+public class NoteServiceInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     UserRepository userRepository;
@@ -48,4 +51,14 @@ public class NoteServiceInterceptor implements HandlerInterceptor {
             throw new AuthenticationException("User Don't have permission");
         }
     }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        System.out.println(response);
+
+//        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+//        byte[] contentAsByteArray = responseWrapper.getContentAsByteArray();
+//        super.postHandle(request, responseWrapper, handler, modelAndView);
+    }
+
 }

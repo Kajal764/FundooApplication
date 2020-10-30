@@ -46,5 +46,4 @@ public class CollaboratorController {
         String email = (String) request.getAttribute("email");
         return collaborateService.getCollaboratUsers(email, note_id);
     }
-
 }
