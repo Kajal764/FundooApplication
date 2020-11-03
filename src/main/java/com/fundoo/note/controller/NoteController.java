@@ -128,7 +128,8 @@ public class NoteController {
     public List<Note> fetchPinNotes(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
         String email = (String) request.getAttribute("email");
         GetNote value = GetNote.PIN;
-        List<Note> list = noteService.getNotes(value, email);
+//        List<Note> list = noteService.getNotes(value, email);
+        List<Note> list = noteService.getPinList(value, email);
         if (list.isEmpty())
             throw new LabelException("empty", 400);
         return list;

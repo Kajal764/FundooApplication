@@ -74,9 +74,16 @@ public class UserController {
 
     @GetMapping("/user-data/{email}")
     public Optional<User> getUser(@PathVariable("email") String email) {
-      Optional<User> user = userService.getUser(email);
-        if (user==null)
+        Optional<User> user = userService.getUser(email);
+        if (user == null)
             throw new LoginUserException("User Data Not Found");
         return user;
+    }
+
+    @PostMapping(value = "/social-login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDto login(@RequestBody SocialUser SocialUser, HttpServletResponse response) {
+        String token = userService.socialLogin(SocialUser);
+        response.setHeader("AuthorizeToken", token);
+        return new ResponseDto("Login Successful", 200);
     }
 }

@@ -39,8 +39,11 @@ public class User {
     @Column(nullable = false)
     private boolean isVarified;
 
-    @Column(nullable = false)
     private String city;
+
+    public String imageURL;
+
+    public boolean isSocialUser;
 
     @JsonIgnore
     private LocalDateTime accountCreatedDate;

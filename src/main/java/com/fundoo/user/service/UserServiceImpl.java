@@ -148,9 +148,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUser(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        if(user.isPresent())
+        if (user.isPresent())
             return user;
         throw new LoginUserException("User Not login");
 
+    }
+
+    @Override
+    public String socialLogin(SocialUser socialUser) {
+        User user = new User();
+        Optional<User> userPresent = userRepository.findByEmail(socialUser.email);
+        if (userPresent.isPresent()) {
+            String token = jwtUtil.createJwtToken(socialUser.email);
+            RedisService.setToken(socialUser.email, token);
+            return token;
+        }
+        user.setFirstName(socialUser.firstName);
+        user.setLastName(socialUser.lastName);
+        user.setEmail(socialUser.email);
+        user.setAccountCreatedDate(LocalDateTime.now());
+        user.setImageURL(socialUser.imageURL);
+        user.setPassword("Social#123");
+        user.setVarified(true);
+        user.setSocialUser(true);
+        userRepository.save(user);
+        String token = jwtUtil.createJwtToken(socialUser.email);
+        RedisService.setToken(socialUser.email, token);
+        return token;
     }
 }

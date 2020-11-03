@@ -28,4 +28,5 @@ public interface UserService {
 
     Optional<User> getUser(String email);
 
+    String socialLogin(SocialUser socialUser);
 }

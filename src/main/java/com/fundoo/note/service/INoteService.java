@@ -44,4 +44,5 @@ public interface INoteService {
 
     List<Note> getMapNote(String email, Integer label_id) throws NoteException;
 
+    List<Note> getPinList(GetNote value, String email);
 }

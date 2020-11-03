@@ -286,6 +286,18 @@ class NoteService implements INoteService {
         throw new NoteException("Note Not Found", 400);
     }
 
+    @Override
+    public List<Note> getPinList(GetNote value, String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            List<Note> noteList = user.get().getNoteList();
+            noteList.removeIf(note -> note.isTrash());
+            noteList.removeIf(note -> note.isArchive());
+            noteList.removeIf(note -> !note.isPin());
+            return noteList;
+        }
+        return null;
+    }
 
 }
 
