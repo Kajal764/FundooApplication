@@ -17,11 +17,6 @@ public class IElasticSearchServiceTest {
     @Autowired
     ElasticSearchService elasticSearchService;
 
-    @Test
-    void givenSearchValue_WhenReturn_ItShouldGiveList() throws IOException {
-        List<Note> list = elasticSearchService.searchByTitle("java", "kdw@gmail.com");
-        Assert.assertTrue(list.get(0).getTitle().contains("java"));
-    }
 
     @Test
     void givenNoteToSave_WhenSaveInIndex_ItShouldGiveIndexResult() throws IOException {
@@ -30,6 +25,12 @@ public class IElasticSearchServiceTest {
         BeanUtils.copyProperties(noteDto, note);
         String result = elasticSearchService.saveNote(note);
         Assert.assertEquals(result, "CREATED");
+    }
+
+    @Test
+    void givenSearchValue_WhenReturn_ItShouldGiveList() throws IOException {
+        List<Note> list = elasticSearchService.searchByTitle("Spring", "kdw@gmail.com");
+        Assert.assertTrue(list.get(0).getTitle().contains("Spring"));
     }
 
     @Test

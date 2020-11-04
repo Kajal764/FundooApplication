@@ -1,6 +1,5 @@
 package com.fundoo.note.controller;
 
-import com.fundoo.label.exception.LabelException;
 import com.fundoo.note.dto.NoteColorDto;
 import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.dto.ReminderDto;
@@ -20,7 +19,6 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -69,20 +67,20 @@ public class NoteController {
     }
 
     @GetMapping("/list")
-    public List<Note> getNoteList(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
+    public List<Note> getNoteList(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
         List<Note> list = noteService.getNoteList(email);
         if (list.isEmpty())
-            throw new LabelException("Note Not Found", 400);
+            throw new NoteException("Note Not Found", 400);
         return list;
     }
 
     @PostMapping(value = "/sort")
-    public List<Note> sortList(@RequestBody SortDto sortDto, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
+    public List<Note> sortList(@RequestBody SortDto sortDto, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
         List<Note> sortList = noteService.sort(sortDto, email);
         if (sortList.isEmpty())
-            throw new LabelException("List Not Found", 400);
+            throw new NoteException("List Not Found", 400);
         return sortList;
     }
 
@@ -104,33 +102,32 @@ public class NoteController {
     }
 
     @GetMapping("/trashList")
-    public List<Note> fetchTrashNotes(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
+    public List<Note> fetchTrashNotes(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
         GetNote value = GetNote.TRASH;
         List<Note> list = noteService.getNotes(value, email);
         if (list.isEmpty())
-            throw new LabelException("Trash is empty", 400);
+            throw new NoteException("Trash is empty", 400);
         return list;
     }
 
     @GetMapping("/archiveList")
-    public List<Note> fetchArchiveNotes(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
+    public List<Note> fetchArchiveNotes(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
         GetNote value = GetNote.ARCHIVE;
         List<Note> list = noteService.getNotes(value, email);
         if (list.isEmpty())
-            throw new LabelException("empty", 400);
+            throw new NoteException("empty", 400);
         return list;
     }
 
     @GetMapping("/pinList")
-    public List<Note> fetchPinNotes(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) {
+    public List<Note> fetchPinNotes(HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
         GetNote value = GetNote.PIN;
-//        List<Note> list = noteService.getNotes(value, email);
         List<Note> list = noteService.getPinList(value, email);
         if (list.isEmpty())
-            throw new LabelException("empty", 400);
+            throw new NoteException("empty", 400);
         return list;
     }
 
@@ -174,7 +171,7 @@ public class NoteController {
     }
 
     @GetMapping("/mapNote/{labelId}")
-    public List<Note> getMappingNotes(@PathVariable("labelId") Integer label_Id, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws IOException, NoteException {
+    public List<Note> getMappingNotes(@PathVariable("labelId") Integer label_Id, HttpServletRequest request, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken) throws NoteException {
         String email = (String) request.getAttribute("email");
         List<Note> mapNote = noteService.getMapNote(email, label_Id);
         return mapNote;

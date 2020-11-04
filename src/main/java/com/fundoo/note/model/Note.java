@@ -54,7 +54,7 @@ public class Note {
     @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY)
     private List<User> userList;
 
-    @ManyToMany(mappedBy = "noteList", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY)
     private List<Label> labelList;
 
 }
