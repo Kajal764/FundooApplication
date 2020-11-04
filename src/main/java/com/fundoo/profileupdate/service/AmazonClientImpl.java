@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.fundoo.properties.FileProperties;
+import com.fundoo.user.model.User;
 import com.fundoo.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class AmazonClientImpl implements AmazonClient {
@@ -28,6 +30,9 @@ public class AmazonClientImpl implements AmazonClient {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AmazonClientImpl amazonClient;
 
     @Autowired
     FileProperties properties;
@@ -45,11 +50,19 @@ public class AmazonClientImpl implements AmazonClient {
     }
 
     @Override
-    public String uploadFile(MultipartFile multipartFile) {
+    public String uploadFile(MultipartFile multipartFile, String email) {
         try {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
             uploadFileTos3bucket(fileName, file);
+            Optional<User> user = userRepository.findByEmail(email);
+            if (user.isPresent()) {
+                user.get().setImageURL(fileName);
+                if (user.get().isSocialUser) {
+                    user.get().setSocialUser(false);
+                }
+                userRepository.save(user.get());
+            }
             file.delete();
             return fileName;
         } catch (Exception e) {

@@ -23,8 +23,9 @@ public class BucketController {
     }
 
     @PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam(value = "file") MultipartFile multipartFile) {
-        String file = this.amazonClient.uploadFile(multipartFile);
+    public String uploadFile(@RequestParam(value = "file") MultipartFile multipartFile, @RequestParam(value = "email") String email) {
+        String file = this.amazonClient.uploadFile(multipartFile, email);
+        System.out.println(file);
         if (file != null)
             return file;
         throw new LoginUserException("Error while uploading profile");
@@ -32,10 +33,12 @@ public class BucketController {
 
     @GetMapping("/image/{uploadFileName}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable("uploadFileName") String keyName) {
+        System.out.println(keyName);
         ByteArrayOutputStream downloadInputStream = amazonClient.downloadFile(keyName);
-        return ResponseEntity.ok()
+        ResponseEntity<byte[]> body = ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + keyName + "\"")
                 .body(downloadInputStream.toByteArray());
+        return body;
     }
 }
