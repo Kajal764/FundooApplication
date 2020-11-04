@@ -36,7 +36,6 @@ public class NoteController {
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto createNote(@Valid @RequestBody NoteDto noteDto, @RequestHeader(value = "AuthorizeToken", required = false) String AuthorizeToken, HttpServletRequest request) throws IOException, NoteException, MessagingException {
-        System.out.println(noteDto);
         Object email = request.getAttribute("email");
         return noteService.createNote(noteDto, (String) email);
     }

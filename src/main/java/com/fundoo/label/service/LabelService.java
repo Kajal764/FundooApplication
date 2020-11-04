@@ -31,7 +31,6 @@ public class LabelService implements ILabelService {
 
     @Override
     public boolean createLabel(LabelDto labelDto, String email) {
-
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             labelRepository.findBylabelName(labelDto.getLabelName())

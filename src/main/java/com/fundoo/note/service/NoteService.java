@@ -72,11 +72,28 @@ class NoteService implements INoteService {
                     noteService.mapLabel(newNote.getNote_Id(), noteDto.getLabelList().get(i).getLabelName());
                 }
             }
-
-            if (noteDto.getCollaborateUser() != null) {
-                CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(note.get().getNote_Id(), noteDto.getCollaborateUser());
-                collaborateService.addCollaborator(collaborateNoteDto,email);
+            System.out.println(noteDto.getCollaborateUserList());
+            if (noteDto.getCollaborateUserList().size() > 0 && note.isPresent()) {
+                CollaborateNoteDto collaborateNoteDto;
+                for (int i = 0; i < noteDto.getCollaborateUserList().size(); i++) {
+                    collaborateNoteDto = new CollaborateNoteDto(newNote.getNote_Id(), noteDto.getCollaborateUserList().get(i).getEmail());
+                    collaborateService.addCollaborator(collaborateNoteDto, email);
+                }
             }
+
+//            if (noteDto.getCollaborateUser() != null) {
+//                CollaborateNoteDto collaborateNoteDto;
+//                for (int i=0 ;i<noteDto.getCollaborateUser().size(); i++){
+//                    collaborateNoteDto = new CollaborateNoteDto(note.get().getNote_Id(),noteDto.getCollaborateUser().get(i).getEmail());
+//                    collaborateService.addCollaborator(collaborateNoteDto,email);
+//                }
+//            }
+//
+
+//            if (noteDto.getCollaborateUser() != null) {
+//                CollaborateNoteDto collaborateNoteDto = new CollaborateNoteDto(note.get().getNote_Id(), noteDto.getCollaborateUser());
+//                collaborateService.addCollaborator(collaborateNoteDto,email);
+//            }
             IElasticSearchService.saveNote(newNote);
             return new ResponseDto("Note created successfully", 200);
         }

@@ -1,6 +1,7 @@
 package com.fundoo.note.dto;
 
 import com.fundoo.label.model.Label;
+import com.fundoo.user.model.User;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -34,5 +35,5 @@ public class NoteDto {
 
     private String remainder;
 
-    private String collaborateUser;
+    private List<User> collaborateUserList;
 }
