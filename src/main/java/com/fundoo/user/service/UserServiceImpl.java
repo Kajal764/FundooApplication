@@ -151,7 +151,6 @@ public class UserServiceImpl implements UserService {
         if (user.isPresent())
             return user;
         throw new LoginUserException("User Not login");
-
     }
 
     @Override
@@ -159,6 +158,8 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         Optional<User> userPresent = userRepository.findByEmail(socialUser.email);
         if (userPresent.isPresent()) {
+            userPresent.get().setImageURL(socialUser.imageURL);
+            userRepository.save(userPresent.get());
             String token = jwtUtil.createJwtToken(socialUser.email);
             RedisService.setToken(socialUser.email, token);
             return token;

@@ -38,23 +38,23 @@ public class Note {
     private LocalDateTime editDate;
 
     @JsonIgnore
-    private boolean isTrash=false;
+    private boolean isTrash = false;
 
     @JsonIgnore
-    private boolean isPin=false;
+    private boolean isPin = false;
 
     @JsonIgnore
-    private boolean isArchive=false;
+    private boolean isArchive = false;
 
     @JsonIgnore
-    private boolean isCollaborateNote=false;
+    private boolean isCollaborateNote = false;
 
     private String remainder;
 
     @ManyToMany(mappedBy = "noteList", fetch = FetchType.LAZY)
     private List<User> userList;
 
-    @ManyToMany(mappedBy = "noteList", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "noteList", fetch = FetchType.EAGER)
     private List<Label> labelList;
 
 }

@@ -58,9 +58,6 @@ public class AmazonClientImpl implements AmazonClient {
             Optional<User> user = userRepository.findByEmail(email);
             if (user.isPresent()) {
                 user.get().setImageURL(fileName);
-                if (user.get().isSocialUser) {
-                    user.get().setSocialUser(false);
-                }
                 userRepository.save(user.get());
             }
             file.delete();

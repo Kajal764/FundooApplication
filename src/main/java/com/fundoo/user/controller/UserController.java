@@ -66,7 +66,6 @@ public class UserController {
     @GetMapping("/unVerifiedUser")
     public List<User> unVerifiedUser() {
         List<User> userList = userService.unVerifyAccount();
-        System.out.println("Inside");
         if (userList.isEmpty())
             throw new LoginUserException("User Data Not Found");
         return userList;
