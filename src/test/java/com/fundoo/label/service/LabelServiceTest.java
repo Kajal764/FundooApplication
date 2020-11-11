@@ -5,6 +5,7 @@ import com.fundoo.label.dto.MapDto;
 import com.fundoo.label.exception.LabelException;
 import com.fundoo.label.model.Label;
 import com.fundoo.label.repository.LabelRepository;
+import com.fundoo.note.dto.NoteDto;
 import com.fundoo.note.model.Note;
 import com.fundoo.note.repository.INoteRepository;
 import com.fundoo.user.model.User;
@@ -32,9 +33,6 @@ public class LabelServiceTest {
 
     @InjectMocks
     LabelService labelService;
-
-//    @Mock
-//    FileProperties fileProperties;
 
     @Mock
     UserRepository userRepository;
@@ -83,12 +81,11 @@ public class LabelServiceTest {
 
     @Test
     void givenLabelNameWithNoteId_WhenMappingLabel_ItShouldReturnTrue() {
-        mockLabellist = new ArrayList<>();
         label.setNoteList(mockLabellist);
         when(labelRepository.findBylabelName(any())).thenReturn(Optional.of(label));
         when(noteRepository.findById(anyInt())).thenReturn(Optional.of(note));
         boolean result = labelService.mapLabel(labelDto, email);
-
+        System.out.println(result);
         assertThat(result, is(true));
     }
 

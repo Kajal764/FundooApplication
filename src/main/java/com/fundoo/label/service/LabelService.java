@@ -32,30 +32,34 @@ public class LabelService implements ILabelService {
     @Override
     public boolean createLabel(LabelDto labelDto, String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            labelRepository.findBylabelName(labelDto.getLabelName())
-                    .ifPresent(value -> {
-                        throw new LabelException("Label Already Exist", 409);
-                    });
-            Label newLabel = new Label();
-            BeanUtils.copyProperties(labelDto, newLabel);
-            newLabel.setUser(user.get());
-            labelRepository.save(newLabel);
-            return true;
+        for (int i = 0; i < user.get().getLabelList().size(); i++) {
+            if (user.get().getLabelList().get(i).getLabelName().equals(labelDto.getLabelName())) {
+                throw new LabelException("Label Already Exist", 409);
+            }
         }
-        return false;
+        Label newLabel = new Label();
+        BeanUtils.copyProperties(labelDto, newLabel);
+        newLabel.setUser(user.get());
+        labelRepository.save(newLabel);
+        return true;
     }
 
     public boolean mapLabel(LabelDto labelDto, String email) {
-        Optional<Label> label = labelRepository.findBylabelName(labelDto.getLabelName());
-        if (label.isPresent()) {
+        Optional<User> user = userRepository.findByEmail(email);
+        List<Label> label = user.get().getLabelList();
+        if (label.size() > 0) {
             Optional<Note> note = noteRepository.findById(labelDto.getNote_Id());
             return note.map((value) -> {
-                if (label.get().getNoteList().contains(value))
-                    return false;
-                label.get().getNoteList().add(value);
-                labelRepository.save(label.get());
-                return true;
+                for (int i = 0; i < label.size(); i++) {
+                    if (label.get(i).getLabel_Id() == labelDto.getLabel_Id()) {
+                        if (label.get(i).getNoteList().contains(value))
+                            return false;
+                        label.get(i).getNoteList().add(value);
+                        userRepository.save(user.get());
+                        return true;
+                    }
+                }
+                return false;
             }).orElseThrow(() -> new LabelException("Note Is Not Present", 404));
         }
         return false;
